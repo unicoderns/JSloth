@@ -99,7 +99,7 @@ class App {
          * @param res {express.Response} The response object.
          * @return true
          */
-        router.get("/health/", (res: express.Response) => {
+        router.get("/health/", (req: express.Request, res: express.Response) => {
             res.json({
                 response: true
             });
