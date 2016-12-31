@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Christopher Mejía Montoya - me@chrissmejia.com - chrissmejia.com   //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -39,7 +39,7 @@ module.exports = function(grunt, tasks) {
                 dest: grunt.dist
             }],
             options: {
-                module: 'amd', //or commonjs 
+                module: 'commonjs', //or amd 
                 target: 'es5', //or es3 
                 sourceMap: true,
                 declaration: true,
