@@ -2,4 +2,5 @@ language: node_js
 node_js:
  - "0.10"
 script: 
+ - "node dist/server.js"
  - "mocha --reporter spec --compilers ts:ts-node/register tests/**/*.test.ts"
