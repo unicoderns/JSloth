@@ -25,10 +25,11 @@
 module.exports = function(grunt) {
     "use strict";
 
+    // Base URI
     grunt.uri = "./";
-    grunt.source = "source/";
-    grunt.dist = "dist/";
-    grunt.views = "views/";
+    // Sys URIs
+    grunt.source = grunt.uri + "source/";
+    grunt.dist = grunt.uri + "dist/";
     grunt.uriTask = grunt.uri + "grunt/";
 
     // Our task object where we"ll store our configuration.

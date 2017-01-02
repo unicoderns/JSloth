@@ -33,13 +33,13 @@ module.exports = function(grunt, tasks) {
         build: {
             files: [{
                     expand: true,
-                    cwd: grunt.uri + "public",
+                    cwd: grunt.source + "public",
                     src: ["**"],
                     dest: grunt.dist + "public"
                 },
                 {
                     expand: true,
-                    cwd: grunt.views,
+                    cwd: grunt.source + "views",
                     src: ["**"],
                     dest: grunt.dist + "views"
                 }

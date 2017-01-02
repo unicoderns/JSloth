@@ -4,6 +4,7 @@ import fs = require('fs');
 import chaiHttp = require('chai-http');
 
 import app from '../source/server';
+import IConfig from '../source/interfaces/IConfig';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
@@ -13,7 +14,7 @@ const expect = chai.expect;
 // ---------------------------------------------------------------------------------------------------------------
 const basePath = process.cwd();
 const configPath = basePath + "/config.json";
-let config:JSON;
+let config: IConfig;
 
 if (fs.existsSync(configPath)) {
     config = require(configPath);
@@ -24,9 +25,31 @@ if (fs.existsSync(configPath)) {
 // ---------------------------------------------------------------------------------------------------------------
 
 describe('Dev Tests', () => {
-
     it('Config file exists', () => {
         expect(config).to.exist;
     });
 
+    describe('MySQL', () => {
+        it('Config exists', () => {
+            expect(config.mysql).to.exist;
+        });
+        it('User is set', () => {
+            expect(config.mysql.user).to.exist;
+        });
+        it('User is a string', () => {
+            expect(config.mysql.user).to.be.string;
+        });
+        it('Password is set', () => {
+            expect(config.mysql.password).to.exist;
+        });
+        it('Password is a string', () => {
+            expect(config.mysql.password).to.be.string;
+        });
+        it('DB name is set', () => {
+            expect(config.mysql.db).to.exist;
+        });
+        it('DB name is a string', () => {
+            expect(config.mysql.db).to.be.string;
+        });
+    });
 });

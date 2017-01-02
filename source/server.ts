@@ -27,6 +27,8 @@ import * as express from "express";
 import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 
+import IConfig from './interfaces/IConfig';
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Creates and configures an ExpressJS web server.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +39,7 @@ class App {
     // Get sys port or assign 3000
     private port = process.env.PORT || 3000;
     // Get config file
-    private config = require('../config.json');
+    private config: IConfig = require("../config.json");
 
     // ---------------------------------------------------------------------------------------------------------------
     // Run configuration methods on the Express instance.
