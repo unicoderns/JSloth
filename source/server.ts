@@ -36,6 +36,8 @@ class App {
     public express: express.Application;
     // Get sys port or assign 3000
     private port = process.env.PORT || 3000;
+    // Get config file
+    private config = require('../config.json');
 
     // ---------------------------------------------------------------------------------------------------------------
     // Run configuration methods on the Express instance.
