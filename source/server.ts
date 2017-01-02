@@ -96,6 +96,7 @@ class App {
          * Check the health of the system.
          * Render a json object with a true response.
          *
+         * @param req {express.Request} The request object.
          * @param res {express.Response} The response object.
          * @return true
          */
