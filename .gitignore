@@ -1,4 +1,5 @@
 .tscache
 npm-debug.log
+config.json
 dist/*
 node_modules/*
