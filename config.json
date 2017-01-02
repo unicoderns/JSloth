@@ -1,1 +1,9 @@
-{}
+{
+    "mysql": {
+        "user": "apiUser",
+        "password": "password",
+        "db": "apiDB",
+        "port": 3306,
+        "host": "localhost"
+    }
+}
