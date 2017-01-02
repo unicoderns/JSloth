@@ -1,5 +1,6 @@
 .tscache
 npm-debug.log
 config.json
+coverage/
 dist/*
 node_modules/*
