@@ -7,12 +7,6 @@ Express foundation API in Typescript
 ![Dev Dependencies](https://david-dm.org/chrissmejia/expressAPI/dev-status.svg)
 
 ## First steps
-* Create configuration file in the root folder (config.json). E.G.:
-
-```json
-{}
-```
-
 * Install dependencies:
 
 ```bash
