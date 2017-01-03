@@ -9,7 +9,8 @@
     "scripts": {
         "start": "node dist/server.js",
         "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
-        "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
+        "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/core/**/*.test.ts",
+        "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
     },
     "bugs": {
         "url": "https://github.com/chrissmejia/expressAPI/issues",
