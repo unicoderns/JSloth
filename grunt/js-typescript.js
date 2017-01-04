@@ -34,7 +34,7 @@ module.exports = function(grunt, tasks) {
             files: [{
                 src: [
                     grunt.source + "/\*\*/\*.ts",
-                    "!" + grunt.source + "source/.baseDir.ts"
+                    "!" + grunt.source + ".baseDir.ts"
                 ],
                 dest: grunt.dist
             }],

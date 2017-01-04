@@ -33,7 +33,7 @@ module.exports = function(grunt, tasks) {
         // The files that we want to check.
         src: [
             grunt.source + "/\*\*/\*.ts",
-            "!" + grunt.source + "source/.baseDir.ts"
+            "!" + grunt.source + ".baseDir.ts"
         ]
     };
 
