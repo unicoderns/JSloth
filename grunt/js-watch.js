@@ -30,6 +30,10 @@ module.exports = function(grunt, tasks) {
     // In this case we have more than a single concat task. We need to append our task to our `tasks` object that
     // way we're not overriding any of other previous tasks.
     tasks.watch = {
+        lint: {
+            files: [grunt.source + "\*\*/\*.ts"],
+            tasks: ["lint"]
+        },
         ts: {
             files: [grunt.source + "\*\*/\*.ts"],
             tasks: ["ts"]
