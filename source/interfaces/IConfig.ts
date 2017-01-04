@@ -1,4 +1,4 @@
-import IMySQL from './IMySQL';
+import IMySQL from "./IMySQL";
 
 interface IConfig {
   mysql: IMySQL;

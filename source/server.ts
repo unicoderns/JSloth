@@ -28,7 +28,9 @@ import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 import * as fs from "fs";
 
-import IConfig from './interfaces/IConfig';
+import IConfig from "./interfaces/IConfig";
+
+import * as routes from "./routes";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Creates and configures an ExpressJS web server.
@@ -38,7 +40,7 @@ class App {
     // Express instance
     public express: express.Application;
     // Get sys port or assign 3000
-    private port = process.env.PORT || 3000;
+    private port: number = process.env.PORT || 3000;
 
 
     // ---------------------------------------------------------------------------------------------------------------
@@ -77,50 +79,7 @@ class App {
     // Configure API endpoints.
     // ---------------------------------------------------------------------------------------------------------------
     private routes(): void {
-        let router = express.Router();
-
-        /**
-         * Render a page with instructions.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
-
-        /**
-         * Render a json object with fake data.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        router.get("/api/users/:id", (req: express.Request, res: express.Response) => {
-            let user = {
-                username: req.params.id,
-                firstName: "Chriss",
-                lastName: "Mejía"
-            };
-            res.json(user);
-        });
-
-        /**
-         * Check the health of the system.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return true
-         */
-        router.get("/health/", (req: express.Request, res: express.Response) => {
-            res.json({
-                response: true
-            });
-        });
-
-        this.express.use("/", router);
+        this.express.use("/", routes.default);
     }
 
 }
