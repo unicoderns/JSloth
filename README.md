@@ -1,10 +1,10 @@
-# expressAPI
-Express foundation API in Typescript
+# JSloth
+Core TDD API code it in express using Typescript
 
-[![Travis](https://travis-ci.org/chrissmejia/expressAPI.svg?branch=master)](https://travis-ci.org/chrissmejia/expressAPI)
-[![Coverage Status](https://coveralls.io/repos/github/chrissmejia/expressAPI/badge.svg)](https://coveralls.io/github/chrissmejia/expressAPI)
-![Dependencies](https://david-dm.org/chrissmejia/expressAPI.svg)
-![Dev Dependencies](https://david-dm.org/chrissmejia/expressAPI/dev-status.svg)
+[![Travis](https://travis-ci.org/chrissmejia/JSloth.svg?branch=master)](https://travis-ci.org/chrissmejia/JSloth)
+[![Coverage Status](https://coveralls.io/repos/github/chrissmejia/JSloth/badge.svg)](https://coveralls.io/github/chrissmejia/JSloth)
+![Dependencies](https://david-dm.org/chrissmejia/JSloth.svg)
+![Dev Dependencies](https://david-dm.org/chrissmejia/JSloth/dev-status.svg)
 
 ## First steps
 

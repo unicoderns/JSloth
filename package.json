@@ -1,5 +1,5 @@
 {
-    "name": "ExpressAPI",
+    "name": "JSloth",
     "version": "0.0.1",
     "author": {
         "name": "Chriss Mejia",
@@ -13,7 +13,7 @@
         "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
     },
     "bugs": {
-        "url": "https://github.com/chrissmejia/expressAPI/issues",
+        "url": "https://github.com/chrissmejia/JSloth/issues",
         "email": "me@chrissmejia.com"
     },
     "license": "(MIT OR Apache-2.0)",
