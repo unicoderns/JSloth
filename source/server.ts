@@ -28,9 +28,9 @@ import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 import * as fs from "fs";
 
-import IConfig from "./interfaces/IConfig";
+import IConfig from "./core/interfaces/IConfig";
 
-import * as routes from "./routes";
+import * as routes from "./core/routes";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Creates and configures an ExpressJS web server.

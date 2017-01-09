@@ -4,7 +4,7 @@ import * as fs from "fs";
 import chaiHttp = require('chai-http');
 
 import app from '../../source/server';
-import IConfig from '../../source/interfaces/IConfig';
+import IConfig from '../../source/core/interfaces/IConfig';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
