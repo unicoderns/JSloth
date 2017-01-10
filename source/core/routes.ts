@@ -24,7 +24,7 @@ class Routes {
     // ---------------------------------------------------------------------------------------------------------------
     private routes(): void {
         this.router.use("/", coreController.default);
-        this.router.use("/app/", appRoutes.default);
+        this.router.use("/", appRoutes.default);
     }
 
 }
