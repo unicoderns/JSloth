@@ -26,8 +26,8 @@ import * as path from "path";
 import * as express from "express";
 import * as logger from "morgan";
 import * as bodyParser from "body-parser";
-import * as fs from "fs";
 
+import * as JSFiles from "./core/lib/files";
 import IConfig from "./core/interfaces/IConfig";
 
 import * as routes from "./core/routes";
@@ -43,19 +43,20 @@ class App {
     private port: number = process.env.PORT || 3000;
 
 
-    // ---------------------------------------------------------------------------------------------------------------
+    // ===============================================================================================================
     // Loading configuration.
-    // ---------------------------------------------------------------------------------------------------------------
+    // ===============================================================================================================
     private configPath: string = "../config.json";
     private config: IConfig;
 
-    // ---------------------------------------------------------------------------------------------------------------
+    // ===============================================================================================================
     // Run configuration methods on the Express instance.
-    // ---------------------------------------------------------------------------------------------------------------
+    // ===============================================================================================================
     constructor() {
-        if (fs.existsSync(this.configPath)) {
+        let files = new JSFiles.Files();
+        files.ifExists(__dirname + this.configPath, function () {
             this.config = require(this.configPath);
-        }
+        });
 
         this.express = express();
         this.middleware();

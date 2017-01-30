@@ -1,6 +1,6 @@
 import * as express from "express";
-import * as appRoutes from "../app/routes";
-import * as coreController from "./controllers/coreController";
+import appRoutes from "../app/routes";
+import coreController from "./controllers/coreController";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Centralized Controller Routes Loader
@@ -23,8 +23,8 @@ class Routes {
     // Configure API endpoints.
     // ---------------------------------------------------------------------------------------------------------------
     private routes(): void {
-        this.router.use("/", coreController.default);
-        this.router.use("/", appRoutes.default);
+        this.router.use("/", coreController);
+        this.router.use("/", appRoutes);
     }
 
 }
