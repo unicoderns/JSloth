@@ -4,6 +4,10 @@ import * as chai from 'chai';
 import * as JSFiles from "../../source/core/lib/files";
 
 const expect = chai.expect;
+
+// ---------------------------------------------------------------------------------------------------------------
+// JSloth Library.
+// ---------------------------------------------------------------------------------------------------------------
 let files = new JSFiles.Files();
 
 describe('Lib Tests - Files', () => {
