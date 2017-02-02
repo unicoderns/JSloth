@@ -34,8 +34,8 @@ export class Path {
      * @return void
      */
     public get(file: string, next: Function): void {
-        let path:string = this.basepath + "views/" + file;
-        let customPath:string = this.basepath + "custom_views/" + file;
+        let path: string = this.basepath + "views/" + file;
+        let customPath: string = this.basepath + "custom_views/" + file;
 
         this.files.exists(customPath, function (exist: boolean) {
             if (exist) {
