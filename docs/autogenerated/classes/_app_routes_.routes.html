@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CoreController | JSloth</title>
+	<title>Routes | JSloth</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,24 +56,36 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_core_controllers_corecontroller_.html">&quot;core/controllers/coreController&quot;</a>
+					<a href="../modules/_app_routes_.html">&quot;app/routes&quot;</a>
 				</li>
 				<li>
-					<a href="_core_controllers_corecontroller_.corecontroller.html">CoreController</a>
+					<a href="_app_routes_.routes.html">Routes</a>
 				</li>
 			</ul>
-			<h1>Class CoreController</h1>
+			<h1>Class Routes</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Centralized Controller Routes Loader</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>returns</dt>
+						<dd><p>express.Router</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CoreController</span>
+						<span class="target">Routes</span>
 					</li>
 				</ul>
 			</section>
@@ -84,19 +96,19 @@
 						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-external tsd-is-not-exported"><a href="_core_controllers_corecontroller_.corecontroller.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-external tsd-is-not-exported"><a href="_app_routes_.routes.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external tsd-is-not-exported"><a href="_core_controllers_corecontroller_.corecontroller.html#router" class="tsd-kind-icon">router</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external tsd-is-not-exported"><a href="_app_routes_.routes.html#router" class="tsd-kind-icon">router</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected tsd-is-external tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external tsd-is-not-exported"><a href="_core_controllers_corecontroller_.corecontroller.html#routes" class="tsd-kind-icon">routes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external tsd-is-not-exported"><a href="_app_routes_.routes.html#routes" class="tsd-kind-icon">routes</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,16 +120,21 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-external tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Core<wbr>Controller<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_controllers_corecontroller_.corecontroller.html" class="tsd-signature-type">CoreController</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Routes<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_routes_.routes.html" class="tsd-signature-type">Routes</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/ccb94ce/source/core/controllers/coreController.ts#L12">core/controllers/coreController.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/12a232f/source/app/routes.ts#L40">app/routes.ts:40</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="_core_controllers_corecontroller_.corecontroller.html" class="tsd-signature-type">CoreController</a></h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Install endpoints</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="_app_routes_.routes.html" class="tsd-signature-type">Routes</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -130,9 +147,19 @@
 					<div class="tsd-signature tsd-kind-icon">router<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">express.Router</span><span class="tsd-signature-symbol"> =&nbsp;express.Router()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/ccb94ce/source/core/controllers/coreController.ts#L12">core/controllers/coreController.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/12a232f/source/app/routes.ts#L40">app/routes.ts:40</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Express Router instance</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>returns</dt>
+							<dd><p>express.Router</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected tsd-is-external tsd-is-not-exported">
@@ -147,9 +174,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/ccb94ce/source/core/controllers/coreController.ts#L24">core/controllers/coreController.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/12a232f/source/app/routes.ts#L48">app/routes.ts:48</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Configure endpoints</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -171,10 +203,10 @@
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
+					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_app_routes_.html">"app/routes"</a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_core_controllers_corecontroller_.html">"core/controllers/core<wbr>Controller"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
@@ -196,16 +228,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
-						<a href="_core_controllers_corecontroller_.corecontroller.html" class="tsd-kind-icon">Core<wbr>Controller</a>
+						<a href="_app_routes_.routes.html" class="tsd-kind-icon">Routes</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-external tsd-is-not-exported">
-								<a href="_core_controllers_corecontroller_.corecontroller.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_app_routes_.routes.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external tsd-is-not-exported">
-								<a href="_core_controllers_corecontroller_.corecontroller.html#router" class="tsd-kind-icon">router</a>
+								<a href="_app_routes_.routes.html#router" class="tsd-kind-icon">router</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external tsd-is-not-exported">
-								<a href="_core_controllers_corecontroller_.corecontroller.html#routes" class="tsd-kind-icon">routes</a>
+								<a href="_app_routes_.routes.html#routes" class="tsd-kind-icon">routes</a>
 							</li>
 						</ul>
 					</li>

@@ -32,26 +32,33 @@ import IConfig from "./core/interfaces/IConfig";
 
 import * as routes from "./core/routes";
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Creates and configures an ExpressJS web server.
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Creates and configure an ExpressJS web server.
+ *
+ * @return express.Application
+ */
 class App {
 
-    // Express instance
+    /*** Express instance */
     public express: express.Application;
-    // Get sys port or assign 3000
+
+    /**
+     * Stores the app port
+     * @default System environment port or 3000
+     */
     private port: number = process.env.PORT || 3000;
 
-
-    // ===============================================================================================================
-    // Loading configuration.
-    // ===============================================================================================================
+    /*** Default configuration filepath */
     private configPath: string = "../config.json";
+
+    /*** Configuration object */
     private config: IConfig;
 
-    // ===============================================================================================================
-    // Run configuration methods on the Express instance.
-    // ===============================================================================================================
+    /**
+     * Load configuration settings
+     * Install endpoints
+     * Configure and run the Express App instance. 
+     */
     constructor() {
         let files = new JSFiles.Files();
         files.ifExists(__dirname + this.configPath, function () {
@@ -67,18 +74,14 @@ class App {
         console.log("The magic happens on port " + this.port);
     }
 
-    // ---------------------------------------------------------------------------------------------------------------
-    // Configure Express middleware.
-    // ---------------------------------------------------------------------------------------------------------------
+    /*** Configure Express middlewares */
     private middleware(): void {
         this.express.use(logger("dev"));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
     }
 
-    // ---------------------------------------------------------------------------------------------------------------
-    // Configure API endpoints.
-    // ---------------------------------------------------------------------------------------------------------------
+    /*** Configure endpoints */
     private routes(): void {
         this.express.use("/", routes.default);
     }
