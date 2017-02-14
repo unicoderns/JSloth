@@ -22,52 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as JSFiles from "./files";
-
-/**
-* JSloth Path
-* Check the right path, search /core/ first and /app/ if is not found it.
-*/
-export class Path {
-
-    /*** JSloth Files instance */
-    private files: JSFiles.Files;
-
-    /*** Basepath for the templates */
-    private basepath: string;
-
-    /*** Configuration methods */
-    constructor() {
-        this.files = new JSFiles.Files();
-    }
-
-    /**
-     * Set the new base path.
-     *
-     * @param path {string} The base path.
-     * @return void
-     */
-    public setTemplateBase(basepath: string): void {
-        this.basepath = basepath;
-    }
-
-    /**
-     * Get the new full path.
-     *
-     * @param file {string} The file name.
-     * @return void
-     */
-    public get(file: string, next: Function): void {
-        let path: string = this.basepath + "views/" + file;
-        let customPath: string = this.basepath + "custom_views/" + file;
-
-        this.files.exists(customPath, (exist: boolean) => {
-            if (exist) {
-                next(customPath);
-            } else {
-                next(path);
-            }
-        });
-    }
-
+/*** App configuration interface. */
+interface IApp {
+  name: String;
+  basepath?: String;
 }
+
+export default IApp;

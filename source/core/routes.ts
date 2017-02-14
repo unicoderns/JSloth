@@ -48,7 +48,6 @@ class Routes {
     /*** Configure endpoints */
     private routes(): void {
         this.router.use("/", coreController);
-        this.router.use("/", appRoutes);
     }
 
 }

@@ -1,4 +1,12 @@
 {
+    "installed_apps": [{
+            "name": "core"
+        },
+        {
+            "name": "app",
+            "basepath": "/app/"
+        }
+    ],
     "mysql": {
         "user": "apiUser",
         "password": "password",

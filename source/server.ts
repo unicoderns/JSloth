@@ -29,6 +29,7 @@ import * as bodyParser from "body-parser";
 
 import * as JSFiles from "./core/lib/files";
 import IConfig from "./core/interfaces/IConfig";
+import IApp from "./core/interfaces/IApp";
 
 import * as routes from "./core/routes";
 
@@ -49,7 +50,7 @@ class App {
     private port: number = process.env.PORT || 3000;
 
     /*** Default configuration filepath */
-    private configPath: string = "../config.json";
+    private configPath: string = "/../config.json";
 
     /*** Configuration object */
     private config: IConfig;
@@ -61,17 +62,22 @@ class App {
      */
     constructor() {
         let files = new JSFiles.Files();
-        files.ifExists(__dirname + this.configPath, function () {
-            this.config = require(this.configPath);
+        console.log("Loading configuration");
+        files.ifExists(__dirname + this.configPath, () => {
+            this.config = require(__dirname + this.configPath);
+
+            this.express = express();
+            this.middleware();
+
+            console.log("Installing endpoints");
+            this.config.installed_apps.forEach((item) => {
+                this.install_app(item);
+            });
+
+            // Run server
+            this.express.listen(this.port);
+            console.log("The magic happens on port " + this.port);
         });
-
-        this.express = express();
-        this.middleware();
-        this.routes();
-
-        // Run server
-        this.express.listen(this.port);
-        console.log("The magic happens on port " + this.port);
     }
 
     /*** Configure Express middlewares */
@@ -81,9 +87,11 @@ class App {
         this.express.use(bodyParser.urlencoded({ extended: false }));
     }
 
-    /*** Configure endpoints */
-    private routes(): void {
-        this.express.use("/", routes.default);
+    /*** Install app */
+    private install_app(config: IApp): void {
+        let appRoute = require("./" + config.name + "/routes");
+        this.express.use("" + (config.basepath || "/"), appRoute.default);
+        console.log("- " + config.name + " endpoint installed");
     }
 
 }

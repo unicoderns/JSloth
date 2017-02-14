@@ -23,10 +23,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import IMySQL from "./IMySQL";
+import IApp from "./IApp";
 
 /*** Configuration interface */
 interface IConfig {
   mysql: IMySQL;
+  installed_apps: IApp[];
 }
 
 export default IConfig;
