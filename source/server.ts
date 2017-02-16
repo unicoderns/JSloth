@@ -27,7 +27,7 @@ import * as express from "express";
 import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 
-import * as JSFiles from "./core/lib/files";
+import * as JSloth from "./core/lib/core";
 import IConfig from "./core/interfaces/IConfig";
 import IApp from "./core/interfaces/IApp";
 
@@ -57,24 +57,30 @@ class App {
 
     /**
      * Load configuration settings
+     * Set up JSloth Global Library
      * Install endpoints
      * Configure and run the Express App instance. 
      */
     constructor() {
-        let files = new JSFiles.Files();
+        // Loading JSloth Global Library
+        let jsloth = new JSloth.Load();
+
+        // Loading Configuration
         console.log("Loading configuration");
-        files.ifExists(__dirname + this.configPath, () => {
+        jsloth.files.ifExists(__dirname + this.configPath, () => {
             this.config = require(__dirname + this.configPath);
 
+            // Creating App
             this.express = express();
             this.middleware();
 
+            // Installing Endpoints
             console.log("Installing endpoints");
             this.config.installed_apps.forEach((item) => {
                 this.install_app(item);
             });
 
-            // Run server
+            // Runing server
             this.express.listen(this.port);
             console.log("The magic happens on port " + this.port);
         });
