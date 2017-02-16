@@ -22,12 +22,12 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as path from "path";
 import * as express from "express";
 import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 
 import * as JSloth from "./core/lib/core";
+
 import IConfig from "./core/interfaces/IConfig";
 import IApp from "./core/interfaces/IApp";
 
@@ -65,14 +65,21 @@ class App {
         // Loading JSloth Global Library
         let jsloth = new JSloth.Load();
 
+        // Creating App
+        this.express = express();
+
         // Loading Configuration
         console.log("Loading configuration");
         jsloth.files.ifExists(__dirname + this.configPath, () => {
             this.config = require(__dirname + this.configPath);
 
-            // Creating App
-            this.express = express();
+            // Installing Middlewares
+            console.log("Installing middlewares");
             this.middleware();
+
+            // Installing Middlewares
+            console.log("Installing default apps");
+            this.defaultApps();
 
             // Installing Endpoints
             console.log("Installing endpoints");
@@ -80,7 +87,7 @@ class App {
                 this.install_app(item);
             });
 
-            // Runing server
+            // Running server
             this.express.listen(this.port);
             console.log("The magic happens on port " + this.port);
         });
@@ -91,6 +98,11 @@ class App {
         this.express.use(logger("dev"));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+    }
+
+    /*** Configure default endpoints */
+    private defaultApps(): void {
+        this.express.use("/", routes.default);
     }
 
     /*** Install app */

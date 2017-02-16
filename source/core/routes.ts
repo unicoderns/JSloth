@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import appRoutes from "../app/routes";
 import coreController from "./controllers/coreController";
 
 /**
