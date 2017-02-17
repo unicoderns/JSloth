@@ -22,49 +22,26 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as fs from "fs";
+import * as mysql from "mysql";
 import IConfig from "../interfaces/IConfig";
 
 /**
- * JSloth Files
- * File related functions.
+ * JSloth DB
+ * Database components.
  */
-export class Files {
+export class DB {
+    private connections: mysql.IPool;
 
     /*** Configuration methods */
-    constructor(config?: IConfig) {
+    constructor(config: IConfig) {
+        this.connections = mysql.createPool({
+            host: config.mysql.host,
+            user: config.mysql.user,
+            password: config.mysql.password,
+            database: config.mysql.db,
+            port: config.mysql.port,
+            connectionLimit: config.mysql.connectionLimit
+        });
     }
-
-    /**
-     * Check if file exists.
-     *
-     * @param path {string} The specific path.
-     * @param next {Function} Callback.
-     * @return void
-     */
-    public exists(path: string, next: Function): void {
-        fs.access(path, fs.constants.F_OK, (err) => {
-             if (!err) {
-                 next(true);
-             } else {
-                 next(false);
-             }
-        });
-    };
-
-    /**
-     * Call the Callback if file exists.
-     *
-     * @param path {string} The specific path.
-     * @param next {Function} Callback.
-     * @return void
-     */
-    public ifExists(path: string, next: Function): void {
-        fs.access(path, fs.constants.F_OK, (err) => {
-             if (!err) {
-                 next();
-             }
-        });
-    };
 
 }

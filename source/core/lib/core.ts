@@ -22,8 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import IConfig from "../interfaces/IConfig";
+
 import * as JSFiles from "./files";
 import * as JSPath from "./path";
+import * as JSDB from "./db";
 
 /**
  * JSloth Loader
@@ -32,11 +35,13 @@ import * as JSPath from "./path";
 export class Load {
     public files: JSFiles.Files;
     public path: JSPath.Path;
+    public db: JSDB.DB;
 
     /*** Configuration methods */
-    constructor() {
-        this.files = new JSFiles.Files();
-        this.path = new JSPath.Path();
+    constructor(config: IConfig) {
+        this.files = new JSFiles.Files(config);
+        this.path = new JSPath.Path(config);
+        this.db = new JSDB.DB(config);
     }
 
 }

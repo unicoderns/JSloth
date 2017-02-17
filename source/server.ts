@@ -27,6 +27,7 @@ import * as logger from "morgan";
 import * as bodyParser from "body-parser";
 
 import * as JSloth from "./core/lib/core";
+import * as JSFiles from "./core/lib/files";
 
 import IConfig from "./core/interfaces/IConfig";
 import IApp from "./core/interfaces/IApp";
@@ -55,6 +56,9 @@ class App {
     /*** Configuration object */
     private config: IConfig;
 
+    /*** JSloth library */
+    private jsloth: JSloth.Load;
+
     /**
      * Load configuration settings
      * Set up JSloth Global Library
@@ -62,16 +66,20 @@ class App {
      * Configure and run the Express App instance. 
      */
     constructor() {
-        // Loading JSloth Global Library
-        let jsloth = new JSloth.Load();
+        // Loading JSloth Files directly to load the config file.
+        let jslothFiles = new JSFiles.Files();
 
         // Creating App
         this.express = express();
 
         // Loading Configuration
         console.log("Loading configuration");
-        jsloth.files.ifExists(__dirname + this.configPath, () => {
+        jslothFiles.ifExists(__dirname + this.configPath, () => {
             this.config = require(__dirname + this.configPath);
+
+            // Loading JSloth Global Library
+            console.log("Loading JSloth Library");
+            this.jsloth = new JSloth.Load(this.config);
 
             // Installing Middlewares
             console.log("Installing middlewares");
