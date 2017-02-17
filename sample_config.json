@@ -8,6 +8,7 @@
         "password": "password",
         "db": "apiDB",
         "port": 3306,
-        "host": "localhost"
+        "host": "localhost",
+        "connectionLimit": 10
     }
 }
