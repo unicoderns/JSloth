@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -48,30 +50,17 @@ class CoreController {
     private routes(): void {
 
         /**
-         * Render a page with instructions.
+         * Check the health of the system.
+         * Render a json object with a true response.
          *
          * @param req {express.Request} The request object.
          * @param res {express.Response} The response object.
-         * @return void
+         * @return true
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
-
-        /**
-         * Render a json object with fake data.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        this.router.get("/api/users/:id", (req: express.Request, res: express.Response) => {
-            let user = {
-                username: req.params.id,
-                firstName: "Chriss",
-                lastName: "Mejía"
-            };
-            res.json(user);
+            res.json({
+                response: true
+            });
         });
 
     }

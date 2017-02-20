@@ -2,6 +2,9 @@
     "installed_apps": [{
         "name": "app",
         "basepath": "/app/"
+    }, {
+        "name": "health",
+        "basepath": "/health/"
     }],
     "mysql": {
         "user": "apiUser",

@@ -116,15 +116,15 @@ class App {
     /*** Install app */
     private install_app(config: IApp): void {
         // Installing regular routes
-        this.jsloth.files.ifExists("./" + config.name + "/routes", () => {
+        this.jsloth.files.ifExists(__dirname + "/" + config.name + "/routes.js", () => {
             let appRoute = require("./" + config.name + "/routes");
             this.express.use("" + (config.basepath || "/"), appRoute.default);
             console.log("- " + config.name + " routes installed");
         });
         // Installing api routes
-        this.jsloth.files.ifExists("./" + config.name + "/api", () => {
+        this.jsloth.files.ifExists(__dirname + "/" + config.name + "/api.js", () => {
             let appRoute = require("./" + config.name + "/api");
-            this.express.use("api/" + (config.basepath || "/"), appRoute.default);
+            this.express.use("/api" + (config.basepath || "/"), appRoute.default);
             console.log("- " + config.name + " endpoint installed");
         });
     }

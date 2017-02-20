@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -23,14 +25,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
+import coreController from "./controllers/coreController";
 
 /**
- * Core Controller Routes
+ * Centralized Controller Routes Loader
  * 
- * @basepath /
  * @return express.Router
  */
-class CoreController {
+class Routes {
 
     /**
      * Express Router instance
@@ -46,35 +48,9 @@ class CoreController {
 
     /*** Configure endpoints */
     private routes(): void {
-
-        /**
-         * Render a page with instructions.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
-
-        /**
-         * Render a json object with fake data.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        this.router.get("/api/users/:id", (req: express.Request, res: express.Response) => {
-            let user = {
-                username: req.params.id,
-                firstName: "Chriss",
-                lastName: "Mejía"
-            };
-            res.json(user);
-        });
-
+        this.router.use("/", coreController);
     }
+
 }
 
-export default new CoreController().router;
+export default new Routes().router;
