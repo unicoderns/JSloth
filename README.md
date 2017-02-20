@@ -1,5 +1,5 @@
 # JSloth
-Core TDD API code it in express using Typescript
+Modular TDD express app using Typescript
 
 [![Travis](https://travis-ci.org/chrissmejia/JSloth.svg?branch=master)](https://travis-ci.org/chrissmejia/JSloth)
 [![Coverage Status](https://coveralls.io/repos/github/chrissmejia/JSloth/badge.svg)](https://coveralls.io/github/chrissmejia/JSloth)

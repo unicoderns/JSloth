@@ -90,7 +90,7 @@ class App {
             this.defaultApps();
 
             // Installing Endpoints
-            console.log("Installing endpoints");
+            console.log("Installing apps");
             this.config.installed_apps.forEach((item) => {
                 this.install_app(item);
             });
@@ -115,9 +115,18 @@ class App {
 
     /*** Install app */
     private install_app(config: IApp): void {
-        let appRoute = require("./" + config.name + "/routes");
-        this.express.use("" + (config.basepath || "/"), appRoute.default);
-        console.log("- " + config.name + " endpoint installed");
+        // Installing regular routes
+        this.jsloth.files.ifExists("./" + config.name + "/routes", () => {
+            let appRoute = require("./" + config.name + "/routes");
+            this.express.use("" + (config.basepath || "/"), appRoute.default);
+            console.log("- " + config.name + " routes installed");
+        });
+        // Installing api routes
+        this.jsloth.files.ifExists("./" + config.name + "/api", () => {
+            let appRoute = require("./" + config.name + "/api");
+            this.express.use("api/" + (config.basepath || "/"), appRoute.default);
+            console.log("- " + config.name + " endpoint installed");
+        });
     }
 
 }
