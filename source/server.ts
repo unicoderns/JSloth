@@ -110,7 +110,9 @@ class App {
 
     /*** Configure default endpoints */
     private defaultApps(): void {
-        this.express.use("/", routes.default);
+        let route = new routes.Routes(this.jsloth);
+        this.express.use("/", route.router);
+        console.log("- Core routes installed");
     }
 
     /*** Install app */
@@ -118,13 +120,15 @@ class App {
         // Installing regular routes
         this.jsloth.files.ifExists(__dirname + "/" + config.name + "/routes.js", () => {
             let appRoute = require("./" + config.name + "/routes");
-            this.express.use("" + (config.basepath || "/"), appRoute.default);
+            let route = new appRoute.Routes(this.jsloth);
+            this.express.use("" + (config.basepath || "/"), route.router);
             console.log("- " + config.name + " routes installed");
         });
         // Installing api routes
         this.jsloth.files.ifExists(__dirname + "/" + config.name + "/api.js", () => {
             let appRoute = require("./" + config.name + "/api");
-            this.express.use("/api" + (config.basepath || "/"), appRoute.default);
+            let route = new appRoute.Routes(this.jsloth);
+            this.express.use("/api" + (config.basepath || "/"), route.router);
             console.log("- " + config.name + " endpoint installed");
         });
     }

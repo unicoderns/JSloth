@@ -23,6 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
+import * as controller from "../abstract/controller";
+import * as JSloth from "../lib/core";
 
 /**
  * Core Controller Routes
@@ -30,22 +32,10 @@ import * as express from "express";
  * @basepath /
  * @return express.Router
  */
-class CoreController {
-
-    /**
-     * Express Router instance
-     *
-     * @return express.Router
-     */
-    public router: express.Router = express.Router();
-
-    /*** Install endpoints */
-    constructor() {
-        this.routes();
-    }
+export class CoreController extends controller.Controller {
 
     /*** Configure endpoints */
-    private routes(): void {
+    protected routes(): void {
 
         /**
          * Render a page with instructions.
@@ -76,5 +66,3 @@ class CoreController {
 
     }
 }
-
-export default new CoreController().router;

@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -23,8 +25,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import * as JSloth from "./lib/core";
-import * as routes from "./abstract/routes";
+import * as routes from "../core/abstract/routes";
+import * as JSloth from "../core/lib/core";
 import * as coreController from "./controllers/coreController";
 
 /**
@@ -34,13 +36,9 @@ import * as coreController from "./controllers/coreController";
  */
 export class Routes extends routes.Routes {
 
-    /*** Configure endpoints */
+    /*** Configure routes */
     protected routes(): void {
-        // this.router.use("/", this.load(coreController.CoreController));
-
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
+        this.router.use("/", this.load(coreController.CoreController));
     }
 
 }

@@ -23,24 +23,40 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import * as JSloth from "./lib/core";
-import * as routes from "./abstract/routes";
-import * as coreController from "./controllers/coreController";
+import * as JSloth from "../lib/core";
+import * as controller from "../abstract/controller";
 
 /**
- * Centralized Controller Routes Loader
- * 
- * @return express.Router
+ * Routes Abstract
  */
-export class Routes extends routes.Routes {
+export class Routes {
+    protected jsloth: JSloth.Load;
 
-    /*** Configure endpoints */
+    /**
+     * Express Router instance
+     *
+     * @return express.Router
+     */
+    public router: express.Router = express.Router();
+
+    /*** Load library */
+    constructor(jsloth: JSloth.Load) {
+        this.jsloth = jsloth;
+        this.routes();
+    }
+
+    /**
+     * Load Routes 
+     * 
+     * @return express.Router
+     */
+    protected load(controller: any): express.Router {
+        let instance = new controller(this.jsloth);
+        return instance.router;
+    }
+
+    /*** Configure routes */
     protected routes(): void {
-        // this.router.use("/", this.load(coreController.CoreController));
-
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
     }
 
 }

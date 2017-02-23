@@ -25,32 +25,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import coreController from "./controllers/coreController";
+import * as routes from "../core/abstract/routes";
+import * as JSloth from "../core/lib/core";
+import * as coreEndpoint from "./endpoints/coreEndpoint";
 
 /**
- * Centralized Controller Routes Loader
+ * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
-class Routes {
-
-    /**
-     * Express Router instance
-     *
-     * @return express.Router
-     */
-    public router: express.Router = express.Router();
-
-    /*** Install endpoints */
-    constructor() {
-        this.routes();
-    }
+export class Routes extends routes.Routes {
 
     /*** Configure endpoints */
-    private routes(): void {
-        this.router.use("/", coreController);
+    protected routes(): void {
+        this.router.use("/", this.load(coreEndpoint.CoreEndPoint));
     }
 
 }
-
-export default new Routes().router;

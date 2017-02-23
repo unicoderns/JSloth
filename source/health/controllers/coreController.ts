@@ -25,6 +25,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
+import * as controller from "../../core/abstract/controller";
+import * as JSloth from "../../core/lib/core";
 
 /**
  * Core Controller Routes
@@ -32,22 +34,10 @@ import * as express from "express";
  * @basepath /
  * @return express.Router
  */
-class CoreController {
-
-    /**
-     * Express Router instance
-     *
-     * @return express.Router
-     */
-    public router: express.Router = express.Router();
-
-    /*** Install endpoints */
-    constructor() {
-        this.routes();
-    }
+export class CoreController extends controller.Controller {
 
     /*** Configure endpoints */
-    private routes(): void {
+    protected routes(): void {
 
         /**
          * Check the health of the system.
@@ -58,12 +48,8 @@ class CoreController {
          * @return true
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.json({
-                response: true
-            });
+            res.render("../source/health/views/index.ejs");
         });
 
     }
 }
-
-export default new CoreController().router;

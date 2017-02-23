@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -23,24 +25,33 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import * as JSloth from "./lib/core";
-import * as routes from "./abstract/routes";
-import * as coreController from "./controllers/coreController";
+import * as controller from "../../core/abstract/controller";
+import * as JSloth from "../../core/lib/core";
 
 /**
- * Centralized Controller Routes Loader
+ * Core Controller Routes
  * 
+ * @basepath /
  * @return express.Router
  */
-export class Routes extends routes.Routes {
+export class CoreEndPoint extends controller.Controller {
 
     /*** Configure endpoints */
     protected routes(): void {
-        // this.router.use("/", this.load(coreController.CoreController));
 
+        /**
+         * Check the health of the system.
+         * Render a json object with a true response.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         * @return true
+         */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
+            res.json({
+                response: true
+            });
         });
-    }
 
+    }
 }

@@ -23,6 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
+import * as routes from "../core/abstract/routes";
+import * as JSloth from "../core/lib/core";
 // import * as somethingController from "./controllers/somethingController";
 
 /**
@@ -30,7 +32,7 @@ import * as express from "express";
  * 
  * @return express.Router
  */
-class Routes {
+class Routes extends routes.Routes {
 
     /**
      * Express Router instance
@@ -40,15 +42,14 @@ class Routes {
     public router: express.Router = express.Router();
 
     /*** Install endpoints */
-    constructor() {
+    constructor(jsloth: JSloth.Load) {
+        super(jsloth);
         this.routes();
     }
 
     /*** Configure endpoints */
-    private routes(): void {
+    protected routes(): void {
         // this.router.use("/", somethingController.default);
     }
 
 }
-
-export default new Routes().router;
