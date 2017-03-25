@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as mysql from "mysql";
-import IConfig from "../interfaces/IConfig";
+import Config from "../interfaces/Config";
 
 /**
  * JSloth DB
@@ -33,7 +33,7 @@ export class DB {
     private connections: mysql.IPool;
 
     /*** Configuration methods */
-    constructor(config: IConfig) {
+    constructor(config: Config) {
         this.connections = mysql.createPool({
             host: config.mysql.host,
             user: config.mysql.user,

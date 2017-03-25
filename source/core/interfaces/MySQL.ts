@@ -22,13 +22,14 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import IMySQL from "./IMySQL";
-import IApp from "./IApp";
-
-/*** Configuration interface */
-interface IConfig {
-  mysql: IMySQL;
-  installed_apps: IApp[];
+/*** MySQL configuration interface. */
+interface MySQL {
+  user: string;
+  password: string;
+  db: string;
+  port: number;
+  host: string;
+  connectionLimit: number;
 }
 
-export default IConfig;
+export default MySQL;

@@ -29,8 +29,8 @@ import * as bodyParser from "body-parser";
 import * as JSloth from "./core/lib/core";
 import * as JSFiles from "./core/lib/files";
 
-import IConfig from "./core/interfaces/IConfig";
-import IApp from "./core/interfaces/IApp";
+import Config from "./core/interfaces/Config";
+import App from "./core/interfaces/App";
 
 import * as routes from "./core/routes";
 
@@ -39,7 +39,7 @@ import * as routes from "./core/routes";
  *
  * @return express.Application
  */
-class App {
+class Server {
 
     /*** Express instance */
     public express: express.Application;
@@ -54,7 +54,7 @@ class App {
     private configPath: string = "/../config.json";
 
     /*** Configuration object */
-    private config: IConfig;
+    private config: Config;
 
     /*** JSloth library */
     private jsloth: JSloth.Load;
@@ -116,7 +116,15 @@ class App {
     }
 
     /*** Install app */
-    private install_app(config: IApp): void {
+    private install_app(config: App): void {
+        // Compiling styles
+        console.log("Generating styles for " + config.name);
+        let exec = require("child_process").execSync;
+        try {
+            exec("node-sass --output-style compressed -o " + __dirname + "/" + config.name + " " + __dirname + "/../source/" + config.name, { stdio: [0, 1, 2] });
+        } catch (e) {
+
+        }
         // Installing regular routes
         this.jsloth.files.ifExists(__dirname + "/" + config.name + "/routes.js", () => {
             let appRoute = require("./" + config.name + "/routes");
@@ -131,8 +139,10 @@ class App {
             this.express.use("/api" + (config.basepath || "/"), route.router);
             console.log("- " + config.name + " endpoint installed");
         });
+
+        console.log(config.name + " finished");
     }
 
 }
 
-export default new App().express;
+export default new Server().express;

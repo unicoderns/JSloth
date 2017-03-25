@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as JSFiles from "./files";
-import IConfig from "../interfaces/IConfig";
+import Config from "../interfaces/Config";
 
 /**
 * JSloth Path
@@ -38,7 +38,7 @@ export class Path {
     private basepath: string;
 
     /*** Configuration methods */
-    constructor(config: IConfig) {
+    constructor(config: Config) {
         this.files = new JSFiles.Files(config);
     }
 

@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import IConfig from "../interfaces/IConfig";
+import Config from "../interfaces/Config";
 
 import * as JSFiles from "./files";
 import * as JSPath from "./path";
@@ -38,7 +38,7 @@ export class Load {
     public db: JSDB.DB;
 
     /*** Configuration methods */
-    constructor(config: IConfig) {
+    constructor(config: Config) {
         this.files = new JSFiles.Files(config);
         this.path = new JSPath.Path(config);
         this.db = new JSDB.DB(config);

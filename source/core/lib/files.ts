@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as fs from "fs";
-import IConfig from "../interfaces/IConfig";
+import Config from "../interfaces/Config";
 
 /**
  * JSloth Files
@@ -32,7 +32,7 @@ import IConfig from "../interfaces/IConfig";
 export class Files {
 
     /*** Configuration methods */
-    constructor(config?: IConfig) {
+    constructor(config?: Config) {
     }
 
     /**

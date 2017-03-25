@@ -26,13 +26,11 @@
 
 import * as express from "express";
 import * as controller from "../../core/abstract/controller";
-import * as JSloth from "../../core/lib/core";
 
 /**
  * Core Controller Routes
  * 
- * @basepath /
- * @return express.Router
+ * @basepath /health/
  */
 export class CoreController extends controller.Controller {
 
@@ -40,12 +38,10 @@ export class CoreController extends controller.Controller {
     protected routes(): void {
 
         /**
-         * Check the health of the system.
-         * Render a json object with a true response.
+         * Page to check the health of the system.
          *
          * @param req {express.Request} The request object.
          * @param res {express.Response} The response object.
-         * @return true
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
             res.render("../source/health/views/index.ejs");

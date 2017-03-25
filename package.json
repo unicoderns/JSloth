@@ -43,6 +43,7 @@
     "jscoverage": "^0.6.0",
     "mocha": "^3.2.0",
     "mocha-lcov-reporter": "^1.2.0",
+    "node-sass": "^4.5.0",
     "ts-node": "^0.9.3",
     "tslint": "^4.2.0",
     "typescript": "^2.1.4"

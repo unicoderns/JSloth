@@ -22,10 +22,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** App configuration interface. */
-interface IApp {
-  name: String;
-  basepath?: String;
+import MySQL from "./MySQL";
+import App from "./App";
+
+/*** Configuration interface */
+interface Config {
+  mysql: MySQL;
+  installed_apps: App[];
 }
 
-export default IApp;
+export default Config;

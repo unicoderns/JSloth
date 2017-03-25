@@ -44,12 +44,12 @@ module.exports = function(grunt) {
     // Copy Tasks
     tasks = require(grunt.uriTask + "js-copy.js")(grunt, tasks);
 
-    // Minify Tasks
+    // Watch Tasks
     tasks = require(grunt.uriTask + "js-watch.js")(grunt, tasks);
 
     // Register The Tasks
-    grunt.registerTask("lint", ["tslint"]);
     grunt.registerTask("typescript", ["ts"]);
+    grunt.registerTask("lint", ["tslint"]);
     grunt.registerTask("cp", ["copy"]);
     //grunt.registerTask("watch", ["daemon"]);
     grunt.registerTask("default", ["lint", "typescript", "cp"]);

@@ -22,14 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** MySQL configuration interface. */
-interface IMySQL {
-  user: string;
-  password: string;
-  db: string;
-  port: number;
-  host: string;
-  connectionLimit: number;
+/*** App configuration interface. */
+interface App {
+  name: String;
+  basepath?: String;
 }
 
-export default IMySQL;
+export default App;
