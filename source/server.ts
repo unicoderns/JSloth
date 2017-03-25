@@ -30,7 +30,7 @@ import * as JSloth from "./core/lib/core";
 import * as JSFiles from "./core/lib/files";
 
 import Config from "./core/interfaces/Config";
-import App from "./core/interfaces/App";
+import * as App from "./core/interfaces/App";
 
 import * as routes from "./core/routes";
 
@@ -40,7 +40,6 @@ import * as routes from "./core/routes";
  * @return express.Application
  */
 class Server {
-
     /*** Express instance */
     public express: express.Application;
 
@@ -55,6 +54,9 @@ class Server {
 
     /*** Configuration object */
     private config: Config;
+
+    /*** Apps object */
+    private apps: App.App[] = [];
 
     /*** JSloth library */
     private jsloth: JSloth.Load;
@@ -92,12 +94,17 @@ class Server {
             // Installing Endpoints
             console.log("Installing apps");
             this.config.installed_apps.forEach((item) => {
-                this.install_app(item);
+                let app: App.App = {
+                    status: {
+                        done: false,
+                        routes: false,
+                        api: false
+                    },
+                    config: item
+                };
+                this.apps.push(app);
+                this.install_app(app);
             });
-
-            // Running server
-            this.express.listen(this.port);
-            console.log("The magic happens on port " + this.port);
         });
     }
 
@@ -115,32 +122,62 @@ class Server {
         console.log("- Core routes installed");
     }
 
+    /*** Run the server */
+    private start(): void {
+        let testCount = 0; // Number of checked apps so far
+        let done = true; // All done
+
+        this.apps.forEach((app) => {
+            if (!app.status.done) {
+                done = false;
+            }
+            testCount++;
+
+            // Everything is installed?
+            if ((this.apps.length === testCount) && (done)) {
+                this.express.listen(this.port);
+                console.log("The magic happens on port " + this.port);
+            }
+        });
+    }
+
     /*** Install app */
-    private install_app(config: App): void {
+    private install_app(app: App.App): void {
         // Compiling styles
-        console.log("Generating styles for " + config.name);
+        let done = () => {
+            if ((app.status.routes) && (app.status.api)) {
+                app.status.done = true;
+                this.start();
+            }
+        };
+
+        console.log("Generating styles for " + app.config.name);
         let exec = require("child_process").execSync;
         try {
-            exec("node-sass --output-style compressed -o " + __dirname + "/" + config.name + " " + __dirname + "/../source/" + config.name, { stdio: [0, 1, 2] });
+            exec("node-sass --output-style compressed -o " + __dirname + "/" + app.config.name + " " + __dirname + "/../source/" + app.config.name, { stdio: [0, 1, 2] });
         } catch (e) {
 
         }
         // Installing regular routes
-        this.jsloth.files.ifExists(__dirname + "/" + config.name + "/routes.js", () => {
-            let appRoute = require("./" + config.name + "/routes");
+        this.jsloth.files.ifExists(__dirname + "/" + app.config.name + "/routes.js", () => {
+            let appRoute = require("./" + app.config.name + "/routes");
             let route = new appRoute.Routes(this.jsloth);
-            this.express.use("" + (config.basepath || "/"), route.router);
-            console.log("- " + config.name + " routes installed");
+            this.express.use("" + (app.config.basepath || "/"), route.router);
+
+            app.status.routes = true;
+            console.log("- " + app.config.name + " routes installed");
+            done();
         });
         // Installing api routes
-        this.jsloth.files.ifExists(__dirname + "/" + config.name + "/api.js", () => {
-            let appRoute = require("./" + config.name + "/api");
+        this.jsloth.files.ifExists(__dirname + "/" + app.config.name + "/api.js", () => {
+            let appRoute = require("./" + app.config.name + "/api");
             let route = new appRoute.Routes(this.jsloth);
-            this.express.use("/api" + (config.basepath || "/"), route.router);
-            console.log("- " + config.name + " endpoint installed");
-        });
+            this.express.use("/api" + (app.config.basepath || "/"), route.router);
 
-        console.log(config.name + " finished");
+            app.status.api = true;
+            console.log("- " + app.config.name + " endpoint installed");
+            done();
+        });
     }
 
 }

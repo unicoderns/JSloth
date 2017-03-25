@@ -23,12 +23,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import MySQL from "./MySQL";
-import App from "./App";
+import * as App from "./App";
 
 /*** Configuration interface */
 interface Config {
   mysql: MySQL;
-  installed_apps: App[];
+  installed_apps: App.Config[];
 }
 
 export default Config;

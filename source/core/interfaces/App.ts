@@ -22,10 +22,21 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/*** App interface. */
+export interface App {
+  status: Status;
+  config: Config;
+}
+
 /*** App configuration interface. */
-interface App {
+export interface Config {
   name: String;
   basepath?: String;
 }
 
-export default App;
+/*** App configuration interface. */
+export interface Status {
+  done: Boolean;
+  routes: Boolean;
+  api: Boolean;
+}
