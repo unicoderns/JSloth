@@ -6,9 +6,16 @@
 Welcome to JSloth's documentation!
 ==================================
 
+JSloth is a `Typescript`_ TDD extensible core base app that will save you time in your new Node/Express projects.
+
+.. _Typescript: https://www.typescriptlang.org/
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   installation
+   controllers
 
 
 
