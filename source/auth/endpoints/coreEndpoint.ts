@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,25 +24,34 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
-import Config from "../interfaces/Config";
+import * as express from "express";
+import * as controller from "../../core/abstract/controller";
+import * as JSloth from "../../core/lib/core";
 
 /**
- * JSloth DB
- * Database components.
+ * Core Controller Routes
+ * 
+ * @basepath /
+ * @return express.Router
  */
-export class DB {
-    private connections: mysql.IPool;
+export class CoreEndPoint extends controller.Controller {
 
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.connections = mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            database: config.mysql.db,
-            port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
+    /*** Configure endpoints */
+    protected routes(): void {
+
+        /**
+         * Check the health of the system.
+         * Render a json object with a true response.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         * @return true
+         */
+        this.router.get("/", (req: express.Request, res: express.Response) => {
+            res.json({
+                response: true
+            });
         });
+
     }
 }

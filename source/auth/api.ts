@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Auth App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,25 +24,21 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
-import Config from "../interfaces/Config";
+import * as express from "express";
+import * as routes from "../core/abstract/routes";
+import * as JSloth from "../core/lib/core";
+import * as coreEndpoint from "./endpoints/coreEndpoint";
 
 /**
- * JSloth DB
- * Database components.
+ * Centralized Controller Endpoint Loader
+ * 
+ * @return express.Router
  */
-export class DB {
-    private connections: mysql.IPool;
+export class Routes extends routes.Routes {
 
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.connections = mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            database: config.mysql.db,
-            port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
-        });
+    /*** Configure endpoints */
+    protected routes(): void {
+        this.router.use("/", this.load(coreEndpoint.CoreEndPoint));
     }
+
 }

@@ -2,7 +2,7 @@
 Controllers
 ##################
 
-The place for the bussiness logic.
+The place for the business logic.
 
 ==========
 Example

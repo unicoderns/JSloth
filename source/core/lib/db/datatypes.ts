@@ -22,25 +22,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
-import Config from "../interfaces/Config";
+import * as dbtable from "../../interfaces/db/table";
 
 /**
- * JSloth DB
- * Database components.
+ * JSloth DB Datatypes
  */
-export class DB {
-    private connections: mysql.IPool;
+export class Datatypes {
 
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.connections = mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            database: config.mysql.db,
-            port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
-        });
+    public CHAR(settings?: dbtable.FieldSettings): dbtable.Datatype {
+        let type: dbtable.Datatype = {
+            type: "CHAR",
+            size: settings.size,
+        };
+        return type;
     }
+
 }

@@ -22,25 +22,37 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
-import Config from "../interfaces/Config";
+
+// from django.db import models
+
+// class Musician(models.Model):
+//     first_name = models.CharField(max_length=50)
+//     last_name = models.CharField(max_length=50)
+//     instrument = models.CharField(max_length=100)
+
+/////////////////////////////////////////////////
+
+import * as model from "../../core/abstract/model";
+import * as dbtable from "../../core/interfaces/db/table";
+import * as datatypes from "../../core/lib/db/datatypes";
+
+export interface User {
+    id?: number;
+    created?: number;
+    username: string;
+    email: string;
+    password: string;
+    salt: string;
+    first_name?: string;
+    last_name?: string;
+}
 
 /**
- * JSloth DB
- * Database components.
+ * User Model
  */
-export class DB {
-    private connections: mysql.IPool;
+export class UsersTable extends model.Model {
+    public first_name: dbtable.Datatype = new datatypes.Datatypes().CHAR();
+    // models.CharField(max_length = 50)
+    // public last_name = models.CharField(max_length = 50)
 
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.connections = mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            database: config.mysql.db,
-            port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
-        });
-    }
 }

@@ -22,25 +22,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
-import Config from "../interfaces/Config";
+/*** Datatype interface. */
+export interface Datatype {
+  type: string;
+  size: number;
+}
 
-/**
- * JSloth DB
- * Database components.
- */
-export class DB {
-    private connections: mysql.IPool;
-
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.connections = mysql.createPool({
-            host: config.mysql.host,
-            user: config.mysql.user,
-            password: config.mysql.password,
-            database: config.mysql.db,
-            port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
-        });
-    }
+export interface FieldSettings {
+  size?: number;
+  alias?: string;
 }
