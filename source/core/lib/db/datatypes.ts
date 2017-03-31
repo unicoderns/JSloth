@@ -29,12 +29,66 @@ import * as dbtable from "../../interfaces/db/table";
  */
 export class Datatypes {
 
-    public CHAR(settings?: dbtable.FieldSettings): dbtable.Datatype {
-        let type: dbtable.Datatype = {
-            type: "CHAR",
-            size: settings.size,
+    private fillCommonTypes(settings?: dbtable.FieldSettings) {
+        let type: dbtable.FieldCommonTypes = {
+            primaryKey: settings.primaryKey || false,
+            notNull: settings.notNull || false,
+            unique: settings.unique || false,
+            // binary: settings.binary || false,
+            unsigned: settings.unsigned || false,
+            zeroFill: settings.zeroFill || false,
+            autoincrement: settings.autoincrement || false,
+            generated: settings.generated || false
         };
         return type;
     }
+
+    /////////////////////////////////////////////////////////////////////
+    // Numbers
+    /////////////////////////////////////////////////////////////////////
+
+    public INT(settings?: dbtable.FieldSettings): dbtable.Datatype {
+        let commonType = this.fillCommonTypes(settings);
+        let customType: dbtable.Datatype = {
+            type: "INT",
+            size: settings.size,
+        };
+        let type = (<any>Object).assign({}, commonType, customType); // Merge
+        return type;
+    }
+
+    // ------------------------------------------------------------------
+    // Special Numbers
+    // ------------------------------------------------------------------
+
+    public ID(settings?: dbtable.FieldSettings): dbtable.Datatype {
+        let commonType = this.fillCommonTypes(settings);
+        let customType: dbtable.Datatype = {
+            type: "INT",
+            size: settings.size || 0,
+            primaryKey: true,
+            notNull: true,
+            unique: true,
+            unsigned: true,
+            autoincrement: true
+        };
+        let type = (<any>Object).assign({}, commonType, customType); // Merge
+        return type;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Strings
+    /////////////////////////////////////////////////////////////////////
+
+    public CHAR(settings?: dbtable.FieldSettings): dbtable.Datatype {
+        let commonType = this.fillCommonTypes(settings);
+        let customType: dbtable.Datatype = {
+            type: "CHAR",
+            size: settings.size,
+        };
+        let type = (<any>Object).assign({}, commonType, customType); // Merge
+        return type;
+    }
+
 
 }

@@ -22,13 +22,24 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** Datatype interface. */
-export interface Datatype {
-  type: string;
-  size: number;
+export interface FieldCommonTypes {
+    primaryKey?: boolean;
+    notNull?: boolean;
+    unique?: boolean;
+    // binary?: boolean;
+    unsigned?: boolean;
+    zeroFill?: boolean;
+    autoincrement?: boolean;
+    generated?: boolean;
 }
 
-export interface FieldSettings {
-  size?: number;
-  alias?: string;
+/*** Datatype interface. */
+export interface Datatype extends FieldCommonTypes {
+    type: string;
+    size: number;
+}
+
+export interface FieldSettings extends FieldCommonTypes {
+    size?: number;
+    alias?: string;
 }

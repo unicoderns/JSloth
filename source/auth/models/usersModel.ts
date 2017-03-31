@@ -51,6 +51,7 @@ export interface User {
  * User Model
  */
 export class UsersTable extends model.Model {
+    public id: dbtable.Datatype = new datatypes.Datatypes().ID();
     public first_name: dbtable.Datatype = new datatypes.Datatypes().CHAR();
     // models.CharField(max_length = 50)
     // public last_name = models.CharField(max_length = 50)
