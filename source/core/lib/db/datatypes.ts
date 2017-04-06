@@ -22,15 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as dbtable from "../../interfaces/db/table";
+import * as fields from "../../interfaces/db/fields";
+import * as settings from "../../interfaces/db/settings";
 
 /**
  * JSloth DB Datatypes
  */
 export class Datatypes {
 
-    private fillCommonTypes(settings?: dbtable.FieldSettings) {
-        let type: dbtable.FieldCommonTypes = {
+    private fillCommonTypes(settings?: settings.General) {
+        let type: settings.General = {
             primaryKey: settings.primaryKey || false,
             notNull: settings.notNull || false,
             unique: settings.unique || false,
@@ -47,11 +48,11 @@ export class Datatypes {
     // Numbers
     /////////////////////////////////////////////////////////////////////
 
-    public INT(settings?: dbtable.FieldSettings): dbtable.Datatype {
+    public INT(settings?: settings.General): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
-        let customType: dbtable.Datatype = {
+        let customType: fields.Datatype = {
             type: "INT",
-            size: settings.size,
+            size: settings.size
         };
         let type = (<any>Object).assign({}, commonType, customType); // Merge
         return type;
@@ -61,9 +62,9 @@ export class Datatypes {
     // Special Numbers
     // ------------------------------------------------------------------
 
-    public ID(settings?: dbtable.FieldSettings): dbtable.Datatype {
+    public ID(settings?: settings.General): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
-        let customType: dbtable.Datatype = {
+        let customType: fields.Datatype = {
             type: "INT",
             size: settings.size || 0,
             primaryKey: true,
@@ -80,15 +81,38 @@ export class Datatypes {
     // Strings
     /////////////////////////////////////////////////////////////////////
 
-    public CHAR(settings?: dbtable.FieldSettings): dbtable.Datatype {
+    public CHAR(settings?: settings.General): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
-        let customType: dbtable.Datatype = {
+        let customType: fields.Datatype = {
             type: "CHAR",
-            size: settings.size,
+            size: settings.size
         };
         let type = (<any>Object).assign({}, commonType, customType); // Merge
         return type;
     }
 
+    public VARCHAR(settings?: settings.General): fields.Datatype {
+        let commonType = this.fillCommonTypes(settings);
+        let customType: fields.Datatype = {
+            type: "VARCHAR",
+            size: settings.size
+        };
+        let type = (<any>Object).assign({}, commonType, customType); // Merge
+        return type;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Dates
+    /////////////////////////////////////////////////////////////////////
+
+    public TIMESTAMP(settings?: settings.Timestamp): fields.DataTimestampType {
+        let commonType = this.fillCommonTypes(settings);
+        let customType: fields.DataTimestampType = {
+            type: "TIMESTAMP",
+            default: settings.default
+        };
+        let type = (<any>Object).assign({}, commonType, customType); // Merge
+        return type;
+    }
 
 }

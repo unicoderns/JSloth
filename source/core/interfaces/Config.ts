@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import MySQL from "./db/connection";
+import MySQL from "./db/connections";
 import * as App from "./App";
 
 /*** Configuration interface */

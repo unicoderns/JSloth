@@ -33,7 +33,8 @@
 /////////////////////////////////////////////////
 
 import * as model from "../../core/abstract/model";
-import * as dbtable from "../../core/interfaces/db/table";
+import * as fields from "../../core/interfaces/db/fields";
+import * as defaults from "../../core/interfaces/db/defaults";
 import * as datatypes from "../../core/lib/db/datatypes";
 
 export interface User {
@@ -51,8 +52,20 @@ export interface User {
  * User Model
  */
 export class UsersTable extends model.Model {
-    public id: dbtable.Datatype = new datatypes.Datatypes().ID();
-    public first_name: dbtable.Datatype = new datatypes.Datatypes().CHAR();
+
+    public id: fields.Datatype = new datatypes.Datatypes().ID();
+
+    public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
+        notNull: true,
+        default: defaults.Timestamp.CURRENT_TIMESTAMP
+    });
+
+    public username: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        size: 45,
+        unique: true
+    });
+
+    public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR();
     // models.CharField(max_length = 50)
     // public last_name = models.CharField(max_length = 50)
 

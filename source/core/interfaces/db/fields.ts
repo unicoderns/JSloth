@@ -22,7 +22,9 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-export interface FieldCommonTypes {
+import * as defaults from "./defaults";
+
+export interface CommonTypes {
     primaryKey?: boolean;
     notNull?: boolean;
     unique?: boolean;
@@ -34,12 +36,12 @@ export interface FieldCommonTypes {
 }
 
 /*** Datatype interface. */
-export interface Datatype extends FieldCommonTypes {
+export interface Datatype extends CommonTypes {
     type: string;
     size: number;
 }
 
-export interface FieldSettings extends FieldCommonTypes {
-    size?: number;
-    alias?: string;
+export interface DataTimestampType extends CommonTypes {
+    type: string;
+    default: defaults.Timestamp;
 }
