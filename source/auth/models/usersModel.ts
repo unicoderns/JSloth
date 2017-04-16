@@ -22,16 +22,6 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-// from django.db import models
-
-// class Musician(models.Model):
-//     first_name = models.CharField(max_length=50)
-//     last_name = models.CharField(max_length=50)
-//     instrument = models.CharField(max_length=100)
-
-/////////////////////////////////////////////////
-
 import * as model from "../../core/abstract/model";
 import * as fields from "../../core/interfaces/db/fields";
 import * as defaults from "../../core/interfaces/db/defaults";
@@ -46,6 +36,8 @@ export interface User {
     salt: string;
     first_name?: string;
     last_name?: string;
+    // timezone?: string;
+    root?: boolean;
 }
 
 /**
@@ -65,8 +57,30 @@ export class UsersTable extends model.Model {
         unique: true
     });
 
-    public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR();
-    // models.CharField(max_length = 50)
-    // public last_name = models.CharField(max_length = 50)
+    public email: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        notNull: true,
+        size: 45,
+        unique: true
+    });
+
+    public password: fields.Datatype = new datatypes.Datatypes().CHAR({
+        notNull: true,
+        size: 60,
+        protected: true
+    });
+
+    public salt: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        notNull: true,
+        size: 20,
+        protected: true
+    });
+
+    public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        size: 45
+    });
+
+    public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        size: 45
+    });
 
 }

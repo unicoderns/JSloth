@@ -29,6 +29,7 @@ import * as App from "./App";
 interface Config {
   mysql: MySQL;
   installed_apps: App.Config[];
+  token: string;
 }
 
 export default Config;

@@ -1,4 +1,5 @@
 {
+    "token": "magicisallaroundus",
     "installed_apps": [{
         "name": "app",
         "basepath": "/app/"

@@ -19,9 +19,10 @@
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
     "@types/mysql": "0.0.31",
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "morgan": "^1.7.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "morgan": "^1.8.1",
     "mysql": "^2.13.0"
   },
   "devDependencies": {

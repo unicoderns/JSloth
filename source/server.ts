@@ -95,6 +95,7 @@ class Server {
         console.log(" * Loading configuration \n");
         jslothFiles.ifExists(__dirname + this.configPath, () => {
             this.config = require(__dirname + this.configPath);
+            this.express.set("token", this.config.token); // secret token
 
             // Loading JSloth Global Library
             console.log(" * Loading JSloth Library \n");

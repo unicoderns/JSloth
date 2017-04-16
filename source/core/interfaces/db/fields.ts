@@ -33,6 +33,7 @@ export interface CommonTypes {
     zeroFill?: boolean;
     autoincrement?: boolean;
     generated?: boolean;
+    protected?: boolean;
 }
 
 /*** Datatype interface. */
