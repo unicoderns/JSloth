@@ -32,7 +32,7 @@ import * as JSFiles from "./core/lib/files";
 import Config from "./core/interfaces/Config";
 import * as App from "./core/interfaces/App";
 
-import * as routes from "./core/routes";
+import * as coreRoutes from "./core/routes";
 
 /**
  * Creates and configure an ExpressJS web server.
@@ -60,6 +60,9 @@ class Server {
 
     /*** JSloth library */
     private jsloth: JSloth.Load;
+
+    /*** Batch process */
+    private exec = require("child_process").execSync;
 
     /**
      * Load configuration settings
@@ -135,9 +138,46 @@ class Server {
 
     /*** Configure default endpoints */
     private defaultApps(): void {
-        let route = new routes.Routes(this.jsloth);
+        // Creating shared resources
+        console.log(" Creating shared resources \n");
+        this.compileSCSS(__dirname + "/../source/core/public/styles/", "./dist/core/public/styles/");
+        console.log("Copying views");
+        this.copy(__dirname + "/../source/core/views/", __dirname + "/core/views/");
+
+        // Routes
+        let route = new coreRoutes.Routes(this.jsloth);
         this.express.use("/", route.router);
         console.log("   - Core routes installed \n");
+    }
+
+    /*** Compile SCSS sources */
+    private compileSCSS(from: string, to: string): void {
+        try {
+            this.exec("node-sass --include-path " + __dirname + "/../bower_components/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+            console.log("\n");
+        } catch (e) {
+
+        }
+    }
+
+    /*** Compile SCSS sources */
+    private copy(from: string, to: string): void {
+        try {
+            this.exec("rm -r " + to, { stdio: [0, 1, 2] });
+        } catch (e) {
+
+        }
+        try {
+            this.exec("mkdir " + to, { stdio: [0, 1, 2] }); // Unix only
+        } catch (e) {
+
+        }
+        try {
+            this.exec("cp -r " + from + "* " + to, { stdio: [0, 1, 2] });
+            console.log("\n");
+        } catch (e) {
+
+        }
     }
 
     /*** Run the server */
@@ -178,14 +218,11 @@ class Server {
         console.log("");
         console.log("------------------------------------------------------");
         console.log("");
-        console.log("Generating styles for " + app.config.name);
-        let exec = require("child_process").execSync;
-        try {
-            exec("node-sass --output-style compressed -o " + __dirname + "/" + app.config.name + " " + __dirname + "/../source/" + app.config.name, { stdio: [0, 1, 2] });
-            console.log("\n");
-        } catch (e) {
-
-        }
+        console.log("Generating styles");
+        this.compileSCSS(__dirname + "/../source/" + app.config.name, "./dist/" + app.config.name);
+        console.log("");
+        console.log("Copying views");
+        this.copy(__dirname + "/../source/" + app.config.name + "/views/", __dirname + "/" + app.config.name + "/views/");
         console.log("Setting up");
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.js", (exists: Boolean) => {

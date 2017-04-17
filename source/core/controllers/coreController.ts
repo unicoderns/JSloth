@@ -36,6 +36,7 @@ export class CoreController extends controller.Controller {
 
     /*** Configure endpoints */
     protected routes(): void {
+        let appName: string = "core";
 
         /**
          * Render a page with instructions.
@@ -45,7 +46,9 @@ export class CoreController extends controller.Controller {
          * @return void
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
+            this.jsloth.path.get(appName, "index.ejs", function (path: string) {
+                res.render(path);
+            });
         });
 
         /**

@@ -34,22 +34,9 @@ export class Path {
     /*** JSloth Files instance */
     private files: JSFiles.Files;
 
-    /*** Basepath for the templates */
-    private basepath: string;
-
     /*** Configuration methods */
     constructor(config: Config) {
         this.files = new JSFiles.Files(config);
-    }
-
-    /**
-     * Set the new base path.
-     *
-     * @param path {string} The base path.
-     * @return void
-     */
-    public setTemplateBase(basepath: string): void {
-        this.basepath = basepath;
     }
 
     /**
@@ -58,9 +45,9 @@ export class Path {
      * @param file {string} The file name.
      * @return void
      */
-    public get(file: string, next: Function): void {
-        let path: string = this.basepath + "views/" + file;
-        let customPath: string = this.basepath + "custom_views/" + file;
+    public get(app: string, file: string, next: Function): void {
+        let path: string = "../dist/" + app + "/views/" + file;
+        let customPath: string = app + "/" + file;
 
         this.files.exists(customPath, (exist: boolean) => {
             if (exist) {

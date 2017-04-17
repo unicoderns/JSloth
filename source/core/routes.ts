@@ -36,11 +36,7 @@ export class Routes extends routes.Routes {
 
     /*** Configure endpoints */
     protected routes(): void {
-        // this.router.use("/", this.load(coreController.CoreController));
-
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            res.send("API: /api/users/:id");
-        });
+        this.router.use("/", this.load(coreController.CoreController));
     }
 
 }
