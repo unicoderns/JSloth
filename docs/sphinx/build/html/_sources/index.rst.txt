@@ -15,6 +15,7 @@ JSloth is a `Typescript`_ TDD extensible core base app that will save you time i
    :caption: Contents:
 
    installation
+   config
    controllers
 
 

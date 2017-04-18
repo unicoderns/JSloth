@@ -153,7 +153,7 @@ class Server {
     /*** Compile SCSS sources */
     private compileSCSS(from: string, to: string): void {
         try {
-            this.exec("node-sass --include-path " + __dirname + "/../bower_components/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+            this.exec("node-sass --include-path " + __dirname + "/../node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
             console.log("\n");
         } catch (e) {
 
