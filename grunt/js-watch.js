@@ -33,14 +33,6 @@ module.exports = function(grunt, tasks) {
         lint: {
             files: [grunt.source + "\*\*/\*.ts"],
             tasks: ["lint"]
-        },
-        ts: {
-            files: [grunt.source + "\*\*/\*.ts"],
-            tasks: ["ts"]
-        },
-        views: {
-            files: [grunt.views + "**/*.ejs"],
-            tasks: ["copy"]
         }
     };
 

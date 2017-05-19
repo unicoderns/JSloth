@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -23,49 +25,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import * as controller from "../abstract/controller";
-import * as JSloth from "../lib/core";
+import * as routes from "../core/abstract/routes";
+import * as JSloth from "../core/lib/core";
+import * as coreController from "./controllers/coreController";
 
 /**
- * Core Controller Routes
+ * Centralized Controller Routes Loader 
  * 
- * @basepath /
  * @return express.Router
  */
-export class CoreController extends controller.Controller {
+export class Routes extends routes.Routes {
 
-    /*** Configure endpoints */
+    /*** Configure routes */
     protected routes(): void {
-        let appName: string = "core";
-
-        /**
-         * Render a page with instructions.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.jsloth.path.get(appName, "index.ejs", function (path: string) {
-                res.render(path);
-            });
-        });
-
-        /**
-         * Render a json object with fake data.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return void
-         */
-        this.router.get("/api/users/:id", (req: express.Request, res: express.Response) => {
-            let user = {
-                username: req.params.id,
-                firstName: "Chriss",
-                lastName: "Mejía"
-            };
-            res.json(user);
-        });
-
+        this.router.use("/", this.load(coreController.CoreController));
     }
+
 }

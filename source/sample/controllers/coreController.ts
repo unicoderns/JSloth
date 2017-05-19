@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Sample App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,31 +24,31 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = function(grunt, tasks) {
-    // Load our node module required for this task.
-    grunt.loadNpmTasks('grunt-ts');
+import * as express from "express";
+import * as controller from "../../core/abstract/controller";
 
-    // The configuration for a specific task.
-    // In this case we have more than a single concat task. We need to append our task to our `tasks` object that
-    // way we're not overriding any of other previous tasks.
-    tasks.ts = {
-        app: {
-            files: [{
-                src: [
-                    grunt.source + "/\*\*/\*.ts",
-                    "!" + grunt.source + ".baseDir.ts"
-                ],
-                dest: grunt.dist
-            }],
-            options: {
-                module: 'commonjs', //or amd 
-                target: 'es5', //or es3 
-                sourceMap: true,
-                declaration: true,
-                fast: 'never'
-            }
-        }
-    };
+/**
+ * Core Controller Routes
+ * 
+ * @basepath /health/
+ */
+export class CoreController extends controller.Controller {
+    private appName: string = "sample";
 
-    return tasks;
-};
+    /*** Configure endpoints */
+    protected routes(): void {
+
+        /**
+         * Page to check the health of the system.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         */
+        this.router.get("/", (req: express.Request, res: express.Response) => {
+            this.jsloth.path.get(this.appName, "index.ejs", function (path: string) {
+                res.render(path);
+            });
+        });
+
+    }
+}

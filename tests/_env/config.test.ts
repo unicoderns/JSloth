@@ -4,7 +4,7 @@ import * as chai from 'chai';
 import * as JSFiles from "../../source/core/lib/files";
 
 import app from '../../source/server';
-import IConfig from '../../source/core/interfaces/IConfig';
+import IConfig from '../../source/core/interfaces/config';
 
 const expect = chai.expect;
 

@@ -7,7 +7,8 @@
     "url": "https://chrissmejia.com/"
   },
   "scripts": {
-    "start": "node dist/server.js",
+    "preinstall": "npm install -g ts-node && npm install -g nodemon",
+    "start": "nodemon --watch source/**/*.ts --ignore source/**/*.spec.ts --exec ts-node source/server.ts",
     "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
     "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/core/**/*.test.ts",
     "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
@@ -46,7 +47,7 @@
     "mocha": "^3.2.0",
     "mocha-lcov-reporter": "^1.2.0",
     "node-sass": "^4.5.0",
-    "ts-node": "^0.9.3",
+    "ts-node": "^3.0.4",
     "tslint": "^4.2.0",
     "typescript": "^2.1.4"
   }

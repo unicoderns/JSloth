@@ -35,24 +35,15 @@ module.exports = function(grunt) {
     // Our task object where we"ll store our configuration.
     var tasks = {};
 
-    // Typescript Tasks
-    tasks = require(grunt.uriTask + "js-typescript.js")(grunt, tasks);
-
     // Lint Tasks
     tasks = require(grunt.uriTask + "js-lint.js")(grunt, tasks);
-
-    // Copy Tasks
-    tasks = require(grunt.uriTask + "js-copy.js")(grunt, tasks);
 
     // Watch Tasks
     tasks = require(grunt.uriTask + "js-watch.js")(grunt, tasks);
 
     // Register The Tasks
-    grunt.registerTask("typescript", ["ts"]);
     grunt.registerTask("lint", ["tslint"]);
-    grunt.registerTask("cp", ["copy"]);
-    //grunt.registerTask("watch", ["daemon"]);
-    grunt.registerTask("default", ["lint", "typescript", "cp"]);
+    grunt.registerTask("default", ["lint"]);
 
     // Initialize The Grunt Configuration
     grunt.initConfig(tasks);

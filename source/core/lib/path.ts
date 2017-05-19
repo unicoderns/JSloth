@@ -46,10 +46,10 @@ export class Path {
      * @return void
      */
     public get(app: string, file: string, next: Function): void {
-        let path: string = "../dist/" + app + "/views/" + file;
-        let customPath: string = app + "/" + file;
+        let path: string = "../source/" + app + "/views/" + file;
+        let customPath: string = "../source/views/" + app + "/" + file;
 
-        this.files.exists(customPath, (exist: boolean) => {
+        this.files.exists(__dirname + "/../../" + customPath, (exist: boolean) => {
             if (exist) {
                 next(customPath);
             } else {

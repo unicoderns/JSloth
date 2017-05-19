@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,30 +24,34 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = function(grunt, tasks) {
-    // Load our node module required for this task.
-    grunt.loadNpmTasks('grunt-contrib-copy');
+import * as express from "express";
+import * as controller from "../../core/abstract/controller";
+import * as JSloth from "../../core/lib/core";
 
-    // The configuration for a specific task.
-    // In this case we have more than a single concat task. We need to append our task to our `tasks` object that
-    // way we're not overriding any of other previous tasks.
-    tasks.copy = {
-        build: {
-            files: [{
-                    expand: true,
-                    cwd: grunt.source + "public",
-                    src: ["**"],
-                    dest: grunt.dist + "public"
-                },
-                {
-                    expand: true,
-                    cwd: grunt.source + "views",
-                    src: ["**"],
-                    dest: grunt.dist + "views"
-                }
-            ]
-        }
-    };
+/**
+ * Core Controller Routes
+ * 
+ * @basepath /
+ * @return express.Router
+ */
+export class CoreEndPoint extends controller.Controller {
 
-    return tasks;
-};
+    /*** Configure endpoints */
+    protected routes(): void {
+
+        /**
+         * Check the health of the system.
+         * Render a json object with a true response.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         * @return true
+         */
+        this.router.get("/", (req: express.Request, res: express.Response) => {
+            res.json({
+                response: true
+            });
+        });
+
+    }
+}

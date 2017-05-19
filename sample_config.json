@@ -10,8 +10,8 @@
         "connectionLimit": 10
     },
     "installed_apps": [{
-        "name": "app",
-        "basepath": "/app/"
+        "name": "sample",
+        "basepath": "/"
     }, {
         "name": "health",
         "basepath": "/health/"
