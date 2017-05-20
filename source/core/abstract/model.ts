@@ -22,23 +22,52 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+// Private settings object
+export interface Private {
+    name: string;
+    fields: string[],
+    protected: boolean
+}
+
 /**
  * Model Abstract
  */
+
 export class Model {
 
-    public data = {
-        CharField: 0
-    };
+    private privateSettings: Private = {
+        name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
+        fields: [], // Fields cache
+        protected: true // It will be hide
+    }
 
-    // /*** Load library */
-    // constructor(jsloth: JSloth.Load) {
-    //     this.jsloth = jsloth;
-    //     this.routes();
-    // }
+    /////////////////////////////////////////////////////////////////////
+    // Get field list.
+    /////////////////////////////////////////////////////////////////////
+    public getFields() {
+        // Use cache if is available
+        if (!this.privateSettings.fields.length) {
+            // Get all keys then remove the protected ones
+            let keys = Object.keys(this);
+            let publicKeys: string[] = [];
 
-    // /*** Configure routes */
-    // protected routes(): void {
-    // }
+            keys.forEach((name, index, array) => {
+                let protectedField: boolean = (<any>this)[name].protected;                
+                if (!protectedField){
+                    publicKeys.push(name);
+                }
+            });
 
+            return publicKeys;
+        } else {
+            return this.privateSettings.fields;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Select
+    /////////////////////////////////////////////////////////////////////
+    public select() {
+        let query = "SELECT * from " + this.privateSettings.name;
+    }
 }

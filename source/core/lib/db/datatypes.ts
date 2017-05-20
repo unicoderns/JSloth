@@ -39,7 +39,8 @@ export class Datatypes {
             unsigned: settings.unsigned || false,
             zeroFill: settings.zeroFill || false,
             autoincrement: settings.autoincrement || false,
-            generated: settings.generated || false
+            generated: settings.generated || false,
+            protected: settings.protected || false
         };
         return type;
     }

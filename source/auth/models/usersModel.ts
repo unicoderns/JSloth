@@ -27,7 +27,7 @@ import * as fields from "../../core/interfaces/db/fields";
 import * as defaults from "../../core/interfaces/db/defaults";
 import * as datatypes from "../../core/lib/db/datatypes";
 
-export interface User {
+export interface Row {
     id?: number;
     created?: number;
     username: string;
@@ -43,7 +43,7 @@ export interface User {
 /**
  * User Model
  */
-export class UsersTable extends model.Model {
+export class Users extends model.Model {
 
     public id: fields.Datatype = new datatypes.Datatypes().ID();
 

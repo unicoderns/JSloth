@@ -26,6 +26,7 @@
 
 import * as express from "express";
 import * as controller from "../../core/abstract/controller";
+import * as users from "../models/usersModel";
 import * as JSloth from "../../core/lib/core";
 
 /**
@@ -35,6 +36,7 @@ import * as JSloth from "../../core/lib/core";
  * @return express.Router
  */
 export class CoreEndPoint extends controller.Controller {
+    private usersTable = new users.Users();
 
     /*** Configure endpoints */
     protected routes(): void {
@@ -49,7 +51,8 @@ export class CoreEndPoint extends controller.Controller {
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
             res.json({
-                response: true
+                response: this.usersTable.getFields(),
+                test: this.usersTable.salt
             });
         });
 
