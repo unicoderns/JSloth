@@ -30,7 +30,7 @@ import * as settings from "../../interfaces/db/settings";
  */
 export class Datatypes {
 
-    private fillCommonTypes(settings?: settings.General) {
+    private fillCommonTypes(settings: settings.General = {}) {
         let type: settings.General = {
             primaryKey: settings.primaryKey || false,
             notNull: settings.notNull || false,
@@ -48,7 +48,7 @@ export class Datatypes {
     // Numbers
     /////////////////////////////////////////////////////////////////////
 
-    public INT(settings?: settings.General): fields.Datatype {
+    public INT(settings: settings.General = {}): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
         let customType: fields.Datatype = {
             type: "INT",
@@ -62,7 +62,7 @@ export class Datatypes {
     // Special Numbers
     // ------------------------------------------------------------------
 
-    public ID(settings?: settings.General): fields.Datatype {
+    public ID(settings: settings.General = {}): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
         let customType: fields.Datatype = {
             type: "INT",
@@ -81,7 +81,7 @@ export class Datatypes {
     // Strings
     /////////////////////////////////////////////////////////////////////
 
-    public CHAR(settings?: settings.General): fields.Datatype {
+    public CHAR(settings: settings.General = {}): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
         let customType: fields.Datatype = {
             type: "CHAR",
@@ -91,7 +91,7 @@ export class Datatypes {
         return type;
     }
 
-    public VARCHAR(settings?: settings.General): fields.Datatype {
+    public VARCHAR(settings: settings.General = {}): fields.Datatype {
         let commonType = this.fillCommonTypes(settings);
         let customType: fields.Datatype = {
             type: "VARCHAR",
@@ -105,7 +105,7 @@ export class Datatypes {
     // Dates
     /////////////////////////////////////////////////////////////////////
 
-    public TIMESTAMP(settings?: settings.Timestamp): fields.DataTimestampType {
+    public TIMESTAMP(settings: settings.Timestamp = {}): fields.DataTimestampType {
         let commonType = this.fillCommonTypes(settings);
         let customType: fields.DataTimestampType = {
             type: "TIMESTAMP",
