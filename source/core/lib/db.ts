@@ -43,4 +43,16 @@ export class DB {
             connectionLimit: config.mysql.connectionLimit
         });
     }
+
+    public query(query: string, data: any[]) {
+        this.connections.getConnection(function (err, connection) {
+            if (err) throw err; // Improve error management
+            connection.query(query, data, function (err, rows) {
+                connection.release();
+                if (err) throw err; // Improve error management
+
+                return rows;
+            });
+        });
+    }
 }

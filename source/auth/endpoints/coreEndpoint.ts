@@ -36,10 +36,30 @@ import * as JSloth from "../../core/lib/core";
  * @return express.Router
  */
 export class CoreEndPoint extends controller.Controller {
-    private usersTable = new users.Users();
+    private usersTable: users.Users;
+
+    constructor(jsloth: JSloth.Load) {
+        super(jsloth);
+        this.usersTable = new users.Users(jsloth);
+    }
 
     /*** Configure endpoints */
     protected routes(): void {
+       
+        /**
+         * Check the health of the system.
+         * Render a json object with a true response.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         * @return array
+         */
+        this.router.get("/", (req: express.Request, res: express.Response) => {
+            let data = this.usersTable.select();
+            res.json({
+                select: data
+            });
+        });
 
         /**
          * Check the health of the system.
@@ -47,9 +67,9 @@ export class CoreEndPoint extends controller.Controller {
          *
          * @param req {express.Request} The request object.
          * @param res {express.Response} The response object.
-         * @return true
+         * @return array
          */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
+        this.router.get("/fields/", (req: express.Request, res: express.Response) => {
             let fields = this.usersTable.getFields();
             res.json({
                 publicFields: fields.public,

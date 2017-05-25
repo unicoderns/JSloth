@@ -22,6 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as JSloth from "../../core/lib/core";
+
 // Private settings fields object
 export interface Fields {
     public: string[];
@@ -40,6 +42,7 @@ export interface Private {
  */
 
 export class Model {
+    protected jsloth: JSloth.Load;
 
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
@@ -49,6 +52,10 @@ export class Model {
         }, // Fields cache
         private: true // It will be hide
     };
+
+    constructor(jsloth: JSloth.Load) {
+        this.jsloth = jsloth;
+    }
 
     /////////////////////////////////////////////////////////////////////
     // Get field list.
@@ -87,5 +94,7 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     public select() {
         let query = "SELECT * from " + this.privateSettings.name;
+        let data = this.jsloth.db.query(query, []);
+        return data;
     }
 }
