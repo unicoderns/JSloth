@@ -24,7 +24,13 @@
 
 import * as defaults from "./defaults";
 
-export interface CommonTypes {
+// JSloth internal flags
+export interface SystemTypes {
+    protected?: boolean;
+    private?: boolean;
+}
+
+export interface CommonTypes extends SystemTypes {
     primaryKey?: boolean;
     notNull?: boolean;
     unique?: boolean;
@@ -33,7 +39,6 @@ export interface CommonTypes {
     zeroFill?: boolean;
     autoincrement?: boolean;
     generated?: boolean;
-    protected?: boolean;
 }
 
 /*** Datatype interface. */

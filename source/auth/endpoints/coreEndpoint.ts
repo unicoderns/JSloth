@@ -50,9 +50,11 @@ export class CoreEndPoint extends controller.Controller {
          * @return true
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
+            let fields = this.usersTable.getFields();
             res.json({
-                response: this.usersTable.getFields(),
-                test: this.usersTable.salt
+                publicFields: fields.public,
+                protectedFields: fields.protected,
+                passwordFieldSettings: this.usersTable.password
             });
         });
 

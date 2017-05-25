@@ -22,11 +22,17 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+// Private settings fields object
+export interface Fields {
+    public: string[];
+    protected: string[];
+}
+
 // Private settings object
 export interface Private {
     name: string;
-    fields: string[],
-    protected: boolean
+    fields: Fields;
+    private: boolean;
 }
 
 /**
@@ -37,31 +43,43 @@ export class Model {
 
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
-        fields: [], // Fields cache
-        protected: true // It will be hide
-    }
+        fields: {
+            public: [],
+            protected: []
+        }, // Fields cache
+        private: true // It will be hide
+    };
 
     /////////////////////////////////////////////////////////////////////
     // Get field list.
     /////////////////////////////////////////////////////////////////////
     public getFields() {
         // Use cache if is available
-        if (!this.privateSettings.fields.length) {
-            // Get all keys then remove the protected ones
+        if (!this.privateSettings.fields.public.length) {
+            // Get all keys then remove the private ones
             let keys = Object.keys(this);
             let publicKeys: string[] = [];
+            let protectedKeys: string[] = [];
 
+            // Checking keys
             keys.forEach((name, index, array) => {
-                let protectedField: boolean = (<any>this)[name].protected;                
-                if (!protectedField){
-                    publicKeys.push(name);
+                // Removing privates
+                let privateField: boolean = (<any>this)[name].private;
+                if (!privateField) {
+                    let protectedField: boolean = (<any>this)[name].protected;
+                    if (protectedField) {
+                        // Listing protected
+                        protectedKeys.push(name);
+                    } else {
+                        // Listing public
+                        publicKeys.push(name);
+                    }
                 }
             });
-
-            return publicKeys;
-        } else {
-            return this.privateSettings.fields;
+            this.privateSettings.fields.protected = protectedKeys;
+            this.privateSettings.fields.public = publicKeys;
         }
+        return this.privateSettings.fields;
     }
 
     /////////////////////////////////////////////////////////////////////
