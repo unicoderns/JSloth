@@ -45,7 +45,7 @@ export class CoreEndPoint extends controller.Controller {
 
     /*** Configure endpoints */
     protected routes(): void {
-       
+
         /**
          * Check the health of the system.
          * Render a json object with a true response.
@@ -55,9 +55,10 @@ export class CoreEndPoint extends controller.Controller {
          * @return array
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            let data = this.usersTable.select();
-            res.json({
-                select: data
+            this.usersTable.select().then((data) => {
+                res.json({
+                    select: data
+                });
             });
         });
 

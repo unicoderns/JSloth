@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as JSloth from "../../core/lib/core";
+import { Promise } from "es6-promise";
 
 // Private settings fields object
 export interface Fields {
@@ -92,9 +93,8 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     // Select
     /////////////////////////////////////////////////////////////////////
-    public select() {
+    public select(): Promise<any> {
         let query = "SELECT * from " + this.privateSettings.name;
-        let data = this.jsloth.db.query(query, []);
-        return data;
+        return this.jsloth.db.query(query, []);
     }
 }

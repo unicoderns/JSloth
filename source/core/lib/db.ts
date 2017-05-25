@@ -24,6 +24,7 @@
 
 import * as mysql from "mysql";
 import Config from "../interfaces/Config";
+import { Promise } from "es6-promise";
 
 /**
  * JSloth DB
@@ -44,15 +45,23 @@ export class DB {
         });
     }
 
-    public query(query: string, data: any[]) {
-        this.connections.getConnection(function (err, connection) {
-            if (err) throw err; // Improve error management
-            connection.query(query, data, function (err, rows) {
-                connection.release();
-                if (err) throw err; // Improve error management
-
-                return rows;
-            });
-        });
+    public query(query: string, params: any[]): Promise<any> {
+        // Create promise
+        const p: Promise<any> = new Promise(
+            (resolve: (data: any) => void, reject: (data: any) => void) => {
+                // Get connection
+                this.connections.getConnection((err, connection) => {
+                    if (err) throw err; // Improve error management
+                    // Query Mysql
+                    connection.query(query, params, (err, rows: any) => {
+                        connection.release();
+                        if (err) throw err; // Improve error management
+                        // Resolve promise
+                        resolve(rows);
+                    });
+                });
+            }
+        );
+        return p;
     }
 }
