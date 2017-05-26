@@ -24,6 +24,7 @@
 
 import * as fs from "fs";
 import Config from "../interfaces/Config";
+import { Promise } from "es6-promise";
 
 /**
  * JSloth Files
@@ -42,14 +43,21 @@ export class Files {
      * @param next {Function} Callback.
      * @return void
      */
-    public exists(path: string, next: Function): void {
-        fs.access(path, fs.constants.F_OK, (err) => {
-             if (!err) {
-                 next(true);
-             } else {
-                 next(false);
-             }
-        });
+    public exists(path: string): Promise<boolean> {
+        // Create promise
+        const p: Promise<boolean> = new Promise(
+            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                // Resolve promise
+                fs.access(path, fs.constants.F_OK, (err) => {
+                    if (!err) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                });
+            }
+        );
+        return p;
     };
 
     /**
@@ -59,12 +67,21 @@ export class Files {
      * @param next {Function} Callback.
      * @return void
      */
-    public ifExists(path: string, next: Function): void {
-        fs.access(path, fs.constants.F_OK, (err) => {
-             if (!err) {
-                 next();
-             }
-        });
+    public ifExists(path: string): Promise<boolean> {
+        // Create promise
+        const p: Promise<boolean> = new Promise(
+            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                // Resolve promise
+                fs.access(path, fs.constants.F_OK, (err) => {
+                    if (!err) {
+                        resolve(true);
+                    } else {
+                        reject(err);
+                    }
+                });
+            }
+        );
+        return p;
     };
 
 }

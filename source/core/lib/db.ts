@@ -48,14 +48,18 @@ export class DB {
     public query(query: string, params: any[]): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
-            (resolve: (data: any) => void, reject: (data: any) => void) => {
+            (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
                 // Get connection
                 this.connections.getConnection((err, connection) => {
-                    if (err) throw err; // Improve error management
+                    if (err) { // Improve error log
+                        reject(err);
+                    }
                     // Query Mysql
                     connection.query(query, params, (err, rows: any) => {
                         connection.release();
-                        if (err) throw err; // Improve error management
+                        if (err) { // Improve error log
+                            reject(err);
+                        }
                         // Resolve promise
                         resolve(rows);
                     });

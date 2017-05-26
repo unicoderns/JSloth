@@ -94,7 +94,7 @@ class Server {
 
         // Loading Configuration
         console.log(" * Loading configuration \n");
-        jslothFiles.ifExists(__dirname + this.configPath, () => {
+        jslothFiles.ifExists(__dirname + this.configPath).then(() => {
             this.config = require(__dirname + this.configPath);
             this.express.set("token", this.config.token); // secret token
 
@@ -187,7 +187,7 @@ class Server {
         console.log("");
         console.log("Setting up");
         // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts", (exists: Boolean) => {
+        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts").then((exists) => {
             if (exists) {
                 let appRoute = require("./" + app.config.name + "/routes");
                 let route = new appRoute.Routes(this.jsloth);
@@ -198,7 +198,7 @@ class Server {
             done();
         });
         // Installing api routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts", (exists: Boolean) => {
+        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts").then((exists) => {
             if (exists) {
                 let appRoute = require("./" + app.config.name + "/api");
                 let route = new appRoute.Routes(this.jsloth);

@@ -49,7 +49,7 @@ export class Path {
         let path: string = "../source/" + app + "/views/" + file;
         let customPath: string = "../source/views/" + app + "/" + file;
 
-        this.files.exists(__dirname + "/../../" + customPath, (exist: boolean) => {
+        this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
             if (exist) {
                 next(customPath);
             } else {
