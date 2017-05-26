@@ -24,6 +24,7 @@
 
 import * as JSFiles from "./files";
 import Config from "../interfaces/Config";
+import { Promise } from "es6-promise";
 
 /**
 * JSloth Path
@@ -45,17 +46,24 @@ export class Path {
      * @param file {string} The file name.
      * @return void
      */
-    public get(app: string, file: string, next: Function): void {
+    public get(app: string, file: string): Promise<string> {
         let path: string = "../source/" + app + "/views/" + file;
         let customPath: string = "../source/views/" + app + "/" + file;
 
-        this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
-            if (exist) {
-                next(customPath);
-            } else {
-                next(path);
+        // Create promise
+        const p: Promise<string> = new Promise(
+            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                // Resolve promise
+                this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
+                    if (exist) {
+                        resolve(customPath);
+                    } else {
+                        resolve(path);
+                   }
+                });
             }
-        });
+        );
+        return p;
     }
 
 }

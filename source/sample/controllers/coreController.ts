@@ -45,7 +45,7 @@ export class CoreController extends controller.Controller {
          * @param res {express.Response} The response object.
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.jsloth.path.get(this.appName, "index.ejs", function (path: string) {
+            this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
                 res.render(path);
             });
         });
