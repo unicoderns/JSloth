@@ -36,6 +36,7 @@ export class Load {
     public files: JSFiles.Files;
     public path: JSPath.Path;
     public db: JSDB.DB;
+    private private: boolean = true; // Hidden library
 
     /*** Configuration methods */
     constructor(config: Config) {

@@ -23,12 +23,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as JSloth from "../../core/lib/core";
+import * as datatypes from "../../core/lib/db/datatypes";
 import { Promise } from "es6-promise";
 
 // Private settings fields object
 export interface Fields {
     public: string[];
     protected: string[];
+    private: string[];
 }
 
 // Private settings object
@@ -41,15 +43,15 @@ export interface Private {
 /**
  * Model Abstract
  */
-
 export class Model {
     protected jsloth: JSloth.Load;
 
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
         fields: {
-            public: [],
-            protected: []
+            public: <string[]>[],
+            protected: <string[]>[],
+            private: <string[]>[]
         }, // Fields cache
         private: true // It will be hide
     };
@@ -61,13 +63,14 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     // Get field list.
     /////////////////////////////////////////////////////////////////////
-    public getFields() {
+    public getFields(): { public: string[], protected: string[] } {
         // Use cache if is available
         if (!this.privateSettings.fields.public.length) {
             // Get all keys then remove the private ones
             let keys = Object.keys(this);
             let publicKeys: string[] = [];
             let protectedKeys: string[] = [];
+            let privateKeys: string[] = [];
 
             // Checking keys
             keys.forEach((name, index, array) => {
@@ -82,19 +85,97 @@ export class Model {
                         // Listing public
                         publicKeys.push(name);
                     }
+                } else {
+                    // Listing private
+                    privateKeys.push(name);
                 }
             });
             this.privateSettings.fields.protected = protectedKeys;
             this.privateSettings.fields.public = publicKeys;
+            this.privateSettings.fields.private = privateKeys; // This will be hidden in consume time
         }
-        return this.privateSettings.fields;
+        return {
+            public: this.privateSettings.fields.public,
+            protected: this.privateSettings.fields.protected
+        };
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Helper - Exists in array
+    // Check if a key exists in a array
+    /////////////////////////////////////////////////////////////////////
+    private filterArrayInArray(target: string[], scope: string[]): string[] {
+        let keys: string[] = [];
+        target.forEach(item => {
+            if (scope.indexOf(item) !== -1) {
+                keys.push(item);
+            }
+        });
+        return keys;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Generate a report and filter fields
+    /////////////////////////////////////////////////////////////////////
+    private selectFieldsReport(select: string[]): Fields {
+        let report: Fields = {
+            public: <string[]>[],
+            protected: <string[]>[],
+            private: <string[]>[]
+        };
+        let fields = this.getFields();
+
+        report.public = this.filterArrayInArray(select, fields.public);
+        report.protected = this.filterArrayInArray(select, fields.protected);
+        report.private = this.filterArrayInArray(select, this.privateSettings.fields.private);
+
+        return report;
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Validate fields
+    // @return a comma separated field list and a report
+    /////////////////////////////////////////////////////////////////////
+    private validateSelectFields(fields: string[]) {
+        // Filtering the select array
+        let fieldsSQL = "";
+        let filteredFields: string[] = [];
+        let fieldsReport: Fields;
+
+        if (typeof fields !== "undefined") {
+            if (Array.isArray(fields)) {
+                let selectableFields: string[] = [];
+                fieldsReport = this.selectFieldsReport(fields);
+                // Concat array of selectable fields (filtered fields).
+                selectableFields = fieldsReport.public.concat(fieldsReport.protected.concat(fieldsReport.private));
+                fieldsSQL = selectableFields.join(", ");
+            } else {
+                fieldsSQL = fields;
+            }
+        } else {
+            fieldsSQL = "*";
+        }
+
+
+        return {
+            sql: fieldsSQL,
+            report: fieldsReport
+        };
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Plain query
+    /////////////////////////////////////////////////////////////////////
+    public query(query): Promise<any> {
+        return this.jsloth.db.query(query, []);
     }
 
     /////////////////////////////////////////////////////////////////////
     // Select
     /////////////////////////////////////////////////////////////////////
-    public select(): Promise<any> {
-        let query = "SELECT * from " + this.privateSettings.name;
+    public select(fields?: string[], where?: string[]): Promise<any> {
+        let selectFields = this.validateSelectFields(fields);
+        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name;
         return this.jsloth.db.query(query, []);
     }
 }

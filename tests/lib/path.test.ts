@@ -17,7 +17,7 @@ let appName: string = "sample";
 // Loading JSloth Files directly to load the config file.
 let jslothFiles = new JSFiles.Files();
 
-jslothFiles.ifExists(__dirname + configPath).then(() => {
+jslothFiles.exists(__dirname + configPath).then(() => {
     var config = require(__dirname + configPath);
     path = new JSPath.Path(config);
     tests();
@@ -32,14 +32,18 @@ function tests() {
             path.get(appName, "view.testfile").then((filepath) => {
                 expect(filepath).to.contain('/source/sample/views/view.testfile');
                 done();
+            }).catch(err => {
+                throw err;
             });
         });
 
         // Async test
         it("view2.testfile exists in /views/sample/", done => {
             path.get(appName, "view2.testfile").then((filepath) => {
-                expect(filepath).to.contain('/source/views/sample/view2.testfile');
+                expect(filepath).to.contain('/views/sample/view2.testfile');
                 done();
+            }).catch(err => {
+                throw err;
             });
         });
 

@@ -40,34 +40,9 @@ export class Files {
      * Check if file exists.
      *
      * @param path {string} The specific path.
-     * @param next {Function} Callback.
-     * @return void
+     * @return Promise<boolean>
      */
-    public exists(path: string): Promise<boolean> {
-        // Create promise
-        const p: Promise<boolean> = new Promise(
-            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                // Resolve promise
-                fs.access(path, fs.constants.F_OK, (err) => {
-                    if (!err) {
-                        resolve(true);
-                    } else {
-                        resolve(false);
-                    }
-                });
-            }
-        );
-        return p;
-    };
-
-    /**
-     * Call the Callback if file exists.
-     *
-     * @param path {string} The specific path.
-     * @param next {Function} Callback.
-     * @return void
-     */
-    public ifExists(path: string): Promise<boolean> {
+    public exists(path: string, fail: boolean = true): Promise<boolean> {
         // Create promise
         const p: Promise<boolean> = new Promise(
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
@@ -77,11 +52,13 @@ export class Files {
                         resolve(true);
                     } else {
                         reject(err);
+                        if (fail) {
+                            throw err;
+                        }
                     }
                 });
             }
         );
         return p;
     };
-
 }

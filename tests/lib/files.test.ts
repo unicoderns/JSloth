@@ -22,25 +22,8 @@ describe('Lib Tests - Files', () => {
 
     // Async test
     it('Fake file not exists', done => {
-        files.exists(__dirname + "/files.test0.ts").then((exist) => {
-            expect(exist).to.be.false;
-            done();
-        });
-    });
-
-    // Async test
-    it('If file exists works', done => {
-        files.ifExists(__dirname + "/files.test.ts").then((exist) => {
-            expect(exist).to.be.true;
-            done();
-        });
-    });
-
-    // Async test
-    it('If fake file exists works', done => {
-        files.ifExists(__dirname + "/files.test0.ts").then((exist) => {
-        }).catch(() => {
-            expect(true).to.be.true;
+        files.exists(__dirname + "/files.test0.ts", false).catch((err) => {
+            expect(err).to.exist;
             done();
         });
     });

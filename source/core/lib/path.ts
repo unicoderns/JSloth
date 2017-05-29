@@ -48,21 +48,19 @@ export class Path {
      */
     public get(app: string, file: string): Promise<string> {
         let path: string = "../source/" + app + "/views/" + file;
-        let customPath: string = "../source/views/" + app + "/" + file;
+        let customPath: string = "../views/" + app + "/" + file;
 
         // Create promise
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
-                this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
-                    if (exist) {
-                        resolve(customPath);
-                    } else {
-                        resolve(path);
-                   }
+                this.files.exists(__dirname + "/../../" + customPath, false).then((exist) => {
+                    resolve(customPath);
+                }).catch((err) => {
+                    resolve(path);
+                    throw err;
                 });
-            }
-        );
+            });
         return p;
     }
 
