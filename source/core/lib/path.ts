@@ -54,9 +54,9 @@ export class Path {
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
-                this.files.exists(__dirname + "/../../" + customPath, false).then((exist) => {
+                this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
                     resolve(customPath);
-                }).catch((err) => {
+                }).catch((err: NodeJS.ErrnoException) => {
                     resolve(path);
                     throw err;
                 });
