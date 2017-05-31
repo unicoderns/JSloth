@@ -42,7 +42,7 @@ export class Files {
      * @param path {string} The specific path.
      * @return Promise<boolean>
      */
-    public exists(path: string, fail: boolean = true): Promise<boolean> {
+    public exists(path: string): Promise<boolean> {
         // Create promise
         const p: Promise<boolean> = new Promise(
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
@@ -52,9 +52,6 @@ export class Files {
                         resolve(true);
                     } else {
                         reject(err);
-                        if (fail) {
-                            throw err;
-                        }
                     }
                 });
             }

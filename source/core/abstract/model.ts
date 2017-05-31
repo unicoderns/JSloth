@@ -134,7 +134,7 @@ export class Model {
 
     /////////////////////////////////////////////////////////////////////
     // Validate fields
-    // @return a comma separated field list and a report
+    // @return string
     /////////////////////////////////////////////////////////////////////
     private validateSelectFields(fields: string[]) {
         // Filtering the select array
@@ -164,18 +164,36 @@ export class Model {
     }
 
     /////////////////////////////////////////////////////////////////////
+    // Generate where sql code
+    // @return string
+    /////////////////////////////////////////////////////////////////////
+    private generteWhereSQL(where?: any): string {
+        if (typeof where !== null) {
+            let sql: string = " WHERE";
+            for (let key in where) {
+                sql = sql + " " + key + " = " + where[key];
+            }
+            return sql + ";";
+        } else {
+            return ";";
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
     // Plain query
     /////////////////////////////////////////////////////////////////////
-    public query(query): Promise<any> {
+    public query(query: string): Promise<any> {
         return this.jsloth.db.query(query, []);
     }
 
     /////////////////////////////////////////////////////////////////////
     // Select
     /////////////////////////////////////////////////////////////////////
-    public select(fields?: string[], where?: string[]): Promise<any> {
+    public select(fields?: string[], where?: any): Promise<any> {
         let selectFields = this.validateSelectFields(fields);
-        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name;
+        let whereSQl = this.generteWhereSQL(where);
+        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name + whereSQl;
+        console.log(query);
         return this.jsloth.db.query(query, []);
     }
 }

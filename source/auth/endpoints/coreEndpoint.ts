@@ -55,7 +55,7 @@ export class CoreEndPoint extends controller.Controller {
          * @return array
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.usersTable.select(["id", "first_name", "last_name"]).then((data) => {
+            this.usersTable.select(["id", "first_name", "last_name"], { id: 1 }).then((data) => {
                 res.json(data);
             });
         });

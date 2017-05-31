@@ -185,7 +185,7 @@ class Server {
         this.compileSCSS(__dirname + "/" + app.config.name, "./dist/" + app.config.name);
         console.log("");
         // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts", false).then(() => {
+        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts").then(() => {
             let appRoute = require("./" + app.config.name + "/routes");
             let route = new appRoute.Routes(this.jsloth);
             this.express.use("" + (app.config.basepath || "/"), route.router);
@@ -197,22 +197,25 @@ class Server {
             app.status.routes = true;
             console.log("- " + app.config.name + " routes not found");
             done();
-            throw err;
         });
-        // Installing api routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts", false).then(() => {
-            let appRoute = require("./" + app.config.name + "/api");
-            let route = new appRoute.Routes(this.jsloth);
-            this.express.use("/api" + (app.config.basepath || "/"), route.router);
 
-            app.status.api = true;
-            console.log("- " + app.config.name + " endpoints installed");
-            done();
+        // Installing api routes
+        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts").then(() => {
+            try {
+                let appRoute = require("./" + app.config.name + "/api");
+                let route = new appRoute.Routes(this.jsloth);
+                this.express.use("/api" + (app.config.basepath || "/"), route.router);
+
+                app.status.api = true;
+                console.log("- " + app.config.name + " endpoints installed");
+                done();
+            } catch (err) {
+                console.error(err);
+            }
         }).catch(err => {
             app.status.api = true;
             console.log("- " + app.config.name + " endpoints not found");
             done();
-            throw err;
         });
     }
 
