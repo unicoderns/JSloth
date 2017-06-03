@@ -32,9 +32,11 @@ import { Promise } from "es6-promise";
  */
 export class DB {
     private connections: mysql.IPool;
+    private config: Config;
 
     /*** Configuration methods */
     constructor(config: Config) {
+        this.config = config;
         this.connections = mysql.createPool({
             host: config.mysql.host,
             user: config.mysql.user,
@@ -46,6 +48,9 @@ export class DB {
     }
 
     public query(query: string, params: any[]): Promise<any> {
+        if (this.config.dev) {
+            console.log("SQL Query: " + query);
+        }
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
@@ -53,12 +58,14 @@ export class DB {
                 this.connections.getConnection((err, connection) => {
                     if (err) { // Improve error log
                         reject(err);
+                        throw err;
                     }
                     // Query Mysql
                     connection.query(query, params, (err, rows: any) => {
                         connection.release();
                         if (err) { // Improve error log
                             reject(err);
+                            throw err;
                         }
                         // Resolve promise
                         resolve(rows);
