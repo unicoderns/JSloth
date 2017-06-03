@@ -191,9 +191,29 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     public select(fields?: string[], where?: any): Promise<any> {
         let selectFields = this.validateSelectFields(fields);
-        let whereSQl = this.generteWhereSQL(where);
+        let whereSQl = "";
+        if (typeof where !== "undefined") {
+            whereSQl = this.generteWhereSQL(where);
+        }
         let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name + whereSQl;
         console.log(query);
         return this.jsloth.db.query(query, []);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Insert
+    /////////////////////////////////////////////////////////////////////
+    public insert(data: any): Promise<any> {
+        let fields = [];
+        let wildcards = [];
+        let values = [];
+        for (let key in data) {
+            fields.push(key);
+            wildcards.push("?");
+            values.push(data[key]);
+        }
+        let query = "INSERT INTO " + this.privateSettings.name + " (" + fields.join(", ") + ") VALUES (" + wildcards.join(", ") + ")";
+        console.log(query);
+        return this.jsloth.db.query(query, values);
     }
 }

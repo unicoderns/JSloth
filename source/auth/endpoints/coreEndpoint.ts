@@ -55,8 +55,19 @@ export class CoreEndPoint extends controller.Controller {
          * @return array
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.usersTable.select(["id", "first_name", "last_name"], { id: 1 }).then((data) => {
-                res.json(data);
+            let randomNumber = Math.floor(Math.random() * 1000);
+            let newUser = { 
+                username: randomNumber,
+                email: randomNumber + "@jsloth.org",
+                password: "secret" + randomNumber,
+                salt: "test",
+                first_name: "first" + randomNumber,
+                last_name: "last" + randomNumber
+            }
+            this.usersTable.insert(newUser).then((done) => {
+                this.usersTable.select(["id", "first_name", "last_name"]).then((data) => {
+                    res.json(data);
+                });
             });
         });
 
