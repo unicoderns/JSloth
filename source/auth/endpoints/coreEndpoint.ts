@@ -63,7 +63,7 @@ export class CoreEndPoint extends controller.Controller {
                 salt: "test",
                 first_name: "first" + randomNumber,
                 last_name: "last" + randomNumber
-            }
+            };
             this.usersTable.update(newUser, {id: 4}).then((done) => {
                 this.usersTable.select(["id", "first_name", "last_name"]).then((data) => {
                     res.json(data);
