@@ -216,4 +216,23 @@ export class Model {
         console.log(query);
         return this.jsloth.db.query(query, values);
     }
+
+    /////////////////////////////////////////////////////////////////////
+    // Update
+    /////////////////////////////////////////////////////////////////////
+    public update(data: any, where?: any): Promise<any> {
+        let fields = [];
+        let values = [];
+        for (let key in data) {
+            fields.push(key + " = ?");
+            values.push(data[key]);
+        }
+        let whereSQl = "";
+        if (typeof where !== "undefined") {
+            whereSQl = this.generteWhereSQL(where);
+        }
+        let query = "UPDATE " + this.privateSettings.name + " SET " + fields.join(", ") + whereSQl;
+        console.log(query);
+        return this.jsloth.db.query(query, values);
+    }
 }
