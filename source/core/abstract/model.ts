@@ -133,7 +133,11 @@ export class Model {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Validate fields
+    // Validate fields for select
+    //
+    // Active even if field validation is off to avoid expose any 
+    // private data.
+    //
     // @return string
     /////////////////////////////////////////////////////////////////////
     private validateSelectFields(fields: string[]) {
@@ -167,7 +171,7 @@ export class Model {
     // Generate where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generteWhereData(where?: any): { sql : string, values: string[] } {
+    private generteWhereData(where?: any): { sql: string, values: string[] } {
         let values = [];
         if (typeof where !== "undefined") {
             let sql: string = " WHERE";

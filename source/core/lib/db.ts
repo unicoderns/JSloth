@@ -43,7 +43,7 @@ export class DB {
             password: config.mysql.password,
             database: config.mysql.db,
             port: config.mysql.port,
-            connectionLimit: config.mysql.connectionLimit
+            connectionLimit: config.mysql.connectionLimit,
         });
     }
 

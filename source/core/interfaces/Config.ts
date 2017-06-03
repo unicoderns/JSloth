@@ -22,13 +22,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import MySQL from "./db/connections";
+import * as MySQL from "./db/connections";
 import * as App from "./App";
 
 /*** Configuration interface */
 interface Config {
   dev: boolean;
-  mysql: MySQL;
+  mysql: MySQL.Settings;
   installed_apps: App.Config[];
   token: string;
 }

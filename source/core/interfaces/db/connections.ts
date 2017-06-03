@@ -23,13 +23,16 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /*** MySQL configuration interface. */
-interface MySQL {
+export interface Settings {
   user: string;
   password: string;
   db: string;
   port: number;
   host: string;
   connectionLimit: number;
+  validations: Validations;
 }
 
-export default MySQL;
+export interface Validations {
+  fields: boolean;
+}
