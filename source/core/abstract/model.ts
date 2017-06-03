@@ -167,23 +167,31 @@ export class Model {
     // Generate where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generteWhereSQL(where?: any): string {
-        if (typeof where !== null) {
+    private generteWhereData(where?: any): { sql : string, values: string[] } {
+        let values = [];
+        if (typeof where !== "undefined") {
             let sql: string = " WHERE";
             for (let key in where) {
-                sql = sql + " " + key + " = " + where[key];
+                sql = sql + " " + key + " = ?";
+                values.push(where[key]);
             }
-            return sql + ";";
+            return {
+                sql: sql + ";",
+                values: values
+            };
         } else {
-            return ";";
+            return {
+                sql: ";",
+                values: []
+            };
         }
     }
 
     /////////////////////////////////////////////////////////////////////
     // Plain query
     /////////////////////////////////////////////////////////////////////
-    public query(query: string): Promise<any> {
-        return this.jsloth.db.query(query, []);
+    public query(query: string, data: string[]): Promise<any> {
+        return this.jsloth.db.query(query, data);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -191,13 +199,9 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     public select(fields?: string[], where?: any): Promise<any> {
         let selectFields = this.validateSelectFields(fields);
-        let whereSQl = "";
-        if (typeof where !== "undefined") {
-            whereSQl = this.generteWhereSQL(where);
-        }
-        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name + whereSQl;
-        console.log(query);
-        return this.jsloth.db.query(query, []);
+        let whereData = this.generteWhereData(where);
+        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name + whereData.sql;
+        return this.jsloth.db.query(query, whereData.values);
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -223,16 +227,24 @@ export class Model {
     public update(data: any, where?: any): Promise<any> {
         let fields = [];
         let values = [];
+        let unifiedValues = [];
         for (let key in data) {
             fields.push(key + " = ?");
             values.push(data[key]);
         }
-        let whereSQl = "";
-        if (typeof where !== "undefined") {
-            whereSQl = this.generteWhereSQL(where);
-        }
-        let query = "UPDATE " + this.privateSettings.name + " SET " + fields.join(", ") + whereSQl;
-        console.log(query);
-        return this.jsloth.db.query(query, values);
+        let whereData = this.generteWhereData(where);
+        let query = "UPDATE " + this.privateSettings.name + " SET " + fields.join(", ") + whereData.sql;
+        unifiedValues = values.concat(whereData.values);
+        return this.jsloth.db.query(query, unifiedValues);
     }
+
+    /////////////////////////////////////////////////////////////////////
+    // Delete
+    /////////////////////////////////////////////////////////////////////
+    public delete(where?: any): Promise<any> {
+        let whereData = this.generteWhereData(where);
+        let query = "DELETE FROM " + this.privateSettings.name + whereData.sql;
+        return this.jsloth.db.query(query, whereData.values);
+    }
+
 }
