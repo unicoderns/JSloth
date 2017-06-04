@@ -191,16 +191,30 @@ export class Model {
         }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Plain query
-    /////////////////////////////////////////////////////////////////////
-    public query(query: string, data: string[]): Promise<any> {
-        return this.jsloth.db.query(query, data);
+    /**
+     * Plain query
+     *
+     * Any query over any table can be done here
+     *
+     * Warnings:
+     * - Field privacity or data integrity will not apply to a direct query, you are responsable for the data security.
+     * 
+     * @var query MySQL query
+     * @var params Parameters to replace in the query
+     * @return Promise with query result
+     */
+    public query(query: string, params: string[]): Promise<any> {
+        return this.jsloth.db.query(query, params);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Select
-    /////////////////////////////////////////////////////////////////////
+    /**
+     * Select query
+     *
+     * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
+     * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
+     * @var where Key/Value array used to filter the query
+     * @return Promise with query result
+     */
     public select(fields?: string[], where?: any): Promise<any> {
         let selectFields = this.validateSelectFields(fields);
         let whereData = this.generteWhereData(where);
@@ -208,9 +222,12 @@ export class Model {
         return this.jsloth.db.query(query, whereData.values);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Insert
-    /////////////////////////////////////////////////////////////////////
+    /**
+     * Insert query
+     * 
+     * @var data object to be inserted in the table
+     * @return Promise with query result
+     */
     public insert(data: any): Promise<any> {
         let fields = [];
         let wildcards = [];
@@ -225,9 +242,13 @@ export class Model {
         return this.jsloth.db.query(query, values);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Update
-    /////////////////////////////////////////////////////////////////////
+    /**
+     * Update query
+     * 
+     * @var data object data to be update in the table
+     * @var where Key/Value array used to filter the query
+     * @return Promise with query result
+     */
     public update(data: any, where?: any): Promise<any> {
         let fields = [];
         let values = [];
@@ -242,9 +263,12 @@ export class Model {
         return this.jsloth.db.query(query, unifiedValues);
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Delete
-    /////////////////////////////////////////////////////////////////////
+    /**
+     * Delete query
+     * 
+     * @var where Key/Value array used to filter the query
+     * @return Promise with query result
+     */
     public delete(where?: any): Promise<any> {
         let whereData = this.generteWhereData(where);
         let query = "DELETE FROM " + this.privateSettings.name + whereData.sql;

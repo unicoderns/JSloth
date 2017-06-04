@@ -34,7 +34,13 @@ export class DB {
     private connections: mysql.IPool;
     private config: Config;
 
-    /*** Configuration methods */
+    /**
+     * Configuration methods 
+     * 
+     * Create a connection pool
+     * 
+     * @var config system configuration file
+     */
     constructor(config: Config) {
         this.config = config;
         this.connections = mysql.createPool({
@@ -47,6 +53,13 @@ export class DB {
         });
     }
 
+    /**
+     * Plain query
+     * 
+     * @var query MySQL query
+     * @var params Parameters to replace in the query
+     * @return Promise with query result
+     */
     public query(query: string, params: any[]): Promise<any> {
         if (this.config.dev) {
             console.log("SQL Query: " + query);
