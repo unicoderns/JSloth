@@ -28,6 +28,7 @@ import { Promise } from "es6-promise";
 
 // Private settings fields object
 export interface Fields {
+    all: string[];
     public: string[];
     protected: string[];
     private: string[];
@@ -49,9 +50,10 @@ export class Model {
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
         fields: {
+            all: <string[]>[],
             public: <string[]>[],
-            protected: <string[]>[],
-            private: <string[]>[]
+            private: <string[]>[],
+            protected: <string[]>[]
         }, // Fields cache
         private: true // It will be hide
     };
@@ -63,7 +65,7 @@ export class Model {
     /////////////////////////////////////////////////////////////////////
     // Get field list.
     /////////////////////////////////////////////////////////////////////
-    public getFields(): { public: string[], protected: string[] } {
+    public getFields(): Fields {
         // Use cache if is available
         if (!this.privateSettings.fields.public.length) {
             // Get all keys then remove the private ones
@@ -90,20 +92,22 @@ export class Model {
                     privateKeys.push(name);
                 }
             });
-            this.privateSettings.fields.protected = protectedKeys;
+            this.privateSettings.fields.all = keys;
             this.privateSettings.fields.public = publicKeys;
-            this.privateSettings.fields.private = privateKeys; // This will be hidden in consume time
+            this.privateSettings.fields.private = privateKeys;
+            this.privateSettings.fields.protected = protectedKeys;
         }
         return {
+            all: this.privateSettings.fields.all,
             public: this.privateSettings.fields.public,
+            private: this.privateSettings.fields.private,
             protected: this.privateSettings.fields.protected
         };
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Helper - Exists in array
-    // Check if a key exists in a array
-    /////////////////////////////////////////////////////////////////////
+    /**
+     * Filter one array if keys don't exists in other array.
+     */
     private filterArrayInArray(target: string[], scope: string[]): string[] {
         let keys: string[] = [];
         target.forEach(item => {
@@ -114,44 +118,45 @@ export class Model {
         return keys;
     }
 
+/*
     /////////////////////////////////////////////////////////////////////
     // Generate a report and filter fields
     /////////////////////////////////////////////////////////////////////
     private selectFieldsReport(select: string[]): Fields {
-        let report: Fields = {
-            public: <string[]>[],
-            protected: <string[]>[],
-            private: <string[]>[]
-        };
+        let report: Fields;
         let fields = this.getFields();
 
+        report.all = this.filterArrayInArray(select, fields.all);
         report.public = this.filterArrayInArray(select, fields.public);
         report.protected = this.filterArrayInArray(select, fields.protected);
-        report.private = this.filterArrayInArray(select, this.privateSettings.fields.private);
+        report.private = this.filterArrayInArray(select, fields.private);
 
-        return report;
+        return this.getFields();
     }
+*/
 
-    /////////////////////////////////////////////////////////////////////
-    // Validate fields for select
-    //
-    // Active even if field validation is off to avoid expose any 
-    // private data.
-    //
-    // @return string
-    /////////////////////////////////////////////////////////////////////
-    private validateSelectFields(fields: string[]) {
-        // Filtering the select array
+    /**
+     * Clean and validate a select if is need it
+     * 
+     * @var fields String array with field names.
+     * @return Object cointaining the SQL and a field report
+     */
+    private getSelectFieldsSQL(fields: string[]): string {
         let fieldsSQL = "";
         let filteredFields: string[] = [];
-        let fieldsReport: Fields;
 
+        // Check if there's any data in @fields or fail with a default `all` SQL code
         if (typeof fields !== "undefined") {
+            // Check if is an array or just SQL code
             if (Array.isArray(fields)) {
                 let selectableFields: string[] = [];
-                fieldsReport = this.selectFieldsReport(fields);
-                // Concat array of selectable fields (filtered fields).
-                selectableFields = fieldsReport.public.concat(fieldsReport.protected.concat(fieldsReport.private));
+                let modelFields = this.getFields();
+                // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
+                if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
+                    selectableFields = this.filterArrayInArray(fields, modelFields.all);
+                } else {
+                    selectableFields = fields;
+                }
                 fieldsSQL = selectableFields.join(", ");
             } else {
                 fieldsSQL = fields;
@@ -161,17 +166,14 @@ export class Model {
         }
 
 
-        return {
-            sql: fieldsSQL,
-            report: fieldsReport
-        };
+        return fieldsSQL;
     }
 
     /////////////////////////////////////////////////////////////////////
     // Generate where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generteWhereData(where?: any): { sql: string, values: string[] } {
+    private generateWhereData(where?: any): { sql: string, values: string[] } {
         let values = [];
         if (typeof where !== "undefined") {
             let sql: string = " WHERE";
@@ -216,9 +218,9 @@ export class Model {
      * @return Promise with query result
      */
     public select(fields?: string[], where?: any): Promise<any> {
-        let selectFields = this.validateSelectFields(fields);
-        let whereData = this.generteWhereData(where);
-        let query = "SELECT " + selectFields.sql + " from " + this.privateSettings.name + whereData.sql;
+        let fieldsSQL = this.getSelectFieldsSQL(fields);
+        let whereData = this.generateWhereData(where);
+        let query = "SELECT " + fieldsSQL + " from " + this.privateSettings.name + whereData.sql;
         return this.jsloth.db.query(query, whereData.values);
     }
 
@@ -257,7 +259,7 @@ export class Model {
             fields.push(key + " = ?");
             values.push(data[key]);
         }
-        let whereData = this.generteWhereData(where);
+        let whereData = this.generateWhereData(where);
         let query = "UPDATE " + this.privateSettings.name + " SET " + fields.join(", ") + whereData.sql;
         unifiedValues = values.concat(whereData.values);
         return this.jsloth.db.query(query, unifiedValues);
@@ -270,7 +272,7 @@ export class Model {
      * @return Promise with query result
      */
     public delete(where?: any): Promise<any> {
-        let whereData = this.generteWhereData(where);
+        let whereData = this.generateWhereData(where);
         let query = "DELETE FROM " + this.privateSettings.name + whereData.sql;
         return this.jsloth.db.query(query, whereData.values);
     }

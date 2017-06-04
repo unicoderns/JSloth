@@ -33,6 +33,7 @@ import * as JSDB from "./db";
  * Load components.
  */
 export class Load {
+    public config: Config;
     public files: JSFiles.Files;
     public path: JSPath.Path;
     public db: JSDB.DB;
@@ -40,6 +41,7 @@ export class Load {
 
     /*** Configuration methods */
     constructor(config: Config) {
+        this.config = config;
         this.files = new JSFiles.Files(config);
         this.path = new JSPath.Path(config);
         this.db = new JSDB.DB(config);
