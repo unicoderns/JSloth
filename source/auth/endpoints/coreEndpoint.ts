@@ -55,7 +55,7 @@ export class CoreEndPoint extends controller.Controller {
          * @return array
          */
         this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.usersTable.delete({id: 3}).then((done) => {
+            this.usersTable.delete({id: 3, pollo: "123"}).then((done) => {
                 this.usersTable.select(["id", "first_name", "last_name"]).then((data) => {
                     res.json(data);
                 });

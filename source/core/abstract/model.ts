@@ -118,22 +118,34 @@ export class Model {
         return keys;
     }
 
-/*
-    /////////////////////////////////////////////////////////////////////
-    // Generate a report and filter fields
-    /////////////////////////////////////////////////////////////////////
-    private selectFieldsReport(select: string[]): Fields {
-        let report: Fields;
-        let fields = this.getFields();
-
-        report.all = this.filterArrayInArray(select, fields.all);
-        report.public = this.filterArrayInArray(select, fields.public);
-        report.protected = this.filterArrayInArray(select, fields.protected);
-        report.private = this.filterArrayInArray(select, fields.private);
-
-        return this.getFields();
+    /**
+     * Log if keys don't exists in other array.
+     */
+    private logArrayInArray(target: string[], scope: string[]): void {
+        let keys: string[] = [];
+        target.forEach(item => {
+            if (scope.indexOf(item) === -1) {
+                console.error(item + " field doesn't exists!");
+            }
+        });
     }
-*/
+
+    /*
+        /////////////////////////////////////////////////////////////////////
+        // Generate a report and filter fields
+        /////////////////////////////////////////////////////////////////////
+        private selectFieldsReport(select: string[]): Fields {
+            let report: Fields;
+            let fields = this.getFields();
+    
+            report.all = this.filterArrayInArray(select, fields.all);
+            report.public = this.filterArrayInArray(select, fields.public);
+            report.protected = this.filterArrayInArray(select, fields.protected);
+            report.private = this.filterArrayInArray(select, fields.private);
+    
+            return this.getFields();
+        }
+    */
 
     /**
      * Clean and validate a select if is need it
@@ -155,6 +167,9 @@ export class Model {
                 if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
                     selectableFields = this.filterArrayInArray(fields, modelFields.all);
                 } else {
+                    if (this.jsloth.config.dev) {
+                        this.logArrayInArray(fields, modelFields.all);
+                    }
                     selectableFields = fields;
                 }
                 fieldsSQL = selectableFields.join(", ");
@@ -174,15 +189,35 @@ export class Model {
     // @return string
     /////////////////////////////////////////////////////////////////////
     private generateWhereData(where?: any): { sql: string, values: string[] } {
-        let values = [];
-        if (typeof where !== "undefined") {
-            let sql: string = " WHERE";
-            for (let key in where) {
-                sql = sql + " " + key + " = ?";
-                values.push(where[key]);
+        let values: string[] = [];
+        let keys: string[] = [];
+        let filteredKeys: string[] = [];
+        let modelFields: Fields = this.getFields();
+
+        for (let key in where) {
+            keys.push(key);
+        }
+
+        // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
+        if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
+            filteredKeys = this.filterArrayInArray(keys, modelFields.all);
+        } else {
+            if (this.jsloth.config.dev) {
+                this.logArrayInArray(keys, modelFields.all);
             }
+            filteredKeys = keys;
+        }
+
+        if (typeof where !== "undefined") {
+            let sql: string = " WHERE ";
+            sql = sql + filteredKeys.join(" = ? ");
+            sql = sql + " = ?;";
+            // getting values
+            filteredKeys.forEach((item: string) => {
+                values.push(where[item]);
+            });
             return {
-                sql: sql + ";",
+                sql: sql,
                 values: values
             };
         } else {
@@ -240,7 +275,6 @@ export class Model {
             values.push(data[key]);
         }
         let query = "INSERT INTO " + this.privateSettings.name + " (" + fields.join(", ") + ") VALUES (" + wildcards.join(", ") + ")";
-        console.log(query);
         return this.jsloth.db.query(query, values);
     }
 
