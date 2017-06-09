@@ -26,7 +26,7 @@
 
 import * as express from "express";
 import * as controller from "../../core/abstract/controller";
-import * as users from "../models/usersModel";
+import * as users from "../models/db/usersModel";
 import * as JSloth from "../../core/lib/core";
 
 /**

@@ -55,3 +55,11 @@ export interface BoolType extends CommonTypes {
 export interface DataTimestampType extends CommonTypes {
     default: defaults.Timestamp;
 }
+
+/**
+ * Foreign key to static enum model
+ */
+
+export interface StaticKey extends Datatype {
+    keys: any;
+}

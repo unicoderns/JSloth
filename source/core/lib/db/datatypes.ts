@@ -37,7 +37,7 @@ export class Datatypes {
      * @var customType Object 2 (will overwrite Object 1 keys)
      * @return Merged object
      */
-    private mergeTypes(commonType, customType) {
+    private mergeTypes(commonType: any, customType: any) {
         let type = (<any>Object).assign({}, commonType, customType);
         return type;
     }
@@ -80,7 +80,6 @@ export class Datatypes {
     // ------------------------------------------------------------------
     // Special Numbers
     // ------------------------------------------------------------------
-
     public ID(settings: settings.General = {}): fields.Datatype {
         let commonType = this.fillDefault(settings);
         let customType: fields.Datatype = {
@@ -91,6 +90,16 @@ export class Datatypes {
             unique: true,
             unsigned: true,
             autoincrement: true
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public STATIC_KEY(keys: any, settings: settings.General = {}): fields.StaticKey {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.StaticKey = {
+            type: "INT",
+            size: settings.size || 0,
+            keys: keys
         };
         return this.mergeTypes(commonType, customType);
     }

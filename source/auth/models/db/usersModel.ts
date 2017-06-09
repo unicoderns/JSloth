@@ -22,10 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as model from "../../core/abstract/model";
-import * as fields from "../../core/interfaces/db/fields";
-import * as defaults from "../../core/interfaces/db/defaults";
-import * as datatypes from "../../core/lib/db/datatypes";
+import * as model from "../../../core/abstract/model";
+import * as fields from "../../../core/interfaces/db/fields";
+import * as defaults from "../../../core/interfaces/db/defaults";
+import * as datatypes from "../../../core/lib/db/datatypes";
+import * as timezones from "../static/timezoneModel";
 
 export interface Row {
     id?: number;
@@ -36,7 +37,7 @@ export interface Row {
     salt: string;
     first_name?: string;
     last_name?: string;
-    timezone?: string;
+    timezone?: number;
     admin?: boolean;
     verified?: boolean;
     active?: boolean;
@@ -85,9 +86,7 @@ export class Users extends model.Model {
         size: 45
     });
 
-    public timezone: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        size: 45
-    });
+    public timezone: fields.Datatype = new datatypes.Datatypes().STATIC_KEY(timezones);
 
     public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
 
