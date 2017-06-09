@@ -3,9 +3,12 @@ import * as defaults from "./defaults";
 
 export interface General extends fields.CommonTypes {
     size?: number;
-    alias?: string;
 }
 
-export interface Timestamp extends General {
+export interface Bool extends fields.CommonTypes {
+    default?: defaults.Binary;
+}
+
+export interface Timestamp extends fields.CommonTypes {
     default?: defaults.Timestamp;
 }

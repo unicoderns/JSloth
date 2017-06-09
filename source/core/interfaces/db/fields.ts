@@ -26,6 +26,8 @@ import * as defaults from "./defaults";
 
 // JSloth internal flags
 export interface SystemTypes {
+    type?: string;
+    alias?: string;
     protected?: boolean;
     private?: boolean;
 }
@@ -43,11 +45,13 @@ export interface CommonTypes extends SystemTypes {
 
 /*** Datatype interface. */
 export interface Datatype extends CommonTypes {
-    type: string;
     size: number;
 }
 
+export interface BoolType extends CommonTypes {
+    default: defaults.Binary;
+}
+
 export interface DataTimestampType extends CommonTypes {
-    type: string;
     default: defaults.Timestamp;
 }

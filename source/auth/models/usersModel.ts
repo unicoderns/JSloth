@@ -37,6 +37,7 @@ export interface Row {
     first_name?: string;
     last_name?: string;
     // timezone?: string;
+    admin?: boolean;
     root?: boolean;
 }
 
@@ -82,5 +83,7 @@ export class Users extends model.Model {
     public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
+
+    public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
 
 }

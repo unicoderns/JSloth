@@ -30,7 +30,25 @@ import * as settings from "../../interfaces/db/settings";
  */
 export class Datatypes {
 
-    private fillDefault(settings: settings.General = {}) {
+    /**
+     * Merge 2 objects
+     * 
+     * @var commonType Object 1
+     * @var customType Object 2 (will overwrite Object 1 keys)
+     * @return Merged object
+     */
+    private mergeTypes(commonType, customType) {
+        let type = (<any>Object).assign({}, commonType, customType);
+        return type;
+    }
+
+    /**
+     * Fill SQl defaults for fields
+     * 
+     * @var settings Object with custom settings
+     * @return Object with defaults
+     */
+    private fillDefault(settings: settings.General = {}): settings.General {
         let type: settings.General = {
             primaryKey: settings.primaryKey || false,
             notNull: settings.notNull || false,
@@ -56,8 +74,7 @@ export class Datatypes {
             type: "INT",
             size: settings.size
         };
-        let type = (<any>Object).assign({}, commonType, customType); // Merge
-        return type;
+        return this.mergeTypes(commonType, customType);
     }
 
     // ------------------------------------------------------------------
@@ -75,15 +92,14 @@ export class Datatypes {
             unsigned: true,
             autoincrement: true
         };
-        let type = (<any>Object).assign({}, commonType, customType); // Merge
-        return type;
+        return this.mergeTypes(commonType, customType);
     }
 
     /////////////////////////////////////////////////////////////////////
     // Strings
     /////////////////////////////////////////////////////////////////////
 
-    public CHAR(settings: settings.General = {}): fields.Datatype {
+    public CHAR(settings: settings.General = <settings.General>{}): fields.Datatype {
         let commonType = this.fillDefault(settings);
         let customType: fields.Datatype = {
             type: "CHAR",
@@ -93,28 +109,39 @@ export class Datatypes {
         return type;
     }
 
-    public VARCHAR(settings: settings.General = {}): fields.Datatype {
+    public VARCHAR(settings: settings.General = <settings.General>{}): fields.Datatype {
         let commonType = this.fillDefault(settings);
         let customType: fields.Datatype = {
             type: "VARCHAR",
             size: settings.size
         };
-        let type = (<any>Object).assign({}, commonType, customType); // Merge
-        return type;
+        return this.mergeTypes(commonType, customType);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Binary
+    /////////////////////////////////////////////////////////////////////
+
+    public BOOL(settings: settings.Bool = <settings.Bool>{}): fields.BoolType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.BoolType = {
+            type: "BOOL",
+            default: settings.default
+        };
+        return this.mergeTypes(commonType, customType);
     }
 
     /////////////////////////////////////////////////////////////////////
     // Dates
     /////////////////////////////////////////////////////////////////////
 
-    public TIMESTAMP(settings: settings.Timestamp = {}): fields.DataTimestampType {
+    public TIMESTAMP(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
         let commonType = this.fillDefault(settings);
         let customType: fields.DataTimestampType = {
             type: "TIMESTAMP",
             default: settings.default
         };
-        let type = (<any>Object).assign({}, commonType, customType); // Merge
-        return type;
+        return this.mergeTypes(commonType, customType);
     }
 
 }
