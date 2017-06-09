@@ -36,7 +36,7 @@ export interface Row {
     salt: string;
     first_name?: string;
     last_name?: string;
-    // timezone?: string;
+    timezone?: string;
     admin?: boolean;
     verified?: boolean;
     active?: boolean;
@@ -82,6 +82,10 @@ export class Users extends model.Model {
     });
 
     public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+        size: 45
+    });
+
+    public timezone: fields.Datatype = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
 
