@@ -38,7 +38,8 @@ export interface Row {
     last_name?: string;
     // timezone?: string;
     admin?: boolean;
-    root?: boolean;
+    verified?: boolean;
+    active?: boolean;
 }
 
 /**
@@ -85,5 +86,9 @@ export class Users extends model.Model {
     });
 
     public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
+
+    public verified: fields.BoolType = new datatypes.Datatypes().BOOL();
+
+    public active: fields.BoolType = new datatypes.Datatypes().BOOL();
 
 }
