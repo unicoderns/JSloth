@@ -94,7 +94,7 @@ export class Datatypes {
         return this.mergeTypes(commonType, customType);
     }
 
-    public STATIC_KEY(keys: any, settings: settings.General = {}): fields.StaticKey {
+    public STATICKEY(keys: any, settings: settings.General = {}): fields.StaticKey {
         let commonType = this.fillDefault(settings);
         let customType: fields.StaticKey = {
             type: "INT",

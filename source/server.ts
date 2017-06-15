@@ -129,7 +129,11 @@ class Server {
 
     /*** Configure Express middlewares */
     private middleware(): void {
-        this.express.use(logger("dev"));
+        if (this.jsloth.config.dev) {
+            this.express.use(logger("dev"));
+        } else {
+            this.express.use(logger("combined"));
+        }
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
     }

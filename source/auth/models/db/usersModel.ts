@@ -86,7 +86,7 @@ export class Users extends model.Model {
         size: 45
     });
 
-    public timezone: fields.Datatype = new datatypes.Datatypes().STATIC_KEY(timezones);
+    public timezone: fields.Datatype = new datatypes.Datatypes().STATICKEY(timezones);
 
     public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
 
