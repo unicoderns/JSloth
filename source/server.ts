@@ -23,8 +23,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as express from "express";
-import * as logger from "morgan";
-import * as bodyParser from "body-parser";
+import * as logger from "morgan";  // Log requests
+import * as bodyParser from "body-parser"; // Parse incoming request bodies
+import * as jwt from "jsonwebtoken"; // Create, sign, and verify tokens
 
 import * as JSloth from "./core/lib/core";
 import * as JSFiles from "./core/lib/files";
@@ -129,11 +130,13 @@ class Server {
 
     /*** Configure Express middlewares */
     private middleware(): void {
+        // Log hits using morgan
         if (this.jsloth.config.dev) {
             this.express.use(logger("dev"));
         } else {
             this.express.use(logger("combined"));
         }
+        // Use body parser so we can get info from POST and/or URL parameters
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
     }

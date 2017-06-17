@@ -22,9 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as mysql from "mysql";
+import { Promise } from "es6-promise";
+
 import * as JSloth from "../../core/lib/core";
 import * as datatypes from "../../core/lib/db/datatypes";
-import { Promise } from "es6-promise";
 
 // Private settings fields object
 export interface Fields {
@@ -158,7 +160,7 @@ export class Model {
         let filteredFields: string[] = [];
 
         // Check if there's any data in @fields or fail with a default `all` SQL code
-        if (typeof fields !== "undefined") {
+        if ((typeof fields !== "undefined") && (fields.length)) {
             // Check if is an array or just SQL code
             if (Array.isArray(fields)) {
                 let selectableFields: string[] = [];
@@ -210,8 +212,8 @@ export class Model {
 
         if (typeof where !== "undefined") {
             let sql: string = " WHERE ";
-            sql = sql + filteredKeys.join(" = ? ");
-            sql = sql + " = ?;";
+            sql = sql + filteredKeys.join(" = ? AND ");
+            sql = sql + " = ?";
             // getting values
             filteredKeys.forEach((item: string) => {
                 values.push(where[item]);
@@ -222,7 +224,7 @@ export class Model {
             };
         } else {
             return {
-                sql: ";",
+                sql: "",
                 values: []
             };
         }
@@ -245,20 +247,71 @@ export class Model {
     }
 
     /**
-     * Select query
+     * Select private query
      *
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
      * @return Promise with query result
      */
-    public select(fields?: string[], where?: any): Promise<any> {
+    private select(fields?: string[], where?: any, limit?: number): Promise<any> {
         let fieldsSQL = this.getSelectFieldsSQL(fields);
         let whereData = this.generateWhereData(where);
-        let query = "SELECT " + fieldsSQL + " from " + this.privateSettings.name + whereData.sql;
+        let extra = "";
+        if (limit) {
+            extra = " LIMIT " + limit;
+        }
+        let query = "SELECT " + fieldsSQL + " FROM " + this.privateSettings.name + whereData.sql + extra;
         return this.jsloth.db.query(query, whereData.values);
     }
 
+    /**
+     * Get item - Select query
+     *
+     * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
+     * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
+     * @var where Key/Value array used to filter the query
+     * @return Promise with query result
+     */
+    public get(fields?: string[], where?: any): Promise<any> {
+        // Create promise
+        const p: Promise<any> = new Promise(
+            (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
+                let sqlPromise = this.select(fields, where, 1);
+                sqlPromise.then((data) => {
+                    resolve(data[0]);
+                }).catch(err => {
+                    reject(err);
+                });
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Get some item - Select query
+     *
+     * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
+     * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
+     * @var where Key/Value array used to filter the query
+     * @return Promise with query result
+     */
+    public getSome(fields?: string[], where?: any, limit?: number): Promise<any> {
+        return this.select(fields, where, limit);
+    }
+
+    /**
+     * Get all items - Select query
+     *
+     * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
+     * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
+     * @var where Key/Value array used to filter the query
+     * @var limit Number of rows to get
+     * @return Promise with query result
+     */
+    public getAll(fields?: string[], where?: any): Promise<any> {
+        return this.select(fields, where);
+    }
     /**
      * Insert query
      * 
