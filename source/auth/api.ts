@@ -24,21 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as express from "express";
-import * as routes from "../core/abstract/routes";
-import * as JSloth from "../core/lib/core";
-import * as coreEndpoint from "./endpoints/coreEndpoint";
+import Routes from "../core/abstract/routes";
+import CoreEndpoint from "./endpoints/coreEndpoint";
 
 /**
  * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
-export class Routes extends routes.Routes {
+export class Urls extends Routes {
 
     /*** Configure endpoints */
     protected routes(): void {
-        this.router.use("/", this.load(coreEndpoint.CoreEndPoint));
+        this.router.use("/", this.load(CoreEndpoint));
     }
 
 }

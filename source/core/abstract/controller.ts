@@ -22,27 +22,24 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="../types/express.d.ts"/>
-
-import * as express from "express";
-import * as jwt from "jsonwebtoken";
-import * as JSloth from "../lib/core";
+import JSloth from "../lib/core";
+import { Router } from "express";
 
 /**
  * Controller Abstract
  */
-export class Controller {
-    protected jsloth: JSloth.Load;
+export default class Controller {
+    protected jsloth: JSloth;
 
     /**
      * Express Router instance
      *
      * @return express.Router
      */
-    public router: express.Router = express.Router();
+    public router: Router = Router();
 
     /*** Load library */
-    constructor(jsloth: JSloth.Load) {
+    constructor(jsloth: JSloth) {
         this.jsloth = jsloth;
         this.routes();
     }
@@ -51,39 +48,4 @@ export class Controller {
     protected routes(): void {
     }
 
-    /**
-     * Session token verification
-     * 
-     * @param req {express.Request} The request object.
-     * @param res {express.Response} The response object.
-     * @param next Callback.
-     */
-    protected auth = (req: express.Request, res: express.Response, next: Function) => {
-        let jsloth = this.jsloth;
-        // Check header or url parameters or post parameters for token
-        let token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-        // Decode token
-        if (token) {
-            // Verifies secret and checks exp
-            jwt.verify(token, jsloth.config.token, function (err: NodeJS.ErrnoException, decoded: any) {
-                if (err) {
-                    return res.json({ success: false, message: 'Failed to authenticate token.' });
-                } else {
-                    // If everything is good, save to request for use in other routes
-                    req.decoded = decoded;
-                    next();
-                }
-            });
-
-        } else {
-            // if there is no token
-            // return an error
-            return res.status(403).send({
-                success: false,
-                message: 'No token provided.'
-            });
-
-        }
-    };
 }

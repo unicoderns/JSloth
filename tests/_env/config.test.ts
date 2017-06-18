@@ -1,17 +1,16 @@
-import * as mocha from 'mocha';
-import * as chai from 'chai';
-
-import * as JSFiles from "../../source/core/lib/files";
-
 import app from '../../source/server';
+import JSFiles from "../../source/core/lib/files";
 import IConfig from '../../source/core/interfaces/config';
+
+import * as chai from 'chai';
+import * as mocha from 'mocha';
 
 const expect = chai.expect;
 
 // ---------------------------------------------------------------------------------------------------------------
 // JSloth Library.
 // ---------------------------------------------------------------------------------------------------------------
-let files = new JSFiles.Files();
+let files = new JSFiles();
 
 // ---------------------------------------------------------------------------------------------------------------
 // Loading configuration.
@@ -19,11 +18,11 @@ let files = new JSFiles.Files();
 const configPath: string = "/../../config.json";
 var config: IConfig;
 
-files.exists(__dirname + configPath, function (exist: boolean) {
-    if (exist) {
-        config = require(__dirname + configPath);
-    }
+files.exists(__dirname + configPath).then(() => {
+    config = require(__dirname + configPath);
     tests();
+}).catch(err => {
+    console.error("Configuration file not found");
 });
 
 // ---------------------------------------------------------------------------------------------------------------

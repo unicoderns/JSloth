@@ -24,27 +24,27 @@
 
 import Config from "../interfaces/Config";
 
-import * as JSFiles from "./files";
-import * as JSPath from "./path";
-import * as JSDB from "./db";
+import JSDB from "./db";
+import JSPath from "./path";
+import JSFiles from "./files";
 
 /**
  * JSloth Loader
  * Load components.
  */
-export class Load {
+export default class JSloth {
     public config: Config;
-    public files: JSFiles.Files;
-    public path: JSPath.Path;
-    public db: JSDB.DB;
+    public files: JSFiles;
+    public path: JSPath;
+    public db: JSDB;
     private private: boolean = true; // Hidden library
 
     /*** Configuration methods */
     constructor(config: Config) {
         this.config = config;
-        this.files = new JSFiles.Files(config);
-        this.path = new JSPath.Path(config);
-        this.db = new JSDB.DB(config);
+        this.files = new JSFiles(config);
+        this.path = new JSPath(config);
+        this.db = new JSDB(config);
     }
 
 }

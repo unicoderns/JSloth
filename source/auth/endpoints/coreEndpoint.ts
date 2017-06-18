@@ -24,13 +24,14 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import JSloth from "../../core/lib/core";
+import Controller from "../abstract/controller";
+
 import * as express from "express";
 import * as jwt from "jsonwebtoken";
-import * as controller from "../../core/abstract/controller";
 import * as users from "../models/db/usersModel";
-import * as JSloth from "../../core/lib/core";
 
-let bcrypt = require('bcrypt-nodejs');
+let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
 
 /**
@@ -39,19 +40,17 @@ let bcrypt = require('bcrypt-nodejs');
  * @basepath /
  * @return express.Router
  */
-export class CoreEndPoint extends controller.Controller {
+export default class CoreEndPoint extends Controller {
     private usersTable: users.Users;
-
     private email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    constructor(jsloth: JSloth.Load) {
+    constructor(jsloth: JSloth) {
         super(jsloth);
         this.usersTable = new users.Users(jsloth);
     }
 
     /*** Configure endpoints */
     protected routes(): void {
-
         /**
          * Dummy.
          * Render a json object with a true response.
@@ -85,14 +84,14 @@ export class CoreEndPoint extends controller.Controller {
             } else {
                 // find the user
                 this.usersTable.get([], { email: email, active: 1 }).then((user) => {
-                    if (typeof user == "undefined") {
+                    if (typeof user === "undefined") {
                         res.json({ success: false, message: "Authentication failed. User and password don't match." });
                     } else {
                         bcrypt.compare(req.body.password, user.password, function (err: NodeJS.ErrnoException, match: boolean) {
                             if (match) {
                                 // if user is found and password is right
                                 // create a token
-                                var token = jwt.sign(user, jsloth.config.token, {
+                                let token = jwt.sign(user, jsloth.config.token, {
                                     expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                                 });
 
@@ -140,7 +139,6 @@ export class CoreEndPoint extends controller.Controller {
             });
         });
 
-
         /**
          * Dummy.
          * Render a json object with a true response.
@@ -149,7 +147,7 @@ export class CoreEndPoint extends controller.Controller {
          * @param res {express.Response} The response object.
          * @return array
          */
-        this.router.get("/fields/", this.auth ,(req: express.Request, res: express.Response) => {
+        this.router.get("/fields/", this.auth, (req: express.Request, res: express.Response) => {
             let fields = this.usersTable.getFields();
             res.json({
                 publicFields: fields.public,

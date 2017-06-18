@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as JSFiles from "./files";
+import JSFiles from "./files";
 import Config from "../interfaces/Config";
 import { Promise } from "es6-promise";
 
@@ -30,14 +30,14 @@ import { Promise } from "es6-promise";
 * JSloth Path
 * Check the right path, search /core/ first and /app/ if is not found it.
 */
-export class Path {
+export default class JSPath {
 
     /*** JSloth Files instance */
-    private files: JSFiles.Files;
+    private files: JSFiles;
 
     /*** Configuration methods */
     constructor(config: Config) {
-        this.files = new JSFiles.Files(config);
+        this.files = new JSFiles(config);
     }
 
     /**

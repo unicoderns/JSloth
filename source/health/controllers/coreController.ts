@@ -24,15 +24,15 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as express from "express";
-import * as controller from "../../core/abstract/controller";
+import Controller from "../../core/abstract/controller";
+import { Request, Response } from "express";
 
 /**
  * Core Controller Routes
  * 
  * @basepath /health/
  */
-export class CoreController extends controller.Controller {
+export default class CoreController extends Controller {
 
     /*** Configure endpoints */
     protected routes(): void {
@@ -40,10 +40,10 @@ export class CoreController extends controller.Controller {
         /**
          * Page to check the health of the system.
          *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
+         * @param req {Request} The request object.
+         * @param res {Response} The response object.
          */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
+        this.router.get("/", (req: Request, res: Response) => {
             res.render("../source/health/views/index.ejs");
         });
 

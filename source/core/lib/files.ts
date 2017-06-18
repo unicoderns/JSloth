@@ -22,15 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as fs from "fs";
 import Config from "../interfaces/Config";
 import { Promise } from "es6-promise";
+
+import * as fs from "fs";
 
 /**
  * JSloth Files
  * File related functions.
  */
-export class Files {
+export default class JSFiles {
 
     /*** Configuration methods */
     constructor(config?: Config) {

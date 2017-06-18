@@ -22,10 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
+import JSloth from "../../core/lib/core";
 import { Promise } from "es6-promise";
 
-import * as JSloth from "../../core/lib/core";
+import * as mysql from "mysql";
 import * as datatypes from "../../core/lib/db/datatypes";
 
 // Private settings fields object
@@ -47,7 +47,7 @@ export interface Private {
  * Model Abstract
  */
 export class Model {
-    protected jsloth: JSloth.Load;
+    protected jsloth: JSloth;
 
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
@@ -60,7 +60,7 @@ export class Model {
         private: true // It will be hide
     };
 
-    constructor(jsloth: JSloth.Load) {
+    constructor(jsloth: JSloth) {
         this.jsloth = jsloth;
     }
 

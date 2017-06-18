@@ -1,14 +1,14 @@
 import * as mocha from 'mocha';
 import * as chai from 'chai';
 
-import * as JSFiles from "../../source/core/lib/files";
+import JSFiles from "../../source/core/lib/files";
 
 const expect = chai.expect;
 
 // ---------------------------------------------------------------------------------------------------------------
 // JSloth Library.
 // ---------------------------------------------------------------------------------------------------------------
-let files = new JSFiles.Files();
+let files = new JSFiles();
 
 describe('Lib Tests - Files', () => {
 
@@ -22,7 +22,7 @@ describe('Lib Tests - Files', () => {
 
     // Async test
     it('Fake file not exists', done => {
-        files.exists(__dirname + "/files.test0.ts", false).catch((err) => {
+        files.exists(__dirname + "/files.test0.ts").catch((err) => {
             expect(err).to.exist;
             done();
         });

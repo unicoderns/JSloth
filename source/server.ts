@@ -25,10 +25,9 @@
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
 import * as bodyParser from "body-parser"; // Parse incoming request bodies
-import * as jwt from "jsonwebtoken"; // Create, sign, and verify tokens
 
-import * as JSloth from "./core/lib/core";
-import * as JSFiles from "./core/lib/files";
+import JSloth from "./core/lib/core";
+import JSFiles from "./core/lib/files";
 
 import Config from "./core/interfaces/Config";
 import * as App from "./core/interfaces/App";
@@ -58,7 +57,7 @@ class Server {
     private apps: App.App[] = [];
 
     /*** JSloth library */
-    private jsloth: JSloth.Load;
+    private jsloth: JSloth;
 
     /*** Batch process */
     private exec = require("child_process").execSync;
@@ -71,7 +70,7 @@ class Server {
      */
     constructor() {
         // Loading JSloth Files directly to load the config file.
-        let jslothFiles = new JSFiles.Files();
+        let jslothFiles = new JSFiles();
 
         // Creating App
         this.express = express();
@@ -101,7 +100,7 @@ class Server {
 
             // Loading JSloth Global Library
             console.log(" * Loading JSloth Library \n");
-            this.jsloth = new JSloth.Load(this.config);
+            this.jsloth = new JSloth(this.config);
 
             // Installing Middlewares
             console.log(" * Installing middlewares \n");
@@ -125,6 +124,8 @@ class Server {
                 this.apps.push(app);
                 this.install_app(app);
             });
+        }).catch(err => {
+            console.error("Configuration file not found");
         });
     }
 
@@ -194,7 +195,7 @@ class Server {
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts").then(() => {
             let appRoute = require("./" + app.config.name + "/routes");
-            let route = new appRoute.Routes(this.jsloth);
+            let route = new appRoute.Urls(this.jsloth);
             this.express.use("" + (app.config.basepath || "/"), route.router);
 
             app.status.routes = true;
@@ -210,7 +211,7 @@ class Server {
         this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts").then(() => {
             try {
                 let appRoute = require("./" + app.config.name + "/api");
-                let route = new appRoute.Routes(this.jsloth);
+                let route = new appRoute.Urls(this.jsloth);
                 this.express.use("/api" + (app.config.basepath || "/"), route.router);
 
                 app.status.api = true;

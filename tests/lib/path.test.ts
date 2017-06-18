@@ -1,11 +1,11 @@
+import JSFiles from "../../source/core/lib/files";
+import JSPath from "../../source/core/lib/path";
+
 import * as mocha from "mocha";
 import * as chai from "chai";
 
-import * as JSFiles from "../../source/core/lib/files";
-import * as JSPath from "../../source/core/lib/path";
-
 const expect = chai.expect;
-let path: JSPath.Path;
+let path: JSPath;
 
 /*** Default configuration filepath */
 let configPath: string = "/../../config.json";
@@ -15,11 +15,11 @@ let appName: string = "sample";
 // JSloth Library.
 // ---------------------------------------------------------------------------------------------------------------
 // Loading JSloth Files directly to load the config file.
-let jslothFiles = new JSFiles.Files();
+let jslothFiles = new JSFiles();
 
 jslothFiles.exists(__dirname + configPath).then(() => {
     var config = require(__dirname + configPath);
-    path = new JSPath.Path(config);
+    path = new JSPath(config);
     tests();
 });
 

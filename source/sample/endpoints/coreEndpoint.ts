@@ -24,8 +24,9 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as express from "express";
-import * as controller from "../../core/abstract/controller";
+import Controller from "../../core/abstract/controller";
+import { Request, Response } from "express";
+
 import * as JSloth from "../../core/lib/core";
 
 /**
@@ -34,7 +35,7 @@ import * as JSloth from "../../core/lib/core";
  * @basepath /
  * @return express.Router
  */
-export class CoreEndPoint extends controller.Controller {
+export default class CoreEndPoint extends Controller {
 
     /*** Configure endpoints */
     protected routes(): void {
@@ -43,11 +44,11 @@ export class CoreEndPoint extends controller.Controller {
          * Check the health of the system.
          * Render a json object with a true response.
          *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
+         * @param req {Request} The request object.
+         * @param res {Response} The response object.
          * @return true
          */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
+        this.router.get("/", (req: Request, res: Response) => {
             res.json({
                 response: true
             });

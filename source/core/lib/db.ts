@@ -22,15 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as mysql from "mysql";
 import Config from "../interfaces/Config";
 import { Promise } from "es6-promise";
+
+import * as mysql from "mysql";
 
 /**
  * JSloth DB
  * Database components.
  */
-export class DB {
+export default class JSDB {
     private connections: mysql.IPool;
     private config: Config;
 
