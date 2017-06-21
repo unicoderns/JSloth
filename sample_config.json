@@ -14,9 +14,17 @@
     },
     "installed_apps": [{
         "name": "sample",
-        "basepath": "/"
+        "basepath": "/",
+        "config": {}
+    }, {
+        "name": "auth",
+        "basepath": "/auth/",
+        "config": {
+            "session": "stateless"
+        }
     }, {
         "name": "health",
-        "basepath": "/health/"
+        "basepath": "/health/",
+        "config": {}
     }]
 }
