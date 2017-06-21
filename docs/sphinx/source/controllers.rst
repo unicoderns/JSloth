@@ -4,37 +4,58 @@ Controllers
 
 The place for the business logic.
 
-==========
+******************
 Example
-==========
+******************
 
 .. code-block:: javascript
    :linenos:
 
-    import * as express from "express";
-    import * as controller from "../abstract/controller";
+    import Controller from "../../core/abstract/controller";
+    import { Request, Response } from "express";
 
     /**
     * Core Controller Routes
     * 
-    * @basepath /
-    * @return express.Router
+    * @basepath /something/
     */
-    export class CoreController extends controller.Controller {
+    export default class CoreController extends Controller {
 
         /*** Configure endpoints */
         protected routes(): void {
 
-            /**
-            * Render a page with instructions.
-            *
-            * @param req {express.Request} The request object.
-            * @param res {express.Response} The response object.
-            * @return void
-            */
-            this.router.get("/", (req: express.Request, res: express.Response) => {
+               /**
+                * Some description.
+                *
+                * @param req {Request} The request object.
+                * @param res {Response} The response object.
+                */
+            this.router.get("/", (req: Request, res: Response) => {
                 res.send("Hello World!!!");
             });
-
         }
+
     }
+
+******************
+JSloth Library
+******************
+A reference to `JSloth Library`_ is available under ``this.jsloth``
+
+.. _JSloth Library: jsloth.html
+
+******************
+Loading view
+******************
+JSloth Library provides a default way to load html views that check a custom path before to check the app template path, in this way you can provide your app with a default web interface and the final user can customize it really easy:
+
+Custom path: ``/views/basepath/``
+
+App path: ``/basepath/views/``
+
+.. code-block:: javascript
+   :linenos:
+
+    this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
+        res.render(path);
+    });
