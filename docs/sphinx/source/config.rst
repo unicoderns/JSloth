@@ -67,55 +67,7 @@ Mysql
 
 Mysql configuration settings. | ``object``
         
-=================
-user
-=================
-
-Db user name. | ``string``
-
-=================
-password
-=================
-
-Db user password. | ``string``
-
-=================
-db
-=================
-
-Db name. | ``string``
-
-=================
-port
-=================
-
-Port where MySQL service is running, default: 3306. | ``string``
-
-=================
-host
-=================
-
-Host where MySQL is running. | ``string``
-
-=================
-connectionLimit
-=================
-
-Max concurrent connections in the pool. | ``number``
-
-=================
-validations
-=================
-
------------------
-fields
------------------
-
-Validate fields to exists in the model (Only working with SELECT [fields] for now). | ``boolean``
-
-.. note::
-
-   Disallowed by default in dev mode.
+:doc:`Read more </jsloth/db>`
 
 ===============
 Installed Apps
@@ -139,4 +91,4 @@ Installation point, ``/`` for root ``app.com/``, ``/app/`` for ``app.com/app/``.
 config
 ---------------
 
-Object with custom configuration for each installed app.
+Object with custom configuration for each installed app, read the specific app documentation for more.

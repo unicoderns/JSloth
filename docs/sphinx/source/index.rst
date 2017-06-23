@@ -19,6 +19,9 @@ JSloth is a `Typescript`_ TDD extensible core base multiapp that will save you t
    controllers
    models
    models/*
+   routes
+   jsloth
+   jsloth/*
 
 Getting started
 ------------------
@@ -33,6 +36,8 @@ Getting started
 - :doc:`models/static`
 - :doc:`models/db`
 
+:doc:`jsloth`
+------------------
 
 Indices and tables
 ==================
