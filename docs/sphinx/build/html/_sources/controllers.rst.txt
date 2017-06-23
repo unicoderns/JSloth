@@ -42,7 +42,7 @@ JSloth Library
 ******************
 A reference to `JSloth Library`_ is available under ``this.jsloth``
 
-.. _JSloth Library: jsloth.html
+.. _JSloth Library: :doc:`jsloth`
 
 ******************
 Loading view

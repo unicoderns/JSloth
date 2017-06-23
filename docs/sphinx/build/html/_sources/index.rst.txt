@@ -11,14 +11,27 @@ JSloth is a `Typescript`_ TDD extensible core base app that will save you time i
 .. _Typescript: https://www.typescriptlang.org/
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :hidden:
+   :glob:
 
    installation
    config
    controllers
    models
+   models/*
 
+Getting started
+------------------
+- :doc:`installation`
+- :doc:`config`
+
+:doc:`controllers`
+------------------
+
+:doc:`models`
+------------------
+- :doc:`models/static`
+- :doc:`models/db`
 
 
 Indices and tables

@@ -3,22 +3,35 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to JSloth's documentation!
+JSloth's documentation
 ==================================
 
-JSloth is a `Typescript`_ TDD extensible core base app that will save you time in your new Node/Express projects.
+JSloth is a `Typescript`_ TDD extensible core base multiapp that will save you time in your new Node/Express projects.
 
 .. _Typescript: https://www.typescriptlang.org/
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :hidden:
+   :glob:
 
    installation
    config
    controllers
    models
+   models/*
 
+Getting started
+------------------
+- :doc:`installation`
+- :doc:`config`
+
+:doc:`controllers`
+------------------
+
+:doc:`models`
+------------------
+- :doc:`models/static`
+- :doc:`models/db`
 
 
 Indices and tables

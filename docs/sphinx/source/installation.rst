@@ -20,9 +20,7 @@ Quickstart
 
 * Clone the project ``git clone https://github.com/chrissmejia/JSloth.git``
 * Run ``npm install`` to install the requirements
-* Rename ``sample_config.json`` into ``config.json`` `See more`_
-
-.. _See more: config.html
+* Rename ``sample_config.json`` into ``config.json``. :doc:`Read more </config>`
 
 Then run the server with:
 
