@@ -1,5 +1,5 @@
 ##################
-Config
+Configuration
 ##################
 
 Centralized settings file.

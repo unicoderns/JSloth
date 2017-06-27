@@ -78,3 +78,33 @@ Validate fields to exists in the model (Only working with SELECT [fields] for no
 .. note::
 
    Disallowed by default in dev mode.
+
+
+******************
+Public Functions
+******************
+
+=================
+Query
+=================
+
+Execute a plain query
+
+.. js:function:: query(query: string, params: any[])
+
+     :param string query: MySQL query
+     :param any[] params: Object (key/value) with parameters to replace in the query
+     :returns: Promise with query result
+
+-----------------
+Example:
+-----------------
+
+.. code-block:: javascript
+   :linenos:
+
+    this.jsloth.db.query(query, params);
+
+.. note::
+
+   The query will be log at the terminal in dev mode.

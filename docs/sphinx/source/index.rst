@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 JSloth's documentation
-==================================
+=====================================
 
 JSloth is a `Typescript`_ TDD extensible core base multiapp that will save you time in your new Node/Express projects.
 
@@ -23,24 +23,26 @@ JSloth is a `Typescript`_ TDD extensible core base multiapp that will save you t
    jsloth
    jsloth/*
 
-Getting started
-------------------
-- :doc:`installation`
+:doc:`Getting started</installation>`
+-------------------------------------
 - :doc:`config`
 
+:doc:`Core Library</jsloth>`
+-------------------------------------
+- :doc:`JSDB </jsloth/db>`
+- :doc:`JSFiles </jsloth/files>`
+- :doc:`JSPath </jsloth/path>`
+
 :doc:`controllers`
-------------------
+-------------------------------------
 
 :doc:`models`
-------------------
+-------------------------------------
 - :doc:`models/static`
 - :doc:`models/db`
 
-:doc:`jsloth`
-------------------
-
 Indices and tables
-==================
+=====================================
 
 * :ref:`genindex`
 * :ref:`modindex`

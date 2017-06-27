@@ -24,12 +24,12 @@ Example
         /*** Configure endpoints */
         protected routes(): void {
 
-               /**
-                * Some description.
-                *
-                * @param req {Request} The request object.
-                * @param res {Response} The response object.
-                */
+            /**
+            * Some description.
+            *
+            * @param req {Request} The request object.
+            * @param res {Response} The response object.
+            */
             this.router.get("/", (req: Request, res: Response) => {
                 res.send("Hello World!!!");
             });
@@ -40,22 +40,34 @@ Example
 ******************
 JSloth Library
 ******************
-A reference to `JSloth Library`_ is available under ``this.jsloth``
-
-.. _JSloth Library: :doc:`jsloth`
+A reference to :doc:`JSloth Library <jsloth/>` is available under ``this.jsloth``
 
 ******************
-Loading view
+Loading HTML view
 ******************
-JSloth Library provides a default way to load html views that check a custom path before to check the app template path, in this way you can provide your app with a default web interface and the final user can customize it really easy:
+JSloth Library provides a default way to load html views.
 
 Custom path: ``/views/basepath/``
 
 App path: ``/basepath/views/``
 
+`Read more <jsloth/path.html#`get>`_
+
+=================
+Example
+=================
+
 .. code-block:: javascript
    :linenos:
 
-    this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
-        res.render(path);
+    /**
+    * Some description.
+    *
+    * @param req {Request} The request object.
+    * @param res {Response} The response object.
+    */
+    this.router.get("/", (req: Request, res: Response) => {
+        this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
+            res.render(path);
+        });
     });

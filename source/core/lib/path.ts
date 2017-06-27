@@ -43,7 +43,7 @@ export default class JSPath {
     /**
      * Get the new full path.
      *
-     * @param file {string} The file name.
+     * @param file string Filename
      * @return void
      */
     public get(app: string, file: string): Promise<string> {

@@ -26,8 +26,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="models.html" />
-    <link rel="prev" title="Config" href="config.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Configuration" href="config.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -85,12 +85,12 @@
      <span class="cm">/*** Configure endpoints */</span>
      <span class="kr">protected</span> <span class="nx">routes</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span> <span class="p">{</span>
 
-            <span class="cm">/**</span>
-<span class="cm">             * Some description.</span>
-<span class="cm">             *</span>
-<span class="cm">             * @param req {Request} The request object.</span>
-<span class="cm">             * @param res {Response} The response object.</span>
-<span class="cm">             */</span>
+         <span class="cm">/**</span>
+<span class="cm">         * Some description.</span>
+<span class="cm">         *</span>
+<span class="cm">         * @param req {Request} The request object.</span>
+<span class="cm">         * @param res {Response} The response object.</span>
+<span class="cm">         */</span>
          <span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="o">:</span> <span class="nx">Request</span><span class="p">,</span> <span class="nx">res</span><span class="o">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
              <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">&quot;Hello World!!!&quot;</span><span class="p">);</span>
          <span class="p">});</span>
@@ -102,20 +102,40 @@
 </div>
 <div class="section" id="jsloth-library">
 <h2>JSloth Library<a class="headerlink" href="#jsloth-library" title="Permalink to this headline">¶</a></h2>
-<p>A reference to <a class="reference external" href=":doc:`jsloth`">JSloth Library</a> is available under <code class="docutils literal"><span class="pre">this.jsloth</span></code></p>
+<p>A reference to <a class="reference internal" href="jsloth.html"><span class="doc">JSloth Library</span></a> is available under <code class="docutils literal"><span class="pre">this.jsloth</span></code></p>
 </div>
-<div class="section" id="loading-view">
-<h2>Loading view<a class="headerlink" href="#loading-view" title="Permalink to this headline">¶</a></h2>
-<p>JSloth Library provides a default way to load html views that check a custom path before to check the app template path, in this way you can provide your app with a default web interface and the final user can customize it really easy:</p>
+<div class="section" id="loading-html-view">
+<h2>Loading HTML view<a class="headerlink" href="#loading-html-view" title="Permalink to this headline">¶</a></h2>
+<p>JSloth Library provides a default way to load html views.</p>
 <p>Custom path: <code class="docutils literal"><span class="pre">/views/basepath/</span></code></p>
 <p>App path: <code class="docutils literal"><span class="pre">/basepath/views/</span></code></p>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
-2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appName</span><span class="p">,</span> <span class="s2">&quot;index.ejs&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">path</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-     <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+<p><a class="reference external" href="jsloth/path.html#`get">Read more</a></p>
+<div class="section" id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="cm">/**</span>
+<span class="cm"> * Some description.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param req {Request} The request object.</span>
+<span class="cm"> * @param res {Response} The response object.</span>
+<span class="cm"> */</span>
+ <span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="o">:</span> <span class="nx">Request</span><span class="p">,</span> <span class="nx">res</span><span class="o">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+     <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appName</span><span class="p">,</span> <span class="s2">&quot;index.ejs&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">path</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+         <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+     <span class="p">});</span>
  <span class="p">});</span>
 </pre></div>
 </td></tr></table></div>
+</div>
 </div>
 </div>
 
@@ -130,7 +150,10 @@
 <li><a class="reference internal" href="#">Controllers</a><ul>
 <li><a class="reference internal" href="#example">Example</a></li>
 <li><a class="reference internal" href="#jsloth-library">JSloth Library</a></li>
-<li><a class="reference internal" href="#loading-view">Loading view</a></li>
+<li><a class="reference internal" href="#loading-html-view">Loading HTML view</a><ul>
+<li><a class="reference internal" href="#id1">Example</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -138,8 +161,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="config.html" title="previous chapter">Config</a></li>
-      <li>Next: <a href="models.html" title="next chapter">Introduction</a></li>
+      <li>Previous: <a href="config.html" title="previous chapter">Configuration</a></li>
+      <li>Next: <a href="models.html" title="next chapter">Models</a></li>
   </ul></li>
 </ul>
 </div>

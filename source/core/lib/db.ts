@@ -58,7 +58,7 @@ export default class JSDB {
      * Plain query
      * 
      * @var query MySQL query
-     * @var params Parameters to replace in the query
+     * @var params Object (key/value) with parameters to replace in the query
      * @return Promise with query result
      */
     public query(query: string, params: any[]): Promise<any> {

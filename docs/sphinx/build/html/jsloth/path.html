@@ -26,6 +26,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="JSloth Files" href="files.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -43,7 +44,46 @@
             
   <div class="section" id="jsloth-path">
 <h1>JSloth Path<a class="headerlink" href="#jsloth-path" title="Permalink to this headline">¶</a></h1>
-<p>Coming soon</p>
+<p>Helper that loads the right view for each app.</p>
+<div class="section" id="public-functions">
+<h2>Public Functions<a class="headerlink" href="#public-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="get">
+<h3>Get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<p>Check if there&#8217;s a custom view available, if don&#8217;t then return the default path, in this way you can provide your app with a default web interface and the final user can customize it really easy:</p>
+<p>Custom path: <code class="docutils literal"><span class="pre">/views/basepath/</span></code></p>
+<p>App path: <code class="docutils literal"><span class="pre">/basepath/views/</span></code></p>
+<dl class="function">
+<dt>
+<code class="descname">get</code><span class="sig-paren">(</span><em>app: string</em>, <em>file: string</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
+<li><strong>app</strong> (<em>string</em>) &#8211; App requesting the view</li>
+<li><strong>file</strong> (<em>string</em>) &#8211; Name of the file to load</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Promise with string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="example">
+<h4>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appName</span><span class="p">,</span> <span class="s2">&quot;index.ejs&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">path</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+     <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+ <span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -51,10 +91,25 @@
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JSloth Path</a><ul>
+<li><a class="reference internal" href="#public-functions">Public Functions</a><ul>
+<li><a class="reference internal" href="#get">Get</a><ul>
+<li><a class="reference internal" href="#example">Example:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="files.html" title="previous chapter">JSloth Files</a></li>
   </ul></li>
 </ul>
 </div>
