@@ -44,8 +44,9 @@ class Server {
     /**
      * Stores the app port
      * @default System environment port or 3000
+     * Please note: the unary + converts to number
      */
-    private port: number = process.env.PORT || 3000;
+    private port: number = +process.env.PORT || 3000;
 
     /*** Default configuration filepath */
     private configPath: string = "/../config.json";

@@ -57,14 +57,11 @@ export default class JSDB {
     /**
      * Plain query
      * 
-     * @var query MySQL query
+     * @var sql MySQL query
      * @var params Object (key/value) with parameters to replace in the query
      * @return Promise with query result
      */
-    public query(query: string, params: any[]): Promise<any> {
-        if (this.config.dev) {
-            console.log("SQL Query: " + query);
-        }
+    public query(sql: string, params: any[]): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
@@ -75,8 +72,12 @@ export default class JSDB {
                         throw err;
                     }
                     // Query Mysql
-                    connection.query(query, params, (err, rows: any) => {
+                    let query = connection.query(sql, params, (err, rows: any) => {
                         connection.release();
+                        if (this.config.dev) {
+                            console.log("SQL Query: " + query.sql);
+                        }
+
                         if (err) { // Improve error log
                             reject(err);
                             throw err;
