@@ -22,26 +22,17 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../lib/core";
+import JSloth from "../../lib/core";
+import Controller from "./core";
 import { Router } from "express";
 
 /**
  * Routes Abstract
  */
-export default class Routes {
-    protected jsloth: JSloth;
-
-    /**
-     * Express Router instance
-     *
-     * @return express.Router
-     */
-    public router: Router = Router();
-
+export default class Routes extends Controller {
     /*** Load library */
     constructor(jsloth: JSloth) {
-        this.jsloth = jsloth;
-        this.routes();
+        super(jsloth);
     }
 
     /**
@@ -52,10 +43,6 @@ export default class Routes {
     protected load(controller: any): Router {
         let instance = new controller(this.jsloth);
         return instance.router;
-    }
-
-    /*** Configure routes */
-    protected routes(): void {
     }
 
 }

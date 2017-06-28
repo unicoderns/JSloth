@@ -138,7 +138,6 @@ export default class CoreEndPoint extends Controller {
                 res.json(data);
             });
         });
-
         /**
          * Dummy.
          * Render a json object with a true response.
@@ -147,7 +146,7 @@ export default class CoreEndPoint extends Controller {
          * @param res {express.Response} The response object.
          * @return array
          */
-        this.router.get("/fields/", this.auth, (req: express.Request, res: express.Response) => {
+        this.router.get("/fields/", this.auth.bind(this), (req: express.Request, res: express.Response) => {
             let fields = this.usersTable.getFields();
             res.json({
                 publicFields: fields.public,
@@ -155,6 +154,5 @@ export default class CoreEndPoint extends Controller {
                 passwordFieldSettings: this.usersTable.password
             });
         });
-
     }
 }

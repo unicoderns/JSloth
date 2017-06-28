@@ -24,7 +24,7 @@
 
 /// <reference path="../types/express.d.ts"/>
 import JSloth from "../../core/lib/core";
-// import simpleController from "../../core/abstract/controller";
+import coreController from "../../core/abstract/controllers/core";
 import { Router, Request, Response, NextFunction } from "express";
 
 import * as jwt from "jsonwebtoken";
@@ -32,24 +32,10 @@ import * as jwt from "jsonwebtoken";
 /**
  * Controller Abstract
  */
-export default class Controller {
-    protected jsloth: JSloth;
-
-    /**
-     * Express Router instance
-     *
-     * @return Router
-     */
-    public router: Router = Router();
-
+export default class Controller extends coreController {
     /*** Load library */
     constructor(jsloth: JSloth) {
-        this.jsloth = jsloth;
-        this.routes();
-    }
-
-    /*** Configure routes     */
-    protected routes(): void {
+        super(jsloth);
     }
 
     /**
@@ -59,16 +45,14 @@ export default class Controller {
      * @param res {Response} The response object.
      * @param next Callback.
      */
-    protected auth = (req: Request, res: Response, next: NextFunction) => {
-
-        let jsloth = this.jsloth;
+    protected auth(req: Request, res: Response, next: NextFunction) {
         // Check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers["x-access-token"];
 
         // Decode token
         if (token) {
             // Verifies secret and checks exp
-            jwt.verify(token, jsloth.config.token, function (err: NodeJS.ErrnoException, decoded: any) {
+            jwt.verify(token, this.jsloth.config.token, function (err: NodeJS.ErrnoException, decoded: any) {
                 if (err) {
                     return res.json({ success: false, message: "Failed to authenticate token." });
                 } else {
@@ -86,6 +70,5 @@ export default class Controller {
             });
 
         }
-
     }
 }

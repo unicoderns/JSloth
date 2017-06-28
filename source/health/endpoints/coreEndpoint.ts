@@ -24,7 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Controller from "../../core/abstract/controller";
+import Controller from "../../core/abstract/controllers/core";
 import { Request, Response } from "express";
 
 import * as JSloth from "../../core/lib/core";

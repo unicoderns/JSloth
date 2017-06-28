@@ -24,7 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../core/abstract/routes";
+import Routes from "../core/abstract/controllers/routes";
 import CoreController from "./controllers/coreController";
 
 import * as JSloth from "../core/lib/core";

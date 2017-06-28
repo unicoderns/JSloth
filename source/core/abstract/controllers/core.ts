@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../lib/core";
+import JSloth from "../../lib/core";
 import { Router } from "express";
 
 /**
