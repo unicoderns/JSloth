@@ -262,7 +262,7 @@ export class Model {
         if (limit) {
             extra = " LIMIT " + limit;
         }
-        let query = "SELECT " + fieldsSQL + " FROM `" + this.privateSettings.name + "`" + whereData.sql + extra;
+        let query = "SELECT " + fieldsSQL + " FROM `" + this.privateSettings.name + "`" + whereData.sql + extra + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 
@@ -328,7 +328,7 @@ export class Model {
             wildcards.push("?");
             values.push(data[key]);
         }
-        let query = "INSERT INTO `" + this.privateSettings.name + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`)";
+        let query = "INSERT INTO `" + this.privateSettings.name + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
         return this.jsloth.db.query(query, values);
     }
 
@@ -348,7 +348,7 @@ export class Model {
             values.push(data[key]);
         }
         let whereData = this.generateWhereData(where);
-        let query = "UPDATE `" + this.privateSettings.name + "` SET " + fields.join(", ") + whereData.sql;
+        let query = "UPDATE `" + this.privateSettings.name + "` SET " + fields.join(", ") + whereData.sql + ";";
         unifiedValues = values.concat(whereData.values);
         return this.jsloth.db.query(query, unifiedValues);
     }
@@ -361,7 +361,7 @@ export class Model {
      */
     public delete(where?: any): Promise<any> {
         let whereData = this.generateWhereData(where);
-        let query = "DELETE FROM `" + this.privateSettings.name + "`" + whereData.sql;
+        let query = "DELETE FROM `" + this.privateSettings.name + "`" + whereData.sql + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 
