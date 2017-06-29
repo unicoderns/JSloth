@@ -196,15 +196,19 @@ class Server {
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts").then(() => {
             let appRoute = require("./" + app.config.name + "/routes");
-            let route = new appRoute.Urls(this.jsloth);
+            let route = new appRoute.Urls(this.jsloth, app.config);
             this.express.use("" + (app.config.basepath || "/"), route.router);
 
             app.status.routes = true;
             console.log("- " + app.config.name + " routes installed");
             done();
         }).catch(err => {
+            if (err.code === 'ENOENT') {
+                console.log("- " + app.config.name + " routes not found");
+            } else {
+                console.error(err);
+            }
             app.status.routes = true;
-            console.log("- " + app.config.name + " routes not found");
             done();
         });
 
@@ -212,7 +216,7 @@ class Server {
         this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts").then(() => {
             try {
                 let appRoute = require("./" + app.config.name + "/api");
-                let route = new appRoute.Urls(this.jsloth);
+                let route = new appRoute.Urls(this.jsloth, app.config);
                 this.express.use("/api" + (app.config.basepath || "/"), route.router);
 
                 app.status.api = true;
@@ -222,8 +226,12 @@ class Server {
                 console.error(err);
             }
         }).catch(err => {
+            if (err.code === 'ENOENT') {
+                console.log("- " + app.config.name + " endpoints not found");
+            } else {
+                console.error(err);
+            }
             app.status.api = true;
-            console.log("- " + app.config.name + " endpoints not found");
             done();
         });
     }

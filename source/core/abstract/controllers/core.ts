@@ -30,6 +30,7 @@ import { Router } from "express";
  */
 export default class Controller {
     protected jsloth: JSloth;
+    protected config: any;
 
     /**
      * Express Router instance
@@ -39,8 +40,9 @@ export default class Controller {
     public router: Router = Router();
 
     /*** Load library */
-    constructor(jsloth: JSloth) {
+    constructor(jsloth: JSloth, config: any) {
         this.jsloth = jsloth;
+        this.config = config;
         this.routes();
     }
 

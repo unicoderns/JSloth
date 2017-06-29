@@ -31,8 +31,8 @@ import { Router } from "express";
  */
 export default class Routes extends Controller {
     /*** Load library */
-    constructor(jsloth: JSloth) {
-        super(jsloth);
+    constructor(jsloth: JSloth, config: any) {
+        super(jsloth, config);
     }
 
     /**
@@ -41,7 +41,7 @@ export default class Routes extends Controller {
      * @return express.Router
      */
     protected load(controller: any): Router {
-        let instance = new controller(this.jsloth);
+        let instance = new controller(this.jsloth, this.config);
         return instance.router;
     }
 

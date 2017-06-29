@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Sample App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,35 +22,31 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../core/lib/core";
-import Controller from "../../core/abstract/controllers/html";
+import JSloth from "../../lib/core";
+import Controller from "./core";
 import { Request, Response } from "express";
 
 /**
- * Core Controller Routes
- * 
- * @basepath /health/
+ * Routes Abstract
  */
-export default class CoreController extends Controller {
-    // private appName: string = "sample";
+export default class HtmlController extends Controller {
+    protected name: string;
 
     /*** Load library */
     constructor(jsloth: JSloth, config: any) {
         super(jsloth, config);
     }
 
-    /*** Configure endpoints */
-    protected routes(): void {
-
-        /**
-         * Page to check the health of the system.
-         *
-         * @param req {Request} The request object.
-         * @param res {Response} The response object.
-         */
-        this.router.get("/", (req: Request, res: Response) => {
-            this.render(res, "index.ejs");
+    /**
+     * Load Routes 
+     * 
+     * @param res Response
+     * @param file string
+     */
+    protected render(res: Response, file: string, params?: any): void {
+        this.jsloth.path.get(this.config.name, file).then((path) => {
+            res.render(path, params);
         });
-
     }
+
 }

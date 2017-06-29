@@ -34,8 +34,8 @@ import * as jwt from "jsonwebtoken";
  */
 export default class Controller extends coreController {
     /*** Load library */
-    constructor(jsloth: JSloth) {
-        super(jsloth);
+    constructor(jsloth: JSloth, config: any) {
+        super(jsloth, config);
     }
 
     /**
