@@ -25,11 +25,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSloth from "../../../lib/core";
-import Controller from "../abstract/controller";
+import ApiController from "../../../abstract/controllers/api";
 
 import * as express from "express";
 import * as jwt from "jsonwebtoken";
 import * as users from "../models/db/usersModel";
+import * as sessions from "../middlewares/sessions";
 
 let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
@@ -40,7 +41,7 @@ let bcrypt = require("bcrypt-nodejs");
  * @basepath /
  * @return express.Router
  */
-export default class IndexEndPoint extends Controller {
+export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
     private email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -146,7 +147,7 @@ export default class IndexEndPoint extends Controller {
          * @param res {express.Response} The response object.
          * @return array
          */
-        this.router.get("/fields/", this.auth.bind(this), (req: express.Request, res: express.Response) => {
+        this.router.get("/fields/", sessions.auth, (req: express.Request, res: express.Response) => {
             let fields = this.usersTable.getFields();
             res.json({
                 publicFields: fields.public,

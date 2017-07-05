@@ -23,52 +23,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /// <reference path="../types/express.d.ts"/>
+
 import JSloth from "../../../lib/core";
-import coreController from "../../../abstract/controllers/core";
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, Request, Response, NextFunction, RequestHandler } from "express";
 
 import * as jwt from "jsonwebtoken";
 
 /**
- * Controller Abstract
+ * Session token verification
+ * 
+ * @param req {Request} The request object.
+ * @param res {Response} The response object.
+ * @param next Callback.
  */
-export default class Controller extends coreController {
-    /*** Load library */
-    constructor(jsloth: JSloth, config: any) {
-        super(jsloth, config);
-    }
+export function auth(req: Request, res: Response, next: NextFunction) {
+    // Check header or url parameters or post parameters for token
+    let token = req.body.token || req.query.token || req.headers["x-access-token"];
 
-    /**
-     * Session token verification
-     * 
-     * @param req {Request} The request object.
-     * @param res {Response} The response object.
-     * @param next Callback.
-     */
-    protected auth(req: Request, res: Response, next: NextFunction) {
-        // Check header or url parameters or post parameters for token
-        let token = req.body.token || req.query.token || req.headers["x-access-token"];
+    // Decode token
+    if (token) {
+        // Verifies secret and checks exp
+        jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
+            if (err) {
+                return res.json({ success: false, message: "Failed to authenticate token." });
+            } else {
+                // If everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                return next();
+            }
+        });
+    } else {
+        // if there is no token
+        // return an error
+        return res.status(403).send({
+            success: false,
+            message: "No token provided."
+        });
 
-        // Decode token
-        if (token) {
-            // Verifies secret and checks exp
-            jwt.verify(token, this.jsloth.config.token, function (err: NodeJS.ErrnoException, decoded: any) {
-                if (err) {
-                    return res.json({ success: false, message: "Failed to authenticate token." });
-                } else {
-                    // If everything is good, save to request for use in other routes
-                    req.decoded = decoded;
-                    return next();
-                }
-            });
-        } else {
-            // if there is no token
-            // return an error
-            return res.status(403).send({
-                success: false,
-                message: "No token provided."
-            });
-
-        }
     }
 }

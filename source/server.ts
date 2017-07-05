@@ -102,6 +102,7 @@ class Server {
             // Loading JSloth Global Library
             console.log(" * Loading JSloth Library \n");
             this.jsloth = new JSloth(this.config);
+            this.express.set("jsloth", this.jsloth);
 
             // Installing Middlewares
             console.log(" * Installing middlewares \n");
