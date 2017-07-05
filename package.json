@@ -1,57 +1,57 @@
 {
-  "name": "JSloth",
-  "version": "0.0.4",
-  "author": {
-    "name": "Chriss Mejia",
-    "email": "me@chrissmejia.com",
-    "url": "https://chrissmejia.com/"
-  },
-  "scripts": {
-    "preinstall": "npm install -g ts-node && npm install -g nodemon",
-    "start": "nodemon --watch source/**/*.ts --ignore source/**/*.spec.ts --exec ts-node source/server.ts",
-    "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
-    "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/core/**/*.test.ts",
-    "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
-  },
-  "bugs": {
-    "url": "https://github.com/chrissmejia/JSloth/issues",
-    "email": "me@chrissmejia.com"
-  },
-  "license": "(MIT OR Apache-2.0)",
-  "dependencies": {
-    "@types/jsonwebtoken": "^7.2.1",
-    "@types/mysql": "0.0.31",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.17.1",
-    "es6-promise": "^4.1.0",
-    "express": "^4.15.2",
-    "foundation-sites": "^6.3.1",
-    "jsonwebtoken": "^7.4.1",
-    "morgan": "^1.8.1",
-    "mysql": "^2.13.0"
-  },
-  "devDependencies": {
-    "@types/body-parser": "0.0.33",
-    "@types/chai": "^3.4.34",
-    "@types/chai-http": "0.0.29",
-    "@types/express": "^4.0.34",
-    "@types/mocha": "^2.2.35",
-    "@types/morgan": "^1.7.32",
-    "chai": "^3.5.0",
-    "chai-http": "^3.0.0",
-    "coveralls": "^2.11.15",
-    "grunt": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-ts": "^6.0.0-beta.3",
-    "grunt-tslint": "^4.0.0",
-    "istanbul": "^0.4.5",
-    "jscoverage": "^0.6.0",
-    "mocha": "^3.2.0",
-    "mocha-lcov-reporter": "^1.2.0",
-    "node-sass": "^4.5.0",
-    "ts-node": "^3.0.4",
-    "tslint": "^4.2.0",
-    "typescript": "^2.1.4"
-  }
+    "name": "JSloth",
+    "version": "0.0.4",
+    "author": {
+        "name": "Chriss Mejia",
+        "email": "me@chrissmejia.com",
+        "url": "https://chrissmejia.com/"
+    },
+    "scripts": {
+        "preinstall": "npm install -g ts-node && npm install -g nodemon",
+        "start": "nodemon --watch source/**/*.ts --ignore source/**/*.spec.ts --exec ts-node source/server.ts",
+        "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
+        "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
+        "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
+    },
+    "bugs": {
+        "url": "https://github.com/chrissmejia/JSloth/issues",
+        "email": "me@chrissmejia.com"
+    },
+    "license": "(MIT OR Apache-2.0)",
+    "dependencies": {
+        "@types/jsonwebtoken": "^7.2.1",
+        "@types/mysql": "0.0.31",
+        "bcrypt-nodejs": "0.0.3",
+        "body-parser": "^1.17.1",
+        "es6-promise": "^4.1.0",
+        "express": "^4.15.2",
+        "foundation-sites": "^6.3.1",
+        "jsonwebtoken": "^7.4.1",
+        "morgan": "^1.8.1",
+        "mysql": "^2.13.0"
+    },
+    "devDependencies": {
+        "@types/body-parser": "0.0.33",
+        "@types/chai": "^3.4.34",
+        "@types/chai-http": "0.0.29",
+        "@types/express": "^4.0.34",
+        "@types/mocha": "^2.2.35",
+        "@types/morgan": "^1.7.32",
+        "chai": "^3.5.0",
+        "chai-http": "^3.0.0",
+        "coveralls": "^2.11.15",
+        "grunt": "^1.0.1",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-watch": "^1.0.0",
+        "grunt-ts": "^6.0.0-beta.3",
+        "grunt-tslint": "^4.0.0",
+        "istanbul": "^0.4.5",
+        "jscoverage": "^0.6.0",
+        "mocha": "^3.2.0",
+        "mocha-lcov-reporter": "^1.2.0",
+        "node-sass": "^4.5.0",
+        "ts-node": "^3.0.4",
+        "tslint": "^4.2.0",
+        "typescript": "^2.1.4"
+    }
 }

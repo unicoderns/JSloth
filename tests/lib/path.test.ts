@@ -21,6 +21,8 @@ jslothFiles.exists(__dirname + configPath).then(() => {
     var config = require(__dirname + configPath);
     path = new JSPath(config);
     tests();
+}).catch(err => {
+    console.error("Configuration file not found");
 });
 
 function tests() {
@@ -31,20 +33,16 @@ function tests() {
         it("view.testfile exists in /sample/views", done => {
             path.get(appName, "view.testfile").then((filepath) => {
                 expect(filepath).to.contain('/source/apps/sample/views/view.testfile');
-            }).catch(err => {
-                throw err;
+                done();
             });
-            done();
         });
 
         // Async test
         it("view2.testfile exists in /views/sample/", done => {
             path.get(appName, "view2.testfile").then((filepath) => {
                 expect(filepath).to.contain('/views/sample/view2.testfile');
-            }).catch(err => {
-                throw err;
+                done();
             });
-            done();
         });
 
     });

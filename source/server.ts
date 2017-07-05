@@ -191,7 +191,7 @@ class Server {
         console.log("------------------------------------------------------");
         console.log("");
         console.log("Generating styles");
-        this.compileSCSS(__dirname + "/" + app.config.name, "./dist/" + app.config.name);
+        this.compileSCSS(__dirname + "/apps/" + app.config.name, "./dist/" + app.config.name);
         console.log("");
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/routes.ts").then(() => {

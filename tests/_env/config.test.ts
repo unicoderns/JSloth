@@ -21,9 +21,7 @@ var config: IConfig;
 files.exists(__dirname + configPath).then(() => {
     config = require(__dirname + configPath);
     tests();
-}).catch(err => {
-    console.error("Configuration file not found");
-});
+})
 
 // ---------------------------------------------------------------------------------------------------------------
 // Tests.
