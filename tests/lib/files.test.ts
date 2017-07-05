@@ -1,7 +1,7 @@
 import * as mocha from 'mocha';
 import * as chai from 'chai';
 
-import JSFiles from "../../source/core/lib/files";
+import JSFiles from "../../source/lib/files";
 
 const expect = chai.expect;
 

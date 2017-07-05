@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 /// <reference path="../types/express.d.ts"/>
-import JSloth from "../../../core/lib/core";
-import coreController from "../../../core/abstract/controllers/core";
+import JSloth from "../../../lib/core";
+import coreController from "../../../abstract/controllers/core";
 import { Router, Request, Response, NextFunction } from "express";
 
 import * as jwt from "jsonwebtoken";

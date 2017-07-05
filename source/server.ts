@@ -26,11 +26,11 @@ import * as express from "express";
 import * as logger from "morgan";  // Log requests
 import * as bodyParser from "body-parser"; // Parse incoming request bodies
 
-import JSloth from "./core/lib/core";
-import JSFiles from "./core/lib/files";
+import JSloth from "./lib/core";
+import JSFiles from "./lib/files";
 
-import Config from "./core/interfaces/Config";
-import * as App from "./core/interfaces/App";
+import Config from "./interfaces/Config";
+import * as App from "./interfaces/App";
 
 /**
  * Creates and configure an ExpressJS web server.

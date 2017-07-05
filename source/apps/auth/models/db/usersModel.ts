@@ -22,10 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as model from "../../../../core/abstract/model";
-import * as fields from "../../../../core/interfaces/db/fields";
-import * as defaults from "../../../../core/interfaces/db/defaults";
-import * as datatypes from "../../../../core/lib/db/datatypes";
+import * as model from "../../../../abstract/model";
+import * as fields from "../../../../interfaces/db/fields";
+import * as defaults from "../../../../interfaces/db/defaults";
+import * as datatypes from "../../../../lib/db/datatypes";
 import * as timezones from "../static/timezoneModel";
 
 export interface Row {

@@ -1,5 +1,5 @@
-import JSFiles from "../../source/core/lib/files";
-import JSPath from "../../source/core/lib/path";
+import JSFiles from "../../source/lib/files";
+import JSPath from "../../source/lib/path";
 
 import * as mocha from "mocha";
 import * as chai from "chai";
@@ -30,21 +30,21 @@ function tests() {
         // Async test
         it("view.testfile exists in /sample/views", done => {
             path.get(appName, "view.testfile").then((filepath) => {
-                expect(filepath).to.contain('/source/sample/views/view.testfile');
-                done();
+                expect(filepath).to.contain('/source/apps/sample/views/view.testfile');
             }).catch(err => {
                 throw err;
             });
+            done();
         });
 
         // Async test
         it("view2.testfile exists in /views/sample/", done => {
             path.get(appName, "view2.testfile").then((filepath) => {
                 expect(filepath).to.contain('/views/sample/view2.testfile');
-                done();
             }).catch(err => {
                 throw err;
             });
+            done();
         });
 
     });

@@ -1,6 +1,6 @@
 import app from '../../source/server';
-import JSFiles from "../../source/core/lib/files";
-import IConfig from '../../source/core/interfaces/config';
+import JSFiles from "../../source/lib/files";
+import IConfig from '../../source/interfaces/config';
 
 import * as chai from 'chai';
 import * as mocha from 'mocha';

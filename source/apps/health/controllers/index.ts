@@ -24,7 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import HTMLController from "../../../core/abstract/controllers/html";
+import HTMLController from "../../../abstract/controllers/html";
 import { Request, Response } from "express";
 
 /**
