@@ -203,7 +203,7 @@ class Server {
             console.log("- " + app.config.name + " routes installed");
             done();
         }).catch(err => {
-            if (err.code === 'ENOENT') {
+            if (err.code === "ENOENT") {
                 console.log("- " + app.config.name + " routes not found");
             } else {
                 console.error(err);
@@ -226,7 +226,7 @@ class Server {
                 console.error(err);
             }
         }).catch(err => {
-            if (err.code === 'ENOENT') {
+            if (err.code === "ENOENT") {
                 console.log("- " + app.config.name + " endpoints not found");
             } else {
                 console.error(err);

@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSloth from "../../core/lib/core";
-import Controller from "../../core/abstract/controllers/html";
+import HtmlController from "../../core/abstract/controllers/html";
 import { Request, Response } from "express";
 
 /**
@@ -33,7 +33,7 @@ import { Request, Response } from "express";
  * 
  * @basepath /health/
  */
-export default class CoreController extends Controller {
+export default class IndexController extends HtmlController {
     // private appName: string = "sample";
 
     /*** Load library */

@@ -30,7 +30,7 @@ import { Router } from "express";
  * Routes Abstract
  */
 export default class Routes extends Controller {
-    /*** Load library */
+
     constructor(jsloth: JSloth, config: any) {
         super(jsloth, config);
     }

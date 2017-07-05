@@ -24,27 +24,34 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Controller from "../../core/abstract/controllers/core";
+import ApiController from "../../core/abstract/controllers/api";
 import { Request, Response } from "express";
+
+import * as JSloth from "../../core/lib/core";
 
 /**
  * Core Controller Routes
  * 
- * @basepath /health/
+ * @basepath /
+ * @return express.Router
  */
-export default class CoreController extends Controller {
+export default class CoreEndPoint extends ApiController {
 
     /*** Configure endpoints */
     protected routes(): void {
 
         /**
-         * Page to check the health of the system.
+         * Check the health of the system.
+         * Render a json object with a true response.
          *
          * @param req {Request} The request object.
          * @param res {Response} The response object.
+         * @return true
          */
         this.router.get("/", (req: Request, res: Response) => {
-            res.render("../source/health/views/index.ejs");
+            res.json({
+                response: true
+            });
         });
 
     }

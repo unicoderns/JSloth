@@ -25,9 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Routes from "../core/abstract/controllers/routes";
-import CoreEndpoint from "./endpoints/coreEndpoint";
-
-import * as JSloth from "../core/lib/core";
+import IndexEndpoint from "./endpoints/index";
 
 /**
  * Centralized Controller Endpoint Loader
@@ -38,7 +36,7 @@ export class Urls extends Routes {
 
     /*** Configure endpoints */
     protected routes(): void {
-        this.router.use("/", this.load(CoreEndpoint));
+        this.router.use("/", this.load(IndexEndpoint));
     }
 
 }

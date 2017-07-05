@@ -25,9 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Routes from "../core/abstract/controllers/routes";
-import CoreController from "./controllers/coreController";
-
-import * as JSloth from "../core/lib/core";
+import IndexController from "./controllers/index";
 
 /**
  * Centralized Controller Routes Loader
@@ -38,7 +36,7 @@ export class Urls extends Routes {
 
     /*** Configure routes */
     protected routes(): void {
-        this.router.use("/", this.load(CoreController));
+        this.router.use("/", this.load(IndexController));
     }
 
 }

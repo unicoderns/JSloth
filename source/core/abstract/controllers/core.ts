@@ -39,7 +39,9 @@ export default class Controller {
      */
     public router: Router = Router();
 
-    /*** Load library */
+    /**
+     * Load library, app configuration and install routes 
+     */
     constructor(jsloth: JSloth, config: any) {
         this.jsloth = jsloth;
         this.config = config;

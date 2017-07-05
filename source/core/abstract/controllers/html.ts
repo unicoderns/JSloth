@@ -24,7 +24,7 @@
 
 import JSloth from "../../lib/core";
 import Controller from "./core";
-import { Request, Response } from "express";
+import { Response } from "express";
 
 /**
  * Routes Abstract

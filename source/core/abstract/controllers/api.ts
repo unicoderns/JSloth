@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,35 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Controller from "../../core/abstract/controllers/core";
-import { Request, Response } from "express";
-
-import * as JSloth from "../../core/lib/core";
+import JSloth from "../../lib/core";
+import Controller from "./core";
 
 /**
- * Core Controller Routes
- * 
- * @basepath /
- * @return express.Router
+ * Routes Abstract
  */
-export default class CoreEndPoint extends Controller {
+export default class ApiController extends Controller {
 
-    /*** Configure endpoints */
-    protected routes(): void {
-
-        /**
-         * Check the health of the system.
-         * Render a json object with a true response.
-         *
-         * @param req {Request} The request object.
-         * @param res {Response} The response object.
-         * @return true
-         */
-        this.router.get("/", (req: Request, res: Response) => {
-            res.json({
-                response: true
-            });
-        });
-
+    constructor(jsloth: JSloth, config: any) {
+        super(jsloth, config);
     }
+
 }
