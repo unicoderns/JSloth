@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Auth App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,76 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as model from "../../../core/abstract/model";
-import * as fields from "../../../core/interfaces/db/fields";
-import * as defaults from "../../../core/interfaces/db/defaults";
-import * as datatypes from "../../../core/lib/db/datatypes";
-import * as timezones from "../static/timezoneModel";
-
-export interface Row {
-    id?: number;
-    created?: number;
-    username: string;
-    email: string;
-    password: string;
-    salt: string;
-    first_name?: string;
-    last_name?: string;
-    timezone?: number;
-    admin?: boolean;
-    verified?: boolean;
-    active?: boolean;
-}
+import Routes from "../../core/abstract/controllers/routes";
+import IndexEndpoint from "./endpoints/index";
 
 /**
- * User Model
+ * Centralized Controller Endpoint Loader
+ * 
+ * @return express.Router
  */
-export class Users extends model.Model {
+export class Urls extends Routes {
 
-    public id: fields.Datatype = new datatypes.Datatypes().ID();
-
-    public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
-        notNull: true,
-        default: defaults.Timestamp.CURRENT_TIMESTAMP
-    });
-
-    public username: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        size: 45,
-        unique: true
-    });
-
-    public email: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        notNull: true,
-        size: 45,
-        unique: true
-    });
-
-    public password: fields.Datatype = new datatypes.Datatypes().CHAR({
-        notNull: true,
-        size: 60,
-        protected: true
-    });
-
-    public salt: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        notNull: true,
-        size: 20,
-        protected: true
-    });
-
-    public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        size: 45
-    });
-
-    public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-        size: 45
-    });
-
-    public timezone: fields.Datatype = new datatypes.Datatypes().STATICKEY(timezones);
-
-    public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
-
-    public verified: fields.BoolType = new datatypes.Datatypes().BOOL();
-
-    public active: fields.BoolType = new datatypes.Datatypes().BOOL();
+    /*** Configure endpoints */
+    protected routes(): void {
+        this.router.use("/", this.load(IndexEndpoint));
+    }
 
 }

@@ -47,7 +47,7 @@ export default class JSPath {
      * @return void
      */
     public get(app: string, file: string): Promise<string> {
-        let path: string = "../source/" + app + "/views/" + file;
+        let path: string = "../source/apps/" + app + "/views/" + file;
         let customPath: string = "../views/" + app + "/" + file;
 
         // Create promise

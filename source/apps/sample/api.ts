@@ -24,19 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../core/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import Routes from "../../core/abstract/controllers/routes";
+import IndexEndpoint from "./endpoints/index";
 
 /**
- * Centralized Controller Routes Loader
+ * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
 export class Urls extends Routes {
 
-    /*** Configure routes */
+    /*** Configure endpoints */
     protected routes(): void {
-        this.router.use("/", this.load(IndexController));
+        this.router.use("/", this.load(IndexEndpoint));
     }
 
 }

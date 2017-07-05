@@ -194,8 +194,8 @@ class Server {
         this.compileSCSS(__dirname + "/" + app.config.name, "./dist/" + app.config.name);
         console.log("");
         // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/routes.ts").then(() => {
-            let appRoute = require("./" + app.config.name + "/routes");
+        this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/routes.ts").then(() => {
+            let appRoute = require("./apps/" + app.config.name + "/routes");
             let route = new appRoute.Urls(this.jsloth, app.config);
             this.express.use("" + (app.config.basepath || "/"), route.router);
 
@@ -213,9 +213,9 @@ class Server {
         });
 
         // Installing api routes
-        this.jsloth.files.exists(__dirname + "/" + app.config.name + "/api.ts").then(() => {
+        this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/api.ts").then(() => {
             try {
-                let appRoute = require("./" + app.config.name + "/api");
+                let appRoute = require("./apps/" + app.config.name + "/api");
                 let route = new appRoute.Urls(this.jsloth, app.config);
                 this.express.use("/api" + (app.config.basepath || "/"), route.router);
 

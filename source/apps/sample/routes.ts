@@ -24,35 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import ApiController from "../../core/abstract/controllers/api";
-import { Request, Response } from "express";
-
-import * as JSloth from "../../core/lib/core";
+import Routes from "../../core/abstract/controllers/routes";
+import IndexController from "./controllers/index";
 
 /**
- * Index Endpoint 
+ * Centralized Controller Routes Loader 
  * 
- * @basepath /
- * @return express.Router
+ * @return RoutesController
  */
-export default class IndexEndPoint extends ApiController {
+export class Urls extends Routes {
 
-    /*** Configure endpoints */
+    /*** Configure routes */
     protected routes(): void {
-
-        /**
-         * Check the health of the system.
-         * Render a json object with a true response.
-         *
-         * @param req {Request} The request object.
-         * @param res {Response} The response object.
-         * @return true
-         */
-        this.router.get("/", (req: Request, res: Response) => {
-            res.json({
-                response: true
-            });
-        });
-
+        this.router.use("/", this.load(IndexController));
     }
+
 }

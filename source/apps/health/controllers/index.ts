@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Sample App                                                                      //
+// JSloth Health App                                                                      //
 //                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
@@ -24,8 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../core/lib/core";
-import HtmlController from "../../core/abstract/controllers/html";
+import HTMLController from "../../../core/abstract/controllers/html";
 import { Request, Response } from "express";
 
 /**
@@ -33,13 +32,7 @@ import { Request, Response } from "express";
  * 
  * @basepath /health/
  */
-export default class IndexController extends HtmlController {
-    // private appName: string = "sample";
-
-    /*** Load library */
-    constructor(jsloth: JSloth, config: any) {
-        super(jsloth, config);
-    }
+export default class IndexController extends HTMLController {
 
     /*** Configure endpoints */
     protected routes(): void {
