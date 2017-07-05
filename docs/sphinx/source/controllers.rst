@@ -2,40 +2,7 @@
 Controllers
 ##################
 
-The place for the business logic.
-
-******************
-Example
-******************
-
-.. code-block:: javascript
-   :linenos:
-
-    import Controller from "../../core/abstract/controller";
-    import { Request, Response } from "express";
-
-    /**
-    * Core Controller Routes
-    * 
-    * @basepath /something/
-    */
-    export default class CoreController extends Controller {
-
-        /*** Configure endpoints */
-        protected routes(): void {
-
-            /**
-            * Some description.
-            *
-            * @param req {Request} The request object.
-            * @param res {Response} The response object.
-            */
-            this.router.get("/", (req: Request, res: Response) => {
-                res.send("Hello World!!!");
-            });
-        }
-
-    }
+The place for the business logic, there's 4 categories of controllers:
 
 ******************
 JSloth Library
@@ -43,31 +10,31 @@ JSloth Library
 A reference to :doc:`JSloth Library <jsloth/>` is available under ``this.jsloth``
 
 ******************
-Loading HTML view
+Local config
 ******************
-JSloth Library provides a default way to load html views.
-
-Custom path: ``/views/basepath/``
-
-App path: ``/basepath/views/``
-
-`Read more <jsloth/path.html#`get>`_
+Each app can use a custom configuration, a reference of the object holding that data is available under ``this.config``
 
 =================
 Example
 =================
 
-.. code-block:: javascript
+.. code-block:: json
    :linenos:
 
-    /**
-    * Some description.
-    *
-    * @param req {Request} The request object.
-    * @param res {Response} The response object.
-    */
-    this.router.get("/", (req: Request, res: Response) => {
-        this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
-            res.render(path);
-        });
-    });
+    {
+        "installed_apps": [{
+            "config": {
+                "session": "stateless"
+            }
+        }]
+    }
+
+
+******************
+Categories
+******************
+
+- :doc:`CoreController </controllers/core>`: Basic Controller.
+- :doc:`RoutesController </controllers/routes>`: Controller Hub, help you install other controllers as childs.
+- :doc:`APIController </controllers/api>`: Parent Endpoint Controller
+- :doc:`HtmlController </controllers/html>`: Parent Html-like Render Controller

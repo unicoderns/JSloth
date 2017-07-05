@@ -1,0 +1,29 @@
+******************
+Loading HTML view
+******************
+JSloth Library provides a default way to load html views.
+
+Custom path: ``/views/basepath/``
+
+App path: ``/basepath/views/``
+
+`Read more <jsloth/path.html#`get>`_
+
+=================
+Example
+=================
+
+.. code-block:: javascript
+   :linenos:
+
+    /**
+    * Some description.
+    *
+    * @param req {Request} The request object.
+    * @param res {Response} The response object.
+    */
+    this.router.get("/", (req: Request, res: Response) => {
+        this.jsloth.path.get(this.appName, "index.ejs").then((path) => {
+            res.render(path);
+        });
+    });

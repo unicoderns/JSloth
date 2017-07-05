@@ -28,12 +28,12 @@ import ApiController from "../../core/abstract/controllers/api";
 import { Request, Response } from "express";
 
 /**
- * Core Controller Routes
+ * Index EndPoint
  * 
  * @basepath /
  * @return express.Router
  */
-export default class CoreEndPoint extends ApiController {
+export default class IndexEndPoint extends ApiController {
 
     /*** Configure endpoints */
     protected routes(): void {

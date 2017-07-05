@@ -30,7 +30,7 @@ import IndexController from "./controllers/index";
 /**
  * Centralized Controller Routes Loader 
  * 
- * @return express.Router
+ * @return RoutesController
  */
 export class Urls extends Routes {
 

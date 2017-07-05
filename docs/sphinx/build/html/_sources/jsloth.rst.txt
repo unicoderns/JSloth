@@ -10,7 +10,7 @@ Core
 
 A cointainer to access each part of the library.
 
-:doc:`Controllers </controllers>`, :doc:`DB Models </models/db>` and :doc:`Routes </routes>` each cointain a reference to this library reference and can be access any thime using ``this.jsloth``.
+:doc:`Controllers </controllers>` and :doc:`DB Models </models/db>` each one cointain a reference to this library reference and can be access any thime using ``this.jsloth``.
 
 ------------------
 Example

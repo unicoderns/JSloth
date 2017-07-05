@@ -33,8 +33,8 @@ Example
     }
 
     /**
-    * User Model
-    */
+     * User Model
+     */
     export class Users extends model.Model {
 
         public id: fields.Datatype = new datatypes.Datatypes().ID();

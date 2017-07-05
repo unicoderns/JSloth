@@ -35,12 +35,12 @@ let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
 
 /**
- * Core Controller Routes
+ * Index Endpoint
  * 
  * @basepath /
  * @return express.Router
  */
-export default class CoreEndPoint extends Controller {
+export default class IndexEndPoint extends Controller {
     private usersTable: users.Users;
     private email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

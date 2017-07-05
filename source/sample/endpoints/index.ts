@@ -30,12 +30,12 @@ import { Request, Response } from "express";
 import * as JSloth from "../../core/lib/core";
 
 /**
- * Core Controller Routes
+ * Index Endpoint 
  * 
  * @basepath /
  * @return express.Router
  */
-export default class CoreEndPoint extends ApiController {
+export default class IndexEndPoint extends ApiController {
 
     /*** Configure endpoints */
     protected routes(): void {

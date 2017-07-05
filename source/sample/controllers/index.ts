@@ -29,7 +29,7 @@ import HtmlController from "../../core/abstract/controllers/html";
 import { Request, Response } from "express";
 
 /**
- * Core Controller Routes
+ * Index Controller
  * 
  * @basepath /health/
  */

@@ -1,0 +1,39 @@
+##################
+Routes Controller
+##################
+
+Controller Hub, help you import other controllers as childs.
+
+******************
+Load
+******************
+
+Load an imported controller, and initializes it with the right data.
+
+******************
+Example
+******************
+
+.. code-block:: javascript
+   :linenos:
+
+    import Routes from "../core/abstract/controllers/routes";
+    import IndexController from "./controllers/index";
+    import OtherController from "./controllers/other";
+    import SomeotherController from "./controllers/someother";
+
+    /**
+     * Centralized Controller Routes Loader
+     * 
+     * @return RoutesController
+     */
+    export class Urls extends Routes {
+
+        /*** Configure routes */
+        protected routes(): void {
+            this.router.use("/", this.load(IndexController));
+            this.router.use("/other/", this.load(OtherController));
+            this.router.use("/someother/", this.load(SomeotherController));
+        }
+
+    }
