@@ -24,6 +24,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/// <reference path="../types/express.d.ts"/>
+
 import JSloth from "../../../lib/core";
 import ApiController from "../../../abstract/controllers/api";
 
@@ -74,10 +76,9 @@ export default class IndexEndPoint extends ApiController {
          *
          * @param req {express.Request} The request object.
          * @param res {express.Response} The response object.
-         * @return string
+         * @return json
          */
         this.router.post("/token/", (req: express.Request, res: express.Response) => {
-            let jsloth = this.jsloth;
             let email = req.body.email;
 
             if (!this.email_regex.test(email)) {
@@ -92,7 +93,7 @@ export default class IndexEndPoint extends ApiController {
                             if (match) {
                                 // if user is found and password is right
                                 // create a token
-                                let token = jwt.sign(user, jsloth.config.token, {
+                                let token = jwt.sign(user, req.app.get("token"), {
                                     expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                                 });
 
@@ -109,6 +110,31 @@ export default class IndexEndPoint extends ApiController {
                     }
                 });
             }
+        });
+
+        /**
+         * Get a new token.
+         * Render a json object with an auth token.
+         *
+         * @param req {express.Request} The request object.
+         * @param res {express.Response} The response object.
+         * @return json
+         */
+        this.router.post("/token/renew/", sessions.auth, (req: express.Request, res: express.Response) => {
+            // Clean data
+            let data = req.decoded;
+            data.iat = undefined;
+            data.exp = undefined;
+            // create a new token
+            let token = jwt.sign(req.decoded, req.app.get("token"), {
+                expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
+            });
+
+            res.json({
+                success: true,
+                message: "Enjoy your token!",
+                token: token
+            });
         });
 
         /**
