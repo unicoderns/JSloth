@@ -48,13 +48,13 @@ export default class JSPath {
      */
     public get(app: string, file: string): Promise<string> {
         let path: string = "../source/apps/" + app + "/views/" + file;
-        let customPath: string = "../views/" + app + "/" + file;
+        let customPath: string = "./" + app + "/" + file;
 
         // Create promise
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
-                this.files.exists(__dirname + "/../../" + customPath).then((exist) => {
+                this.files.exists(__dirname + "/../../views/" + customPath).then((exist) => {
                     resolve(customPath);
                 }).catch((err: NodeJS.ErrnoException) => {
                     resolve(path);
@@ -63,5 +63,6 @@ export default class JSPath {
             });
         return p;
     }
+
 
 }
