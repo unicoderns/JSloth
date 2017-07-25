@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Config from "../interfaces/Config";
+import Config from "../interfaces/config";
 
 import JSDB from "./db";
 import JSPath from "./path";

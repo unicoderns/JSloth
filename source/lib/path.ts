@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSFiles from "./files";
-import Config from "../interfaces/Config";
+import Config from "../interfaces/config";
 import { Promise } from "es6-promise";
 
 /**
