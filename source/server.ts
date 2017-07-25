@@ -29,8 +29,8 @@ import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import JSloth from "./lib/core";
 import JSFiles from "./lib/files";
 
-import Config from "./interfaces/Config";
-import * as App from "./interfaces/App";
+import Config from "./interfaces/config";
+import * as App from "./interfaces/app";
 
 /**
  * Creates and configure an ExpressJS web server.
