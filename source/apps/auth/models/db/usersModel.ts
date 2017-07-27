@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as model from "../../../../abstract/model";
+import Model from "../../../../abstract/models/model";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
@@ -46,7 +46,7 @@ export interface Row {
 /**
  * User Model
  */
-export class Users extends model.Model {
+export class Users extends Model {
 
     public id: fields.Datatype = new datatypes.Datatypes().ID();
 

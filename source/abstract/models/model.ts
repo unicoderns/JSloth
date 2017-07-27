@@ -22,11 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../lib/core";
+import JSloth from "../../lib/core";
 import { Promise } from "es6-promise";
 
 import * as mysql from "mysql";
-import * as datatypes from "../lib/db/datatypes";
+import * as datatypes from "../../lib/db/datatypes";
 
 // Private settings fields object
 export interface Fields {
@@ -46,7 +46,7 @@ export interface Private {
 /**
  * Model Abstract
  */
-export class Model {
+export default class Model {
     protected jsloth: JSloth;
 
     private privateSettings: Private = {
