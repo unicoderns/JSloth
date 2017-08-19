@@ -7,6 +7,9 @@
         "sourceMap": true,
         "experimentalDecorators": true
     },
+    "include": [
+        "source/**/*.ts"
+    ],
     "files": [
         "source/server.ts"
     ]
