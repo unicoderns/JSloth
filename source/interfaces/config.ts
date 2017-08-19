@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as MySQL from "./db/connections";
-import * as App from "./App";
+import * as App from "./app";
 
 /*** Configuration interface */
 interface Config {
