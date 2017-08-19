@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Model from "../../../../abstract/models/model";
+import Field from "../../../../abstract/models/decorators/core";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
@@ -48,6 +49,7 @@ export interface Row {
  */
 export class Users extends Model {
 
+    @Field()
     public id: fields.Datatype = new datatypes.Datatypes().ID();
 
     public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({

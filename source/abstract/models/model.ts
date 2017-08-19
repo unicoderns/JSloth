@@ -47,7 +47,7 @@ export interface Private {
  * Model Abstract
  */
 export default class Model {
-    protected jsloth: JSloth;
+    private jsloth: JSloth;
 
     private privateSettings: Private = {
         name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.

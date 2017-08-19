@@ -22,20 +22,20 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = function(grunt, tasks) {
-    // Load our node module required for this task.
-    grunt.loadNpmTasks('grunt-tslint');
-
-    // The configuration for a specific task.
-    // In this case we have more than a single concat task. We need to append our task to our `tasks` object that
-    // way we're not overriding any of other previous tasks.
-    tasks.tslint = {
-        // The files that we want to check.
-        src: [
-            grunt.source + "/\*\*/\*.ts",
-            "!" + grunt.source + ".baseDir.ts"
-        ]
-    };
-
-    return tasks;
-};
+/**
+ * Session token verification
+ * 
+ * @param req {Request} The request object.
+ * @param res {Response} The response object.
+ * @param next Callback.
+ */
+export default function Field() {
+    return function (target: any, propertyKey: string) {
+        let descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) || {};
+        Object.defineProperty(target, propertyKey, descriptor)
+/*        if (descriptor.enumerable != value) {
+            descriptor.enumerable = value;
+            Object.defineProperty(target, propertyKey, descriptor)
+        }
+*/    };
+}
