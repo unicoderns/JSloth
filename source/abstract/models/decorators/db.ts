@@ -22,20 +22,57 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+const REGISTRY = new Map<string, Map<string, Map<string, string>>>();
+
+function register(target: string, privacy: string, key: string, alias?: string) {
+    let map: Map<string, Map<string, string>>;
+
+    if (REGISTRY.has(target)) {
+        map = REGISTRY.get(target);
+    } else {
+        map = new Map<string, Map<string, string>>();
+        REGISTRY.set(target, map);
+    }
+
+    let list: Map<string, string>;
+    if (map.has(privacy)) {
+        list = map.get(privacy);
+    } else {
+        list = new Map<string, string>();
+        map.set(privacy, list);
+    }
+
+    if (!list.has(key)) {
+        list.set(key, alias);
+    }
+}
+
+export function getList(target: string) {
+    return REGISTRY.get(target);
+}
+
 /**
- * Session token verification
+ * Core decorators
  * 
  * @param req {Request} The request object.
  * @param res {Response} The response object.
  * @param next Callback.
  */
-export default function Field() {
-    return function (target: any, propertyKey: string) {
-        let descriptor = Object.getOwnPropertyDescriptor(target, propertyKey) || {};
-        Object.defineProperty(target, propertyKey, descriptor)
-/*        if (descriptor.enumerable != value) {
-            descriptor.enumerable = value;
-            Object.defineProperty(target, propertyKey, descriptor)
-        }
-*/    };
+export function field(alias?: string) {
+    return function (target: any, key: string) {
+        register((target.constructor.name).toLowerCase(), "public", key, alias);
+    }
+}
+
+/**
+ * Core decorators
+ * 
+ * @param req {Request} The request object.
+ * @param res {Response} The response object.
+ * @param next Callback.
+ */
+export function privateField(alias?: string) {
+    return function (target: any, key: string) {
+        register((target.constructor.name).toLowerCase(), "private", key, alias);
+    }
 }

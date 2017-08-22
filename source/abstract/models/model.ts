@@ -24,22 +24,14 @@
 
 import JSloth from "../../lib/core";
 import { Promise } from "es6-promise";
+import { getList } from "../models/decorators/db";
 
 import * as mysql from "mysql";
 import * as datatypes from "../../lib/db/datatypes";
 
-// Private settings fields object
-export interface Fields {
-    all: string[];
-    public: string[];
-    protected: string[];
-    private: string[];
-}
-
 // Private settings object
 export interface Private {
     name: string;
-    fields: Fields;
     private: boolean;
 }
 
@@ -48,17 +40,8 @@ export interface Private {
  */
 export default class Model {
     private jsloth: JSloth;
-
-    private privateSettings: Private = {
-        name: ((<any>this).constructor.name).toLowerCase(), // Get the table name from the model name in lowercase.
-        fields: {
-            all: <string[]>[],
-            public: <string[]>[],
-            private: <string[]>[],
-            protected: <string[]>[]
-        }, // Fields cache
-        private: true // It will be hide
-    };
+    public static fields: string[];
+    protected name: string = ((<any>this).constructor.name).toLowerCase(); // Get the table name from the model name in lowercase.
 
     constructor(jsloth: JSloth) {
         this.jsloth = jsloth;
@@ -67,53 +50,18 @@ export default class Model {
     /////////////////////////////////////////////////////////////////////
     // Get field list.
     /////////////////////////////////////////////////////////////////////
-    public getFields(): Fields {
-        // Use cache if is available
-        if (!this.privateSettings.fields.public.length) {
-            // Get all keys then remove the private ones
-            let keys = Object.keys(this);
-            let publicKeys: string[] = [];
-            let protectedKeys: string[] = [];
-            let privateKeys: string[] = [];
-
-            // Checking keys
-            keys.forEach((name, index, array) => {
-                // Removing privates
-                let privateField: boolean = (<any>this)[name].private;
-                if (!privateField) {
-                    let protectedField: boolean = (<any>this)[name].protected;
-                    if (protectedField) {
-                        // Listing protected
-                        protectedKeys.push(name);
-                    } else {
-                        // Listing public
-                        publicKeys.push(name);
-                    }
-                } else {
-                    // Listing private
-                    privateKeys.push(name);
-                }
-            });
-            this.privateSettings.fields.all = keys;
-            this.privateSettings.fields.public = publicKeys;
-            this.privateSettings.fields.private = privateKeys;
-            this.privateSettings.fields.protected = protectedKeys;
-        }
-        return {
-            all: this.privateSettings.fields.all,
-            public: this.privateSettings.fields.public,
-            private: this.privateSettings.fields.private,
-            protected: this.privateSettings.fields.protected
-        };
+    public getFields(): Map<string, Map<string, string>> {
+        return getList(this.name);
     }
 
     /**
      * Filter one array if keys don't exists in other array.
      */
-    private filterArrayInArray(target: string[], scope: string[]): string[] {
+    private filterArrayInArray(target: string[], scope: Map<string, string>): string[] {
         let keys: string[] = [];
+
         target.forEach(item => {
-            if (scope.indexOf(item) !== -1) {
+            if (scope.has(item)) {
                 keys.push(item);
             }
         });
@@ -123,10 +71,9 @@ export default class Model {
     /**
      * Log if keys don't exists in other array.
      */
-    private logArrayInArray(target: string[], scope: string[]): void {
-        let keys: string[] = [];
+    private logArrayInArray(target: string[], scope: Map<string, string>): void {
         target.forEach(item => {
-            if (scope.indexOf(item) === -1) {
+            if (!scope.has(item)) {
                 console.error(item + " field doesn't exists!");
             }
         });
@@ -167,10 +114,10 @@ export default class Model {
                 let modelFields = this.getFields();
                 // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
                 if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
-                    selectableFields = this.filterArrayInArray(fields, modelFields.all);
+                    selectableFields = this.filterArrayInArray(fields, modelFields.get("public"));
                 } else {
                     if (this.jsloth.config.dev) {
-                        this.logArrayInArray(fields, modelFields.all);
+                        this.logArrayInArray(fields, modelFields.get("public"));
                     }
                     selectableFields = fields;
                 }
@@ -195,7 +142,7 @@ export default class Model {
         let values: string[] = [];
         let keys: string[] = [];
         let filteredKeys: string[] = [];
-        let modelFields: Fields = this.getFields();
+        let modelFields = this.getFields();
 
         for (let key in where) {
             keys.push(key);
@@ -203,10 +150,10 @@ export default class Model {
 
         // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
         if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
-            filteredKeys = this.filterArrayInArray(keys, modelFields.all);
+            filteredKeys = this.filterArrayInArray(keys, modelFields.get("public"));
         } else {
             if (this.jsloth.config.dev) {
-                this.logArrayInArray(keys, modelFields.all);
+                this.logArrayInArray(keys, modelFields.get("public"));
             }
             filteredKeys = keys;
         }
@@ -262,7 +209,7 @@ export default class Model {
         if (limit) {
             extra = " LIMIT " + limit;
         }
-        let query = "SELECT " + fieldsSQL + " FROM `" + this.privateSettings.name + "`" + whereData.sql + extra + ";";
+        let query = "SELECT " + fieldsSQL + " FROM `" + this.name + "`" + whereData.sql + extra + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 
@@ -328,7 +275,7 @@ export default class Model {
             wildcards.push("?");
             values.push(data[key]);
         }
-        let query = "INSERT INTO `" + this.privateSettings.name + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
+        let query = "INSERT INTO `" + this.name + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
         return this.jsloth.db.query(query, values);
     }
 
@@ -348,7 +295,7 @@ export default class Model {
             values.push(data[key]);
         }
         let whereData = this.generateWhereData(where);
-        let query = "UPDATE `" + this.privateSettings.name + "` SET " + fields.join(", ") + whereData.sql + ";";
+        let query = "UPDATE `" + this.name + "` SET " + fields.join(", ") + whereData.sql + ";";
         unifiedValues = values.concat(whereData.values);
         return this.jsloth.db.query(query, unifiedValues);
     }
@@ -361,7 +308,7 @@ export default class Model {
      */
     public delete(where?: any): Promise<any> {
         let whereData = this.generateWhereData(where);
-        let query = "DELETE FROM `" + this.privateSettings.name + "`" + whereData.sql + ";";
+        let query = "DELETE FROM `" + this.name + "`" + whereData.sql + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 

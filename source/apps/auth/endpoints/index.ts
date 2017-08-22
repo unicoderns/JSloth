@@ -45,7 +45,7 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    private email_regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any) {
         super(jsloth, config);
@@ -79,7 +79,7 @@ export default class IndexEndPoint extends ApiController {
          * @return json
          */
         this.router.post("/token/", (req: express.Request, res: express.Response) => {
-            let email = req.body.email;
+            let email: string = req.body.email;
 
             if (!this.email_regex.test(email)) {
                 res.json({ success: false, message: "Invalid email address." });
@@ -176,8 +176,8 @@ export default class IndexEndPoint extends ApiController {
         this.router.get("/fields/", sessions.auth, (req: express.Request, res: express.Response) => {
             let fields = this.usersTable.getFields();
             res.json({
-                publicFields: fields.public,
-                protectedFields: fields.protected,
+                publicFields: Array.from(fields.get("public")),
+                privateFields: Array.from(fields.get("private")),
                 passwordFieldSettings: this.usersTable.password
             });
         });

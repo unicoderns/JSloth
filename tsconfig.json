@@ -5,7 +5,9 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "experimentalDecorators": true
+        "target": "es6",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
     "include": [
         "source/**/*.ts"

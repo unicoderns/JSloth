@@ -24,6 +24,8 @@
 
 import * as defaults from "./defaults";
 
+// export enum Privacy {"PUBLIC", "PRIVATE", "PROTECTED"};
+
 // JSloth internal flags
 export interface SystemTypes {
     type?: string;
