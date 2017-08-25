@@ -37,7 +37,6 @@ export default class JSloth {
     public files: JSFiles;
     public path: JSPath;
     public db: JSDB;
-    private private: boolean = true; // Hidden library
 
     /*** Configuration methods */
     constructor(config: Config) {

@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Model from "../../../../abstract/models/model";
-import { field, privateField } from "../../../../abstract/models/decorators/db";
+import { field, secret } from "../../../../abstract/models/decorators/db";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
@@ -71,7 +71,7 @@ export class Users extends Model {
         unique: true
     });
 
-    @privateField()
+    @secret()
     public password: fields.Datatype = new datatypes.Datatypes().CHAR({
         notNull: true,
         size: 60,

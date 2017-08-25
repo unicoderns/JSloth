@@ -22,8 +22,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Centralized db field registry
+ */
 const REGISTRY = new Map<string, Map<string, Map<string, string>>>();
 
+/**
+ * Register field
+ * 
+ * @param target Db table name.
+ * @param privacy Type of field (public/secret).
+ * @param key Field name.
+ * @param alias Optional alias for the field.
+ */
 function register(target: string, privacy: string, key: string, alias?: string) {
     let map: Map<string, Map<string, string>>;
 
@@ -47,16 +58,53 @@ function register(target: string, privacy: string, key: string, alias?: string) 
     }
 }
 
-export function getList(target: string) {
-    return REGISTRY.get(target);
+/**
+ * Get field map for a table
+ * 
+ * @param target Db table name.
+ * @return Field map.
+ */
+export function getList(target: string): Map<string, Map<string, string>> {
+    // Clone structure and return to prevent any changes in the original one.
+    let clone: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
+    let original = REGISTRY.get(target);
+    let publicFields = original.get("public");
+    let secretFields = original.get("secret");
+
+    // Force string clone
+    let strCopy = function (text: string): string {
+        return (' ' + text).slice(1);
+    }
+
+    let clonePublicfields: Map<string, string> = new Map<string, string>();
+    publicFields.forEach((value, key, map) => {
+        if (typeof value !== "undefined") {
+            clonePublicfields.set(strCopy(key), strCopy(value));
+        } else {
+            clonePublicfields.set(strCopy(key), undefined);
+        }
+    });
+    clone.set("public", clonePublicfields);
+
+    
+    let cloneSecretfields: Map<string, string> = new Map<string, string>();
+    secretFields.forEach((value, key, map) => {
+        if (typeof value !== "undefined") {
+            cloneSecretfields.set(strCopy(key), strCopy(value));
+        } else {
+            cloneSecretfields.set(strCopy(key), undefined);
+        }
+    });
+    clone.set("secret", cloneSecretfields);
+    return clone;
 }
 
 /**
- * Core decorators
+ * Public field decorator
  * 
- * @param req {Request} The request object.
- * @param res {Response} The response object.
- * @param next Callback.
+ * @param alias Optional alias for the field.
+ * @param target Db table name.
+ * @param key Field name.
  */
 export function field(alias?: string) {
     return function (target: any, key: string) {
@@ -65,14 +113,14 @@ export function field(alias?: string) {
 }
 
 /**
- * Core decorators
+ * Secret field decorator
  * 
- * @param req {Request} The request object.
- * @param res {Response} The response object.
- * @param next Callback.
+ * @param alias Optional alias for the field.
+ * @param target Db table name.
+ * @param key Field name.
  */
-export function privateField(alias?: string) {
+export function secret(alias?: string) {
     return function (target: any, key: string) {
-        register((target.constructor.name).toLowerCase(), "private", key, alias);
+        register((target.constructor.name).toLowerCase(), "secret", key, alias);
     }
 }

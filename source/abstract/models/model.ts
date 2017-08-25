@@ -40,18 +40,42 @@ export interface Private {
  */
 export default class Model {
     private jsloth: JSloth;
-    public static fields: string[];
     protected name: string = ((<any>this).constructor.name).toLowerCase(); // Get the table name from the model name in lowercase.
+    public unsafe: boolean = false;
+    public fields: Map<string, string>;
 
-    constructor(jsloth: JSloth) {
+    /**
+     * Create a table object.
+     * 
+     * To get all fields (secrets included), you need to ser privacy as "unsafe" explicitly, 
+     * in that way we ensure that this will not be a security breach in any wrong future upgrade.
+     */
+    constructor(jsloth: JSloth, privacy?: string) {
         this.jsloth = jsloth;
+        if (privacy == "unsafe") {
+            this.unsafe = true;
+        }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Get field list.
-    /////////////////////////////////////////////////////////////////////
-    public getFields(): Map<string, Map<string, string>> {
-        return getList(this.name);
+    /**
+     * Create cache and return the model field list.
+     * 
+     * If this.unsafe is set then merge public with secret fields.
+     */
+    public getFields(): Map<string, string> {
+        let fields =  this.fields;
+        if (typeof fields == "undefined") {
+            let tmp: Map<string, Map<string, string>> = getList(this.name);
+            fields = tmp.get("public");
+            if (this.unsafe) {
+                var secret: Map<string, string> = tmp.get("secret");
+                secret.forEach(function (value, key) {
+                    fields.set(key, value);
+                });
+            }
+            this.fields = fields;
+        }
+        return fields;
     }
 
     /**
@@ -114,10 +138,10 @@ export default class Model {
                 let modelFields = this.getFields();
                 // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
                 if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
-                    selectableFields = this.filterArrayInArray(fields, modelFields.get("public"));
+                    selectableFields = this.filterArrayInArray(fields, modelFields);
                 } else {
                     if (this.jsloth.config.dev) {
-                        this.logArrayInArray(fields, modelFields.get("public"));
+                        this.logArrayInArray(fields, modelFields);
                     }
                     selectableFields = fields;
                 }
@@ -150,10 +174,10 @@ export default class Model {
 
         // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
         if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
-            filteredKeys = this.filterArrayInArray(keys, modelFields.get("public"));
+            filteredKeys = this.filterArrayInArray(keys, modelFields);
         } else {
             if (this.jsloth.config.dev) {
-                this.logArrayInArray(keys, modelFields.get("public"));
+                this.logArrayInArray(keys, modelFields);
             }
             filteredKeys = keys;
         }

@@ -165,6 +165,7 @@ export default class IndexEndPoint extends ApiController {
                 res.json(data);
             });
         });
+        
         /**
          * Dummy.
          * Render a json object with a true response.
@@ -174,10 +175,12 @@ export default class IndexEndPoint extends ApiController {
          * @return array
          */
         this.router.get("/fields/", sessions.auth, (req: express.Request, res: express.Response) => {
+            let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
             let fields = this.usersTable.getFields();
+            let unsafeFields = unsafeUsersTable.getFields();
             res.json({
-                publicFields: Array.from(fields.get("public")),
-                privateFields: Array.from(fields.get("private")),
+                publicFields: Array.from(fields),
+                allFields: Array.from(unsafeFields),
                 passwordFieldSettings: this.usersTable.password
             });
         });
