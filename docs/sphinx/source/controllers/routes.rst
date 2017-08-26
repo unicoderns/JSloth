@@ -14,7 +14,7 @@ Load an imported controller, and initializes it with the right data.
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     import Routes from "../core/abstract/controllers/routes";

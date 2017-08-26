@@ -18,7 +18,7 @@ App path: ``/basepath/views/``
 Example
 =================
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     /**
@@ -35,7 +35,7 @@ Example
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     /**

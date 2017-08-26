@@ -8,7 +8,7 @@ The basic controller, it declares the common variables, setup the JSloth Library
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     /**

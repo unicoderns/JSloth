@@ -100,7 +100,7 @@ Execute a plain query
 Example:
 -----------------
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     this.jsloth.db.query(query, params);

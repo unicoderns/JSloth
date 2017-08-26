@@ -93,10 +93,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/api.html">Api Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/core.html">Core Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/html.html">Html Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/routes.html">Routes Controller</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models/db.html">DB Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models/static.html">Static Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../routes.html">Routes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jsloth.html">JSloth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="db.html">JSloth DB</a></li>
 <li class="toctree-l1"><a class="reference internal" href="files.html">JSloth Files</a></li>
@@ -180,7 +183,7 @@
 <h2>Public Functions<a class="headerlink" href="#public-functions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="get">
 <h3>Get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
-<p>Check if there&#8217;s a custom view available, if don&#8217;t then return the default path, in this way you can provide your app with a default web interface and the final user can customize it really easy:</p>
+<p>Check if there’s a custom view available, if don’t then return the default path, in this way you can provide your app with a default web interface and the final user can customize it really easy:</p>
 <p>Custom path: <code class="docutils literal"><span class="pre">/views/basepath/</span></code></p>
 <p>App path: <code class="docutils literal"><span class="pre">/basepath/views/</span></code></p>
 <dl class="function">
@@ -191,8 +194,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>app</strong> (<em>string</em>) &#8211; App requesting the view</li>
-<li><strong>file</strong> (<em>string</em>) &#8211; Name of the file to load</li>
+<li><strong>app</strong> (<em>string</em>) – App requesting the view</li>
+<li><strong>file</strong> (<em>string</em>) – Name of the file to load</li>
 </ul>
 </td>
 </tr>
@@ -205,9 +208,9 @@
 
 <div class="section" id="example">
 <h4>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-typescript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
-3</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appName</span><span class="p">,</span> <span class="s2">&quot;index.ejs&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">path</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">appName</span><span class="p">,</span> <span class="s2">&quot;index.ejs&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">path</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
  <span class="p">});</span>
 </pre></div>

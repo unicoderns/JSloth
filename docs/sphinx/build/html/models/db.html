@@ -94,13 +94,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../controllers.html">Controllers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controllers/api.html">ApiController</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controllers/core.html">CoreController</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controllers/html.html">HtmlController</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../controllers/routes.html">RoutesController</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/api.html">Api Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/core.html">Core Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/html.html">Html Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/routes.html">Routes Controller</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DB Models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interface">Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#class">Class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#decorators">Decorators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datatype">Datatype</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static.html">Static Models</a></li>
@@ -176,7 +185,7 @@
 <p>Placed at <code class="docutils literal"><span class="pre">/basepath/models/db/</span></code>, DB models help you manage data in a DB table.</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-typescript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -207,122 +216,60 @@
 29
 30
 31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">model</span> <span class="nx">from</span> <span class="s2">&quot;../../../core/abstract/model&quot;</span><span class="p">;</span>
- <span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">fields</span> <span class="nx">from</span> <span class="s2">&quot;../../../core/interfaces/db/fields&quot;</span><span class="p">;</span>
- <span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">defaults</span> <span class="nx">from</span> <span class="s2">&quot;../../../core/interfaces/db/defaults&quot;</span><span class="p">;</span>
- <span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">datatypes</span> <span class="nx">from</span> <span class="s2">&quot;../../../core/lib/db/datatypes&quot;</span><span class="p">;</span>
- <span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">timezones</span> <span class="nx">from</span> <span class="s2">&quot;../static/timezoneModel&quot;</span><span class="p">;</span>
+32</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="kr">import</span> <span class="nx">Model</span> <span class="nx">from</span> <span class="s2">&quot;../../../../abstract/models/model&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="p">{</span> <span class="nx">field</span><span class="p">,</span> <span class="nx">secret</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;../../../../abstract/models/decorators/db&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">fields</span> <span class="nx">from</span> <span class="s2">&quot;../../../../interfaces/db/fields&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">defaults</span> <span class="nx">from</span> <span class="s2">&quot;../../../../interfaces/db/defaults&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">datatypes</span> <span class="nx">from</span> <span class="s2">&quot;../../../../lib/db/datatypes&quot;</span><span class="p">;</span>
 
  <span class="kr">export</span> <span class="kr">interface</span> <span class="nx">Row</span> <span class="p">{</span>
-     <span class="nx">id</span><span class="o">?:</span> <span class="nx">number</span><span class="p">;</span>
-     <span class="nx">created</span><span class="o">?:</span> <span class="nx">number</span><span class="p">;</span>
-     <span class="nx">username</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">email</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">password</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">salt</span><span class="o">:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">first_name</span><span class="o">?:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">last_name</span><span class="o">?:</span> <span class="nx">string</span><span class="p">;</span>
-     <span class="nx">timezone</span><span class="o">?:</span> <span class="nx">number</span><span class="p">;</span>
-     <span class="nx">admin</span><span class="o">?:</span> <span class="kr">boolean</span><span class="p">;</span>
-     <span class="nx">verified</span><span class="o">?:</span> <span class="kr">boolean</span><span class="p">;</span>
-     <span class="nx">active</span><span class="o">?:</span> <span class="kr">boolean</span><span class="p">;</span>
+     <span class="nx">id?</span>: <span class="kt">number</span><span class="p">;</span>
+     <span class="nx">created?</span>: <span class="kt">number</span><span class="p">;</span>
+     <span class="nx">username</span>: <span class="kt">string</span><span class="p">;</span>
  <span class="p">}</span>
 
  <span class="cm">/**</span>
-<span class="cm">  * User Model</span>
-<span class="cm">  */</span>
- <span class="kr">export</span> <span class="kr">class</span> <span class="nx">Users</span> <span class="kr">extends</span> <span class="nx">model</span><span class="p">.</span><span class="nx">Model</span> <span class="p">{</span>
+<span class="cm"> * User Model</span>
+<span class="cm"> */</span>
+ <span class="kr">export</span> <span class="kr">class</span> <span class="nx">Users</span> <span class="kr">extends</span> <span class="nx">Model</span> <span class="p">{</span>
 
-     <span class="kr">public</span> <span class="nx">id</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">ID</span><span class="p">();</span>
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">id</span>: <span class="kt">fields.Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">ID</span><span class="p">();</span>
 
-     <span class="kr">public</span> <span class="nx">created</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">DataTimestampType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">TIMESTAMP</span><span class="p">({</span>
-         <span class="nx">notNull</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">created</span>: <span class="kt">fields.DataTimestampType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">TIMESTAMP</span><span class="p">({</span>
+         <span class="nx">notNull</span>: <span class="kt">true</span><span class="p">,</span>
          <span class="k">default</span><span class="o">:</span> <span class="nx">defaults</span><span class="p">.</span><span class="nx">Timestamp</span><span class="p">.</span><span class="nx">CURRENT_TIMESTAMP</span>
      <span class="p">});</span>
 
-     <span class="kr">public</span> <span class="nx">username</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">45</span><span class="p">,</span>
-         <span class="nx">unique</span><span class="o">:</span> <span class="kc">true</span>
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">username</span>: <span class="kt">fields.Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">size</span>: <span class="kt">45</span><span class="p">,</span>
+         <span class="nx">unique</span>: <span class="kt">true</span>
      <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">email</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
-         <span class="nx">notNull</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">45</span><span class="p">,</span>
-         <span class="nx">unique</span><span class="o">:</span> <span class="kc">true</span>
-     <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">password</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">CHAR</span><span class="p">({</span>
-         <span class="nx">notNull</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">60</span><span class="p">,</span>
-         <span class="kr">protected</span><span class="o">:</span> <span class="kc">true</span>
-     <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">salt</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
-         <span class="nx">notNull</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">20</span><span class="p">,</span>
-         <span class="kr">protected</span><span class="o">:</span> <span class="kc">true</span>
-     <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">first_name</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">45</span>
-     <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">last_name</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
-         <span class="nx">size</span><span class="o">:</span> <span class="mi">45</span>
-     <span class="p">});</span>
-
-     <span class="kr">public</span> <span class="nx">timezone</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">Datatype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">STATICKEY</span><span class="p">(</span><span class="nx">timezones</span><span class="p">);</span>
-
-     <span class="kr">public</span> <span class="nx">admin</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
-
-     <span class="kr">public</span> <span class="nx">verified</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
-
-     <span class="kr">public</span> <span class="nx">active</span><span class="o">:</span> <span class="nx">fields</span><span class="p">.</span><span class="nx">BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
-
  <span class="p">}</span>
 </pre></div>
 </td></tr></table></div>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>A DB Model mixes a interface and a class.</p>
+<div class="section" id="interface">
+<h3>Interface<a class="headerlink" href="#interface" title="Permalink to this headline">¶</a></h3>
+<p>Contain all fields and is made to help Typescript compilator to use the right kind of datatype and required status.</p>
+</div>
+<div class="section" id="class">
+<h3>Class<a class="headerlink" href="#class" title="Permalink to this headline">¶</a></h3>
+<p>This is basically the table, it also cointain all the fields but extend the details focusing in MySQL details.</p>
+<div class="section" id="decorators">
+<h4>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h4>
+<p>Set privacy of fields (<code class="docutils literal"><span class="pre">&#64;field</span></code>/<code class="docutils literal"><span class="pre">&#64;secret</span></code>), once a field is mark as <code class="docutils literal"><span class="pre">&#64;secret</span></code> you will be not able to get that field at least that you have a explicit <code class="docutils literal"><span class="pre">unsafe</span></code> instance of the table.</p>
+</div>
+<div class="section" id="datatype">
+<h4>Datatype<a class="headerlink" href="#datatype" title="Permalink to this headline">¶</a></h4>
+<p>Kind of MySQL field</p>
+</div>
+</div>
 </div>
 </div>
 

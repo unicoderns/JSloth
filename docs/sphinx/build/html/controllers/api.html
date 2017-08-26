@@ -176,7 +176,7 @@
 <p>Right now is just a Controller extending the basic <a class="reference internal" href="core.html"><span class="doc">CoreController</span></a>.</p>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-typescript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -221,9 +221,9 @@
 <span class="cm">           * @param req {Request} The request object.</span>
 <span class="cm">           * @param res {Response} The response object.</span>
 <span class="cm">           */</span>
-         <span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="o">:</span> <span class="nx">Request</span><span class="p">,</span> <span class="nx">res</span><span class="o">:</span> <span class="nx">Response</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+         <span class="k">this</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span>: <span class="kt">Request</span><span class="p">,</span> <span class="nx">res</span>: <span class="kt">Response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
              <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span>
-                 <span class="nx">response</span><span class="o">:</span> <span class="kc">true</span>
+                 <span class="nx">response</span>: <span class="kt">true</span>
              <span class="p">});</span>
          <span class="p">});</span>
      <span class="p">}</span>

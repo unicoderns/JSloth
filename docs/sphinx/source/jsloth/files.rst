@@ -23,7 +23,7 @@ Check if a file exists
 Example:
 -----------------
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     this.jsloth.files.exists(path).then((exists) => {

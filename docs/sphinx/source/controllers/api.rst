@@ -8,7 +8,7 @@ Right now is just a Controller extending the basic :doc:`CoreController <./core>
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     /**

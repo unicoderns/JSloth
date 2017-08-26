@@ -94,10 +94,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/api.html">Api Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/core.html">Core Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/html.html">Html Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/routes.html">Routes Controller</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models/db.html">DB Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../models/static.html">Static Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../routes.html">Routes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jsloth.html">JSloth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="db.html">JSloth DB</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">JSloth Files</a><ul>
@@ -190,7 +193,7 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Arguments:</th><td class="field-body"><ul class="first simple">
-<li><strong>path</strong> (<em>string</em>) &#8211; Filepath</li>
+<li><strong>path</strong> (<em>string</em>) – Filepath</li>
 </ul>
 </td>
 </tr>
@@ -203,13 +206,13 @@
 
 <div class="section" id="example">
 <h4>Example:<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+<div class="highlight-typescript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
 2
 3
 4
-5</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">path</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">exists</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="k">this</span><span class="p">.</span><span class="nx">jsloth</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">path</span><span class="p">).</span><span class="nx">then</span><span class="p">((</span><span class="nx">exists</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
      <span class="c1">// File exists, do something</span>
- <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="p">=&gt;</span> <span class="p">{</span>
+ <span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">err</span> <span class="o">=&gt;</span> <span class="p">{</span>
      <span class="c1">// File not found</span>
  <span class="p">});</span>
 </pre></div>

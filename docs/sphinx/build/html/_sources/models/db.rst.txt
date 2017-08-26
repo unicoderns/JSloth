@@ -8,79 +8,63 @@ Placed at ``/basepath/models/db/``, DB models help you manage data in a DB table
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
-    import * as model from "../../../core/abstract/model";
-    import * as fields from "../../../core/interfaces/db/fields";
-    import * as defaults from "../../../core/interfaces/db/defaults";
-    import * as datatypes from "../../../core/lib/db/datatypes";
-    import * as timezones from "../static/timezoneModel";
+    import Model from "../../../../abstract/models/model";
+    import { field, secret } from "../../../../abstract/models/decorators/db";
+    import * as fields from "../../../../interfaces/db/fields";
+    import * as defaults from "../../../../interfaces/db/defaults";
+    import * as datatypes from "../../../../lib/db/datatypes";
 
     export interface Row {
         id?: number;
         created?: number;
         username: string;
-        email: string;
-        password: string;
-        salt: string;
-        first_name?: string;
-        last_name?: string;
-        timezone?: number;
-        admin?: boolean;
-        verified?: boolean;
-        active?: boolean;
     }
 
     /**
-     * User Model
-     */
-    export class Users extends model.Model {
+    * User Model
+    */
+    export class Users extends Model {
 
+        @field()
         public id: fields.Datatype = new datatypes.Datatypes().ID();
 
+        @field()
         public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
             notNull: true,
             default: defaults.Timestamp.CURRENT_TIMESTAMP
         });
 
+        @field()
         public username: fields.Datatype = new datatypes.Datatypes().VARCHAR({
             size: 45,
             unique: true
         });
-
-        public email: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-            notNull: true,
-            size: 45,
-            unique: true
-        });
-
-        public password: fields.Datatype = new datatypes.Datatypes().CHAR({
-            notNull: true,
-            size: 60,
-            protected: true
-        });
-
-        public salt: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-            notNull: true,
-            size: 20,
-            protected: true
-        });
-
-        public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-            size: 45
-        });
-
-        public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
-            size: 45
-        });
-
-        public timezone: fields.Datatype = new datatypes.Datatypes().STATICKEY(timezones);
-
-        public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
-
-        public verified: fields.BoolType = new datatypes.Datatypes().BOOL();
-
-        public active: fields.BoolType = new datatypes.Datatypes().BOOL();
-
     }
+
+******************
+Structure
+******************
+A DB Model mixes a interface and a class.
+
+=================
+Interface
+=================
+Contain all fields and is made to help Typescript compilator to use the right kind of datatype and required status.
+
+=================
+Class
+=================
+This is basically the table, it also cointain all the fields but extend the details focusing in MySQL details.
+
+---------------
+Decorators
+---------------
+Set privacy of fields (``@field``/``@secret``), once a field is mark as ``@secret`` you will be not able to get that field at least that you have a explicit ``unsafe`` instance of the table.
+
+---------------
+Datatype
+---------------
+Kind of MySQL field

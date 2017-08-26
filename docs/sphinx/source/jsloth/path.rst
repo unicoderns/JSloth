@@ -28,7 +28,7 @@ App path: ``/basepath/views/``
 Example:
 -----------------
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     this.jsloth.path.get(this.appName, "index.ejs").then((path) => {

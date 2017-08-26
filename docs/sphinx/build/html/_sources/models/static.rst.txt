@@ -8,7 +8,7 @@ Placed at ``/basepath/models/static/``, static models help you with the kind of 
 Example
 ******************
 
-.. code-block:: javascript
+.. code-block:: typescript
    :linenos:
 
     export enum TimeZones {
