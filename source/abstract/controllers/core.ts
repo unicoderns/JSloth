@@ -48,8 +48,13 @@ export default class Controller {
         this.routes();
     }
 
-    /*** Configure routes     */
+    /*** Define routes */
     protected routes(): void {
+    }
+
+    /*** Dummy test  */
+    protected log(something: string, url: string): void {
+        console.log("KEY: " + something + " URL: " + url);
     }
 
 }

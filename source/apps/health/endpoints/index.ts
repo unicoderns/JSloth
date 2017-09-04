@@ -35,22 +35,23 @@ import { Request, Response } from "express";
  */
 export default class IndexEndPoint extends ApiController {
 
-    /*** Configure endpoints */
+    /*** Define routes */
     protected routes(): void {
-
-        /**
-         * Check the health of the system.
-         * Render a json object with a true response.
-         *
-         * @param req {Request} The request object.
-         * @param res {Response} The response object.
-         * @return true
-         */
-        this.router.get("/", (req: Request, res: Response) => {
-            res.json({
-                response: true
-            });
-        });
-
+        this.router.get("/", this.index);
     }
+
+    /**
+     * Check the health of the system.
+     * Render a json object with a true response.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return json
+     */
+    private index = (req: Request, res: Response): void => {
+        res.json({
+            response: true
+        });
+    };
+
 }

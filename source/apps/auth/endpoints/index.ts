@@ -26,13 +26,14 @@
 
 /// <reference path="../types/express.d.ts"/>
 
-import JSloth from "../../../lib/core";
-import ApiController from "../../../abstract/controllers/api";
-
-import * as express from "express";
 import * as jwt from "jsonwebtoken";
 import * as users from "../models/db/usersModel";
 import * as sessions from "../middlewares/sessions";
+
+import { Request, Response } from "express";
+
+import JSloth from "../../../lib/core";
+import ApiController from "../../../abstract/controllers/api";
 
 let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
@@ -52,137 +53,142 @@ export default class IndexEndPoint extends ApiController {
         this.usersTable = new users.Users(jsloth);
     }
 
-    /*** Configure endpoints */
+    /*** Define routes */
     protected routes(): void {
-        /**
-         * Dummy.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return array
-         */
-        this.router.get("/", (req: express.Request, res: express.Response) => {
-            this.usersTable.delete({ id: 3 }).then((done) => {
-                this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
-                    res.json(data);
-                });
-            });
-        });
+        this.router.get("/", this.getAllUsers);
 
-        /**
-         * Get a token.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return json
-         */
-        this.router.post("/token/", (req: express.Request, res: express.Response) => {
-            let email: string = req.body.email;
+        this.router.post("/token/", this.getToken);
+        this.router.post("/token/renew/", sessions.auth, this.renewToken);
 
-            if (!this.email_regex.test(email)) {
-                res.json({ success: false, message: "Invalid email address." });
-            } else {
-                // find the user
-                this.usersTable.get([], { email: email, active: 1 }).then((user) => {
-                    if (typeof user === "undefined") {
-                        res.json({ success: false, message: "Authentication failed. User and password don't match." });
-                    } else {
-                        bcrypt.compare(req.body.password, user.password, function (err: NodeJS.ErrnoException, match: boolean) {
-                            if (match) {
-                                // if user is found and password is right
-                                // create a token
-                                let token = jwt.sign(user, req.app.get("token"), {
-                                    expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-                                });
+        this.router.get("/users/", this.getList);
+        this.router.get("/users/1/password/", this.updatePassword);
 
-                                // return the information including token as JSON
-                                res.json({
-                                    success: true,
-                                    message: "Enjoy your token!",
-                                    token: token
-                                });
-                            } else {
-                                res.json({ success: false, message: "Authentication failed. User and password don't match." });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-        /**
-         * Get a new token.
-         * Render a json object with an auth token.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return json
-         */
-        this.router.post("/token/renew/", sessions.auth, (req: express.Request, res: express.Response) => {
-            // Clean data
-            let data = req.decoded;
-            data.iat = undefined;
-            data.exp = undefined;
-            // create a new token
-            let token = jwt.sign(req.decoded, req.app.get("token"), {
-                expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-            });
-
-            res.json({
-                success: true,
-                message: "Enjoy your token!",
-                token: token
-            });
-        });
-
-        /**
-         * Get user list.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return array
-         */
-        this.router.get("/users/", (req: express.Request, res: express.Response) => {
-            this.usersTable.getAll().then((data) => {
-                res.json(data);
-            });
-        });
-
-
-        /**
-         * Update user password.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return array
-         */
-        this.router.get("/users/1/password/", (req: express.Request, res: express.Response) => {
-            this.usersTable.update({ password: bcrypt.hashSync("123queso", null, null) }, { id: 1 }).then((data) => {
-                res.json(data);
-            });
-        });
-        
-        /**
-         * Dummy.
-         * Render a json object with a true response.
-         *
-         * @param req {express.Request} The request object.
-         * @param res {express.Response} The response object.
-         * @return array
-         */
-        this.router.get("/fields/", sessions.auth, (req: express.Request, res: express.Response) => {
-            let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
-            let fields = this.usersTable.getFields();
-            let unsafeFields = unsafeUsersTable.getFields();
-            res.json({
-                publicFields: Array.from(fields),
-                allFields: Array.from(unsafeFields),
-                passwordFieldSettings: this.usersTable.password
-            });
-        });
+        this.router.get("/fields/", sessions.auth, this.getFieds);
     }
+
+    /**
+     * Get selected fields from all users.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private getAllUsers = (req: Request, res: Response): void => {
+        this.usersTable.delete({ id: 3 }).then((done) => {
+            this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
+                res.json(data);
+            });
+        });
+    };
+
+    /**
+     * Get auth token.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return json
+     */
+    private getToken = (req: Request, res: Response): void => {
+        let email: string = req.body.email;
+
+        if (!this.email_regex.test(email)) {
+            res.json({ success: false, message: "Invalid email address." });
+        } else {
+            // find the user
+            this.usersTable.get([], { email: email, active: 1 }).then((user) => {
+                if (typeof user === "undefined") {
+                    res.json({ success: false, message: "Authentication failed. User and password don't match." });
+                } else {
+                    bcrypt.compare(req.body.password, user.password, function (err: NodeJS.ErrnoException, match: boolean) {
+                        if (match) {
+                            // if user is found and password is right
+                            // create a token
+                            let token = jwt.sign(user, req.app.get("token"), {
+                                expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
+                            });
+
+                            // return the information including token as JSON
+                            res.json({
+                                success: true,
+                                message: "Enjoy your token!",
+                                token: token
+                            });
+                        } else {
+                            res.json({ success: false, message: "Authentication failed. User and password don't match." });
+                        }
+                    });
+                }
+            });
+        }
+    };
+
+    /**
+     * Get new auth token.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return json
+     */
+    private renewToken = (req: Request, res: Response): void => {
+        // Clean data
+        let data = req.decoded;
+        data.iat = undefined;
+        data.exp = undefined;
+        // create a new token
+        let token = jwt.sign(req.decoded, req.app.get("token"), {
+            expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
+        });
+
+        res.json({
+            success: true,
+            message: "Enjoy your token!",
+            token: token
+        });
+    };
+
+    /**
+     * Get user list.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private getList = (req: Request, res: Response): void => {
+        this.usersTable.getAll().then((data) => {
+            res.json(data);
+        });
+    };
+
+    /**
+     * Update user 1 password.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private updatePassword = (req: Request, res: Response): void => {
+        this.usersTable.update({ password: bcrypt.hashSync("123queso", null, null) }, { id: 1 }).then((data) => {
+            res.json(data);
+        });
+    };
+
+
+    /**
+     * Get DB table fields - test endpoint.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private getFieds = (req: Request, res: Response): void => {
+        let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
+        let fields = this.usersTable.getFields();
+        let unsafeFields = unsafeUsersTable.getFields();
+        res.json({
+            publicFields: Array.from(fields),
+            allFields: Array.from(unsafeFields),
+            passwordFieldSettings: this.usersTable.password
+        });
+    };
+
 }

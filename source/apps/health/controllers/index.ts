@@ -34,18 +34,20 @@ import { Request, Response } from "express";
  */
 export default class IndexController extends HTMLController {
 
-    /*** Configure endpoints */
+    /*** Define routes */
     protected routes(): void {
-
-        /**
-         * Page to check the health of the system.
-         *
-         * @param req {Request} The request object.
-         * @param res {Response} The response object.
-         */
-        this.router.get("/", (req: Request, res: Response) => {
-            this.render(res, "index.ejs");
-        });
-
+        this.router.get("/", this.index);
     }
+
+    /**
+     * Index view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private index = (req: Request, res: Response): void => {
+        this.render(res, "index.ejs");
+    };
+    
 }
