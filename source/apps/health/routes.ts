@@ -35,7 +35,7 @@ import IndexController from "./controllers/index";
 export class Urls extends Routes {
 
     /*** Configure routes */
-    protected routes(): void {
+    protected init(): void {
         this.router.use("/", this.load(IndexController));
     }
 

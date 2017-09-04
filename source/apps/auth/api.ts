@@ -35,7 +35,7 @@ import IndexEndpoint from "./endpoints/index";
 export class Urls extends Routes {
 
     /*** Configure endpoints */
-    protected routes(): void {
+    protected init(): void {
         this.router.use("/", this.load(IndexEndpoint));
     }
 

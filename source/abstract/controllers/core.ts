@@ -35,7 +35,7 @@ export default class Controller {
     /**
      * Express Router instance
      *
-     * @return express.Router
+     * @return Router
      */
     public router: Router = Router();
 
@@ -45,6 +45,15 @@ export default class Controller {
     constructor(jsloth: JSloth, config: any) {
         this.jsloth = jsloth;
         this.config = config;
+        this.init();
+    }
+
+    /*** Init Controller */
+    protected init(): void {
+    }
+
+    /*** Setup Controller */
+    public setup(): void {
         this.routes();
     }
 

@@ -41,7 +41,8 @@ export default class Routes extends Controller {
      * @return express.Router
      */
     protected load(controller: any): Router {
-        let instance = new controller(this.jsloth, this.config);
+        let instance: Controller = new controller(this.jsloth, this.config);
+        instance.setup();
         return instance.router;
     }
 
