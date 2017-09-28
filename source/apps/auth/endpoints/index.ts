@@ -46,10 +46,10 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private email_regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    constructor(jsloth: JSloth, config: any) {
-        super(jsloth, config);
+    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
+        super(jsloth, config, namespaces);
         this.usersTable = new users.Users(jsloth);
     }
 
@@ -91,7 +91,7 @@ export default class IndexEndPoint extends ApiController {
     private getToken = (req: Request, res: Response): void => {
         let email: string = req.body.email;
 
-        if (!this.email_regex.test(email)) {
+        if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
         } else {
             // find the user

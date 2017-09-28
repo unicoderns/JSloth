@@ -31,6 +31,7 @@ import { Router } from "express";
 export default class Controller {
     protected jsloth: JSloth;
     protected config: any;
+    protected namespaces: string[] = [];
 
     /**
      * Express Router instance
@@ -42,9 +43,10 @@ export default class Controller {
     /**
      * Load library, app configuration and install routes 
      */
-    constructor(jsloth: JSloth, config: any) {
+    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
         this.jsloth = jsloth;
         this.config = config;
+        this.namespaces = namespaces;
         this.init();
     }
 
@@ -59,11 +61,6 @@ export default class Controller {
 
     /*** Define routes */
     protected routes(): void {
-    }
-
-    /*** Dummy test  */
-    protected log(something: string, url: string): void {
-        console.log("KEY: " + something + " URL: " + url);
     }
 
 }

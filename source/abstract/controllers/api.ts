@@ -30,8 +30,8 @@ import Controller from "./core";
  */
 export default class ApiController extends Controller {
 
-    constructor(jsloth: JSloth, config: any) {
-        super(jsloth, config);
+    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
+        super(jsloth, config, namespaces);
     }
 
 }

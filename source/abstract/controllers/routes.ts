@@ -31,8 +31,8 @@ import { Router } from "express";
  */
 export default class Routes extends Controller {
 
-    constructor(jsloth: JSloth, config: any) {
-        super(jsloth, config);
+    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
+        super(jsloth, config, namespaces);
     }
 
     /**
@@ -40,8 +40,9 @@ export default class Routes extends Controller {
      * 
      * @return express.Router
      */
-    protected load(controller: any): Router {
-        let instance: Controller = new controller(this.jsloth, this.config);
+    protected include(controller: any, namespace: string = "index"): Router {
+        this.namespaces.push(namespace);
+        let instance: Controller = new controller(this.jsloth, this.config, this.namespaces);
         instance.setup();
         return instance.router;
     }

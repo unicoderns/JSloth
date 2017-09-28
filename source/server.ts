@@ -197,7 +197,7 @@ class Server {
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/routes.ts").then(() => {
             let appRoute = require("./apps/" + app.config.name + "/routes");
-            let route = new appRoute.Urls(this.jsloth, app.config);
+            let route = new appRoute.Urls(this.jsloth, app.config, [app.config.name]);
             this.express.use("" + (app.config.basepath || "/"), route.router);
 
             app.status.routes = true;
@@ -217,7 +217,7 @@ class Server {
         this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/api.ts").then(() => {
             try {
                 let appRoute = require("./apps/" + app.config.name + "/api");
-                let route = new appRoute.Urls(this.jsloth, app.config);
+                let route = new appRoute.Urls(this.jsloth, app.config, [app.config.name]);
                 this.express.use("/api" + (app.config.basepath || "/"), route.router);
 
                 app.status.api = true;
