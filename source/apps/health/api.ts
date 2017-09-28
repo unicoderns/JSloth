@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
+// JSloth Auth App                                                                      //
 //                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Routes from "../../abstract/controllers/routes";
-import IndexEndpoint from "./endpoints/index";
+import * as Versions from "./endpoints/versions";
 
 /**
  * Centralized Controller Endpoint Loader
@@ -36,7 +36,7 @@ export class Urls extends Routes {
 
     /*** Configure endpoints */
     protected init(): void {
-        this.router.use("/", this.include(IndexEndpoint));
+        this.router.use("/", this.include(Versions.Urls, "version"));
     }
 
 }

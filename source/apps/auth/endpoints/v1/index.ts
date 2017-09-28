@@ -24,16 +24,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="../types/express.d.ts"/>
+/// <reference path="../../types/express.d.ts"/>
 
 import * as jwt from "jsonwebtoken";
-import * as users from "../models/db/usersModel";
-import * as sessions from "../middlewares/sessions";
+import * as users from "../../models/db/usersModel";
+import * as sessions from "../../middlewares/sessions";
 
 import { Request, Response } from "express";
 
-import JSloth from "../../../lib/core";
-import ApiController from "../../../abstract/controllers/api";
+import JSloth from "../../../../lib/core";
+import ApiController from "../../../../abstract/controllers/api";
 
 let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work

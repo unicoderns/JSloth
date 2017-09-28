@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
+// JSloth Auth App                                                                      //
 //                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
@@ -24,36 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import ApiController from "../../../abstract/controllers/api";
-import { Request, Response } from "express";
-
-import * as JSloth from "../../../lib/core";
+import Routes from "../../../abstract/controllers/routes";
+import IndexEndpoint from "./v1/index";
 
 /**
- * Index Endpoint 
+ * Centralized Controller Endpoint Loader
  * 
- * @basepath /
  * @return express.Router
  */
-export default class IndexEndPoint extends ApiController {
+export class Urls extends Routes {
 
-    /*** Define routes */
-    protected routes(): void {
-        this.router.get("/", this.index);
+    /*** Configure endpoints */
+    protected init(): void {
+        this.router.use("/v1/", this.include(IndexEndpoint, "1"));
     }
-
-    /**
-     * Dummy endpoint.
-     * Render a json object with a true response.
-     *
-     * @param req { Request } The request object.
-     * @param res { Response } The response object.
-     * @return json
-     */
-    private index = (req: Request, res: Response): void => {
-        res.json({
-            response: true
-        });
-    };
 
 }

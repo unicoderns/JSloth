@@ -24,8 +24,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../abstract/controllers/routes";
-import * as Versions from "./endpoints/versions";
+import Routes from "../../../abstract/controllers/routes";
+import IndexEndpoint from "./v1/index";
 
 /**
  * Centralized Controller Endpoint Loader
@@ -36,7 +36,7 @@ export class Urls extends Routes {
 
     /*** Configure endpoints */
     protected init(): void {
-        this.router.use("/", this.include(Versions.Urls, "version"));
+        this.router.use("/v1/", this.include(IndexEndpoint, "1"));
     }
 
 }
