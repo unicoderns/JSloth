@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSloth from "../../lib/core";
-import { Router } from "express";
+import { Router, RequestHandler } from "express";
 
 /**
  * Controller Abstract
@@ -61,6 +61,15 @@ export default class Controller {
 
     /*** Define routes */
     protected routes(): void {
+    }
+
+    protected get(path: string | RegExp | (string | RegExp)[], namespace: string, ...handlers: RequestHandler[]): void {
+        this.namespaces.push(namespace);            
+        this.router.get(path, handlers);
+        console.log("GET url");
+        console.log(path);
+        console.log("namespaces:");
+        console.log(this.namespaces);
     }
 
 }

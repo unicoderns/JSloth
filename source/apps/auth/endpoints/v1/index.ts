@@ -55,15 +55,15 @@ export default class IndexEndPoint extends ApiController {
 
     /*** Define routes */
     protected routes(): void {
-        this.router.get("/", this.getAllUsers);
+        this.get("/", "allUsers", this.getAllUsers);
 
         this.router.post("/token/", this.getToken);
         this.router.post("/token/renew/", sessions.auth, this.renewToken);
 
-        this.router.get("/users/", this.getList);
-        this.router.get("/users/1/password/", this.updatePassword);
+        this.get("/users/", "userList", this.getList);
+        this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.router.get("/fields/", sessions.auth, this.getFieds);
+        this.get("/fields/", "fields", sessions.auth, this.getFieds);
     }
 
     /**
