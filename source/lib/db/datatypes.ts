@@ -118,6 +118,15 @@ export class Datatypes {
         return type;
     }
 
+    public TINYTEXT(settings: settings.General = <settings.General>{}): fields.Datatype {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.Datatype = {
+            type: "TINYTEXT",
+            size: settings.size
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
     public VARCHAR(settings: settings.General = <settings.General>{}): fields.Datatype {
         let commonType = this.fillDefault(settings);
         let customType: fields.Datatype = {
@@ -127,6 +136,14 @@ export class Datatypes {
         return this.mergeTypes(commonType, customType);
     }
 
+    public LONGTEXT(settings: settings.General = <settings.General>{}): fields.Datatype {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.CommonTypes = {
+            type: "LONGTEXT",
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+    
     /////////////////////////////////////////////////////////////////////
     // Binary
     /////////////////////////////////////////////////////////////////////
