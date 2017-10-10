@@ -127,7 +127,8 @@ class Server {
                 this.install_app(app);
             });
         }).catch(err => {
-            console.error("Configuration file not found");
+            console.error("Something went wrong");
+            console.error(err);
         });
     }
 
