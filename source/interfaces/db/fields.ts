@@ -46,7 +46,11 @@ export interface CommonTypes extends SystemTypes {
 }
 
 /*** Datatype interface. */
-export interface Datatype extends CommonTypes {
+export interface DataType extends CommonTypes {
+    size?: number;
+}
+
+export interface VarCharType extends CommonTypes {
     size: number;
 }
 
@@ -62,6 +66,6 @@ export interface DataTimestampType extends CommonTypes {
  * Foreign key to static enum model
  */
 
-export interface StaticKey extends Datatype {
+export interface StaticKey extends DataType {
     keys: any;
 }

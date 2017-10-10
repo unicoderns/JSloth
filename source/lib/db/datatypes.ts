@@ -68,11 +68,34 @@ export class Datatypes {
     // Numbers
     /////////////////////////////////////////////////////////////////////
 
-    public INT(settings: settings.General = {}): fields.Datatype {
+    public TINYINT(settings: settings.General = {}): fields.DataType {
         let commonType = this.fillDefault(settings);
-        let customType: fields.Datatype = {
-            type: "INT",
-            size: settings.size
+        let customType: fields.DataType = {
+            type: "TINYINT"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public SMALLINT(settings: settings.General = {}): fields.DataType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "SMALLINT"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public INT(settings: settings.General = {}): fields.DataType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "INT"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public FLOAT(settings: settings.General = {}): fields.DataType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "FLOAT"
         };
         return this.mergeTypes(commonType, customType);
     }
@@ -80,9 +103,9 @@ export class Datatypes {
     // ------------------------------------------------------------------
     // Special Numbers
     // ------------------------------------------------------------------
-    public ID(settings: settings.General = {}): fields.Datatype {
+    public ID(settings: settings.General = {}): fields.DataType {
         let commonType = this.fillDefault(settings);
-        let customType: fields.Datatype = {
+        let customType: fields.DataType = {
             type: "INT",
             size: settings.size || 0,
             primaryKey: true,
@@ -108,9 +131,9 @@ export class Datatypes {
     // Strings
     /////////////////////////////////////////////////////////////////////
 
-    public CHAR(settings: settings.General = <settings.General>{}): fields.Datatype {
+    public CHAR(settings: settings.General = <settings.General>{}): fields.DataType {
         let commonType = this.fillDefault(settings);
-        let customType: fields.Datatype = {
+        let customType: fields.DataType = {
             type: "CHAR",
             size: settings.size
         };
@@ -118,27 +141,35 @@ export class Datatypes {
         return type;
     }
 
-    public TINYTEXT(settings: settings.General = <settings.General>{}): fields.Datatype {
+    public VARCHAR(settings: settings.General = <settings.General>{}): fields.DataType {
         let commonType = this.fillDefault(settings);
-        let customType: fields.Datatype = {
-            type: "TINYTEXT",
-            size: settings.size
-        };
-        return this.mergeTypes(commonType, customType);
-    }
-
-    public VARCHAR(settings: settings.General = <settings.General>{}): fields.Datatype {
-        let commonType = this.fillDefault(settings);
-        let customType: fields.Datatype = {
+        let customType: fields.VarCharType = {
             type: "VARCHAR",
             size: settings.size
         };
         return this.mergeTypes(commonType, customType);
     }
 
-    public LONGTEXT(settings: settings.General = <settings.General>{}): fields.Datatype {
+    public TINYTEXT(settings: settings.General = <settings.General>{}): fields.DataType {
         let commonType = this.fillDefault(settings);
-        let customType: fields.CommonTypes = {
+        let customType: fields.DataType = {
+            type: "TINYTEXT",
+            size: settings.size
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public TEXT(settings: settings.General = <settings.General>{}): fields.DataType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "TEXT"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public LONGTEXT(settings: settings.General = <settings.General>{}): fields.DataType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
             type: "LONGTEXT",
         };
         return this.mergeTypes(commonType, customType);
@@ -158,8 +189,40 @@ export class Datatypes {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Dates
+    // Date/Time
     /////////////////////////////////////////////////////////////////////
+
+    public YEAR(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "YEAR"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public DATE(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "DATE"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public TIME(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "TIME"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public DATETIME(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "DATETIME"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
 
     public TIMESTAMP(settings: settings.Timestamp = <settings.Timestamp>{}): fields.DataTimestampType {
         let commonType = this.fillDefault(settings);
