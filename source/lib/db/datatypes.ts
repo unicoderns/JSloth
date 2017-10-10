@@ -137,8 +137,7 @@ export class Datatypes {
             type: "CHAR",
             size: settings.size
         };
-        let type = (<any>Object).assign({}, commonType, customType); // Merge
-        return type;
+        return this.mergeTypes(commonType, customType);
     }
 
     public VARCHAR(settings: settings.General = <settings.General>{}): fields.DataType {
