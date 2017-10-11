@@ -50,7 +50,7 @@ export interface Row {
 export class Users extends Model {
 
     @field()
-    public id: fields.Datatype = new datatypes.Datatypes().ID();
+    public id: fields.DataType = new datatypes.Datatypes().ID();
 
     @field()
     public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
@@ -59,44 +59,44 @@ export class Users extends Model {
     });
 
     @field()
-    public username: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+    public username: fields.DataType = new datatypes.Datatypes().VARCHAR({
         size: 45,
         unique: true
     });
 
     @field()
-    public email: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+    public email: fields.DataType = new datatypes.Datatypes().VARCHAR({
         notNull: true,
         size: 45,
         unique: true
     });
 
     @secret()
-    public password: fields.Datatype = new datatypes.Datatypes().CHAR({
+    public password: fields.DataType = new datatypes.Datatypes().CHAR({
         notNull: true,
         size: 60,
         protected: true
     });
 
     @field()
-    public salt: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+    public salt: fields.DataType = new datatypes.Datatypes().VARCHAR({
         notNull: true,
         size: 20,
         protected: true
     });
 
     @field()
-    public first_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+    public first_name: fields.DataType = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
 
     @field()
-    public last_name: fields.Datatype = new datatypes.Datatypes().VARCHAR({
+    public last_name: fields.DataType = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
 
     @field()
-    public timezone: fields.Datatype = new datatypes.Datatypes().STATICKEY(timezones);
+    public timezone: fields.DataType = new datatypes.Datatypes().STATICKEY(timezones);
 
     @field()
     public admin: fields.BoolType = new datatypes.Datatypes().BOOL();

@@ -28,19 +28,19 @@ import { getList } from "../models/decorators/db";
 
 import * as mysql from "mysql";
 import * as datatypes from "../../lib/db/datatypes";
-
+/*
 // Private settings object
 export interface Private {
     name: string;
     private: boolean;
 }
-
+*/
 /**
  * Model Abstract
  */
 export default class Model {
     private jsloth: JSloth;
-    protected name: string = ((<any>this).constructor.name).toLowerCase(); // Get the table name from the model name in lowercase.
+    protected tableName: string = ((<any>this).constructor.name).toLowerCase(); // Get the table name from the model name in lowercase.
     public unsafe: boolean = false;
     public fields: Map<string, string>;
 
@@ -65,7 +65,7 @@ export default class Model {
     public getFields(): Map<string, string> {
         let fields =  this.fields;
         if (typeof fields == "undefined") {
-            let tmp: Map<string, Map<string, string>> = getList(this.name);
+            let tmp: Map<string, Map<string, string>> = getList(this.tableName);
             fields = tmp.get("public");
             if (this.unsafe) {
                 var secret: Map<string, string> = tmp.get("secret");
@@ -233,7 +233,7 @@ export default class Model {
         if (limit) {
             extra = " LIMIT " + limit;
         }
-        let query = "SELECT " + fieldsSQL + " FROM `" + this.name + "`" + whereData.sql + extra + ";";
+        let query = "SELECT " + fieldsSQL + " FROM `" + this.tableName + "`" + whereData.sql + extra + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 
@@ -299,7 +299,7 @@ export default class Model {
             wildcards.push("?");
             values.push(data[key]);
         }
-        let query = "INSERT INTO `" + this.name + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
+        let query = "INSERT INTO `" + this.tableName + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
         return this.jsloth.db.query(query, values);
     }
 
@@ -319,7 +319,7 @@ export default class Model {
             values.push(data[key]);
         }
         let whereData = this.generateWhereData(where);
-        let query = "UPDATE `" + this.name + "` SET " + fields.join(", ") + whereData.sql + ";";
+        let query = "UPDATE `" + this.tableName + "` SET " + fields.join(", ") + whereData.sql + ";";
         unifiedValues = values.concat(whereData.values);
         return this.jsloth.db.query(query, unifiedValues);
     }
@@ -332,7 +332,7 @@ export default class Model {
      */
     public delete(where?: any): Promise<any> {
         let whereData = this.generateWhereData(where);
-        let query = "DELETE FROM `" + this.name + "`" + whereData.sql + ";";
+        let query = "DELETE FROM `" + this.tableName + "`" + whereData.sql + ";";
         return this.jsloth.db.query(query, whereData.values);
     }
 
