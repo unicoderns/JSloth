@@ -37,7 +37,7 @@ export default class IndexEndPoint extends ApiController {
 
     /*** Define routes */
     protected routes(): void {
-        this.router.get("/", this.index);
+        this.get("/", "index", this.index);
     }
 
     /**

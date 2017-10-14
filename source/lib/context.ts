@@ -22,47 +22,44 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../lib/core";
-import { Router } from "express";
+import JSFiles from "./files";
+import Config from "../interfaces/config";
+import { Promise } from "es6-promise";
 
 /**
- * Controller Abstract
- */
-export default class Controller {
-    protected jsloth: JSloth;
-    protected config: any;
-    protected namespaces: string[] = [];
-    protected url: string;
+* JSloth Context
+* System context storage.
+*/
+export default class JSContext {
+
+    /*** System Urls */
+    private urls: any = {};
+
+    /*** Configuration methods */
+    constructor(config: Config) {
+    }
 
     /**
-     * Express Router instance
+     * Set new url.
      *
-     * @return Router
+     * @param token url token
+     * @param url url path
+     * @return void
      */
-    public router: Router = Router();
+    public setUrl(token: string, url: string): void {
+        this.urls[token] = url;
+    }
 
     /**
-     * Load library, app configuration and install routes 
+     * Export full context.
+     *
+     * @return Object
      */
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        this.jsloth = jsloth;
-        this.config = config;
-        this.namespaces = namespaces;
-        this.url = url;
-        this.init();
+    public export(): any {
+        return {
+            urls: this.urls
+        }
     }
-
-    /*** Init Controller */
-    protected init(): void {
-    }
-
-    /*** Setup Controller */
-    public setup(): void {
-        this.routes();
-    }
-
-    /*** Define routes */
-    protected routes(): void {
-    }
+    
 
 }

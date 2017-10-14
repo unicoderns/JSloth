@@ -24,14 +24,92 @@
 
 import JSloth from "../../lib/core";
 import Controller from "./core";
+import { RequestHandler } from "express";
 
 /**
  * Routes Abstract
  */
 export default class ApiController extends Controller {
 
-    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
-        super(jsloth, config, namespaces);
+    /**
+     * Constructor
+     * 
+     * @param jsloth Library reference
+     * @param config Configuration object
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @return void
+     */
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
     }
 
+    /**
+     * Add url to context
+     * 
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @return void
+     */
+    private context(path: string | RegExp | (string | RegExp)[], namespace: string,): void {
+        var url: string | RegExp | (string | RegExp)[] = this.url + path;
+        var token: string = "";
+
+        url = url.replace(/\/\/+/g, '/'); // Remove double slashes
+        token = this.namespaces.join(":") + ":" + namespace;
+
+        this.jsloth.context.setUrl(token, url);
+    }
+
+    /**
+     * Get Route
+     * 
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @param handlers Express request handlers.
+     * @return void
+     */
+    protected get(path: string | RegExp | (string | RegExp)[], namespace: string, ...handlers: RequestHandler[]): void {
+        this.context(path, namespace);
+        this.router.get(path, handlers);
+    }
+
+    /**
+     * Post Route
+     * 
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @param handlers Express request handlers.
+     * @return void
+     */
+    protected post(path: string | RegExp | (string | RegExp)[], namespace: string, ...handlers: RequestHandler[]): void {
+        this.context(path, namespace);
+        this.router.post(path, handlers);
+    }
+    /**
+     * Put Route
+     * 
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @param handlers Express request handlers.
+     * @return void
+     */
+    protected put(path: string | RegExp | (string | RegExp)[], namespace: string, ...handlers: RequestHandler[]): void {
+        this.context(path, namespace);
+        this.router.put(path, handlers);
+    }
+    /**
+     * Delete Route
+     * 
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports.
+     * @param handlers Express request handlers.
+     * @return void
+     */
+    protected delete(path: string | RegExp | (string | RegExp)[], namespace: string, ...handlers: RequestHandler[]): void {
+        this.context(path, namespace);
+        this.router.delete(path, handlers);
+    }
+
+    
 }

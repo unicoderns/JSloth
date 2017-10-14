@@ -48,8 +48,8 @@ export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
-        super(jsloth, config, namespaces);
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
     }
 
@@ -57,13 +57,15 @@ export default class IndexEndPoint extends ApiController {
     protected routes(): void {
         this.get("/", "allUsers", this.getAllUsers);
 
-        this.router.post("/token/", this.getToken);
-        this.router.post("/token/renew/", sessions.auth, this.renewToken);
+        this.post("/token/", "getToken", this.getToken);
+        this.post("/token/renew/", "renewToken", sessions.auth, this.renewToken);
 
         this.get("/users/", "userList", this.getList);
         this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
         this.get("/fields/", "fields", sessions.auth, this.getFieds);
+
+        this.get("/context/", "context", this.getSysContext);
     }
 
     /**
@@ -189,6 +191,17 @@ export default class IndexEndPoint extends ApiController {
             allFields: Array.from(unsafeFields),
             passwordFieldSettings: this.usersTable.password
         });
+    };
+
+    /**
+     * Get system context.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private getSysContext = (req: Request, res: Response): void => {
+        res.json(this.jsloth.context.export());
     };
 
 }

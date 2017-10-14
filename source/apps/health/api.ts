@@ -36,7 +36,7 @@ export class Urls extends Routes {
 
     /*** Configure endpoints */
     protected init(): void {
-        this.router.use("/", this.include(Versions.Urls, "version"));
+        this.router.use("/", this.include(Versions.Urls, "/", "v"));
     }
 
 }

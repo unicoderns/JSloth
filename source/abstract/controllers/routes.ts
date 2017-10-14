@@ -31,18 +31,30 @@ import { Router } from "express";
  */
 export default class Routes extends Controller {
 
-    constructor(jsloth: JSloth, config: any, namespaces: string[]) {
-        super(jsloth, config, namespaces);
+    /**
+     * Constructor
+     * 
+     * @param jsloth Library reference
+     * @param config Configuration object
+     * @param url Concatenated url across the imports
+     * @param namespace Complete array of namespaces from imports
+     * @return void
+     */
+    constructor(jsloth: JSloth, config: any, url: string = "/", namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
     }
 
     /**
      * Load Routes 
      * 
+     * @param controller
+     * @param url Concatenated url across the imports
+     * @param namespace Current namespace name
      * @return express.Router
      */
-    protected include(controller: any, namespace: string = "index"): Router {
+    protected include(controller: any, url: string = "/", namespace: string = "index"): Router {
         this.namespaces.push(namespace);
-        let instance: Controller = new controller(this.jsloth, this.config, this.namespaces);
+        let instance: Controller = new controller(this.jsloth, this.config, this.url + url, this.namespaces);
         instance.setup();
         return instance.router;
     }

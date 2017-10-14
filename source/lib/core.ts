@@ -24,9 +24,10 @@
 
 import Config from "../interfaces/config";
 
-import JSDB from "./db";
-import JSPath from "./path";
+import JSContext from "./context";
 import JSFiles from "./files";
+import JSPath from "./path";
+import JSDB from "./db";
 
 /**
  * JSloth Loader
@@ -34,6 +35,8 @@ import JSFiles from "./files";
  */
 export default class JSloth {
     public config: Config;
+
+    public context: JSContext;
     public files: JSFiles;
     public path: JSPath;
     public db: JSDB;
@@ -41,6 +44,8 @@ export default class JSloth {
     /*** Configuration methods */
     constructor(config: Config) {
         this.config = config;
+        
+        this.context = new JSContext(config);
         this.files = new JSFiles(config);
         this.path = new JSPath(config);
         this.db = new JSDB(config);
