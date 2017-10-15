@@ -45,18 +45,20 @@ export default class Routes extends Controller {
     }
 
     /**
-     * Load Routes 
+     * Load and install routes 
      * 
      * @param controller
      * @param url Concatenated url across the imports
      * @param namespace Current namespace name
      * @return express.Router
      */
-    protected include(controller: any, url: string = "/", namespace: string = "index"): Router {
+    protected include(controller: any, url: string = "/", namespace: string = "index"): void {
+        // Load
         this.namespaces.push(namespace);
         let instance: Controller = new controller(this.jsloth, this.config, this.url + url, this.namespaces);
         instance.setup();
-        return instance.router;
+        // Install
+        this.router.use(url, instance.router);
     }
 
 }

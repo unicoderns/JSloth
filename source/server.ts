@@ -198,9 +198,10 @@ class Server {
         console.log("");
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/routes.ts").then(() => {
+            let url: string = "" + (app.config.basepath || "/");
             let appRoute = require("./apps/" + app.config.name + "/routes");
-            let route = new appRoute.Urls(this.jsloth, app.config, "" + (app.config.basepath || "/"), [app.config.name]);
-            this.express.use("" + (app.config.basepath || "/"), route.router);
+            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
+            this.express.use(url, route.router);
 
             app.status.routes = true;
             console.log("- " + app.config.name + " routes installed");
@@ -217,17 +218,14 @@ class Server {
 
         // Installing api routes
         this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/api.ts").then(() => {
-            try {
-                let appRoute = require("./apps/" + app.config.name + "/api");
-                let route = new appRoute.Urls(this.jsloth, app.config, "/api" + (app.config.basepath || "/"), [app.config.name]);
-                this.express.use("/api" + (app.config.basepath || "/"), route.router);
+            let url: string = "/api" + (app.config.basepath || "/");
+            let appRoute = require("./apps/" + app.config.name + "/api");
+            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
+            this.express.use(url, route.router);
 
-                app.status.api = true;
-                console.log("- " + app.config.name + " endpoints installed");
-                done();
-            } catch (err) {
-                console.error(err);
-            }
+            app.status.api = true;
+            console.log("- " + app.config.name + " endpoints installed");
+            done();
         }).catch(err => {
             if (err.code === "ENOENT") {
                 console.log("- " + app.config.name + " endpoints not found");
