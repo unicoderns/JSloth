@@ -12,11 +12,7 @@
             "fields": true
         }
     },
-    "installed_apps": [{
-        "name": "sample",
-        "basepath": "/",
-        "config": {}
-    }, {
+    "system_apps": [{
         "name": "auth",
         "basepath": "/auth/",
         "config": {
@@ -25,6 +21,11 @@
     }, {
         "name": "health",
         "basepath": "/health/",
+        "config": {}
+    }],
+    "custom_apps": [{
+        "name": "sample",
+        "basepath": "/",
         "config": {}
     }]
 }

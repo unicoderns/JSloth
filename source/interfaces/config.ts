@@ -29,7 +29,8 @@ import * as App from "./app";
 interface Config {
   dev: boolean;
   mysql: MySQL.Settings;
-  installed_apps: App.Config[];
+  system_apps: App.Config[];
+  custom_apps: App.Config[];
   token: string;
 }
 

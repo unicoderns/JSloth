@@ -112,9 +112,9 @@ class Server {
             // console.log(" * Installing default apps");
             // this.defaultApps();
 
-            // Installing Endpoints
-            console.log(" * Installing apps \n");
-            this.config.installed_apps.forEach((item) => {
+            // Installing Apps
+            console.log(" * Installing system apps \n");
+            this.config.system_apps.forEach((item) => {
                 let app: App.App = {
                     status: {
                         done: false,
@@ -126,6 +126,21 @@ class Server {
                 this.apps.push(app);
                 this.install_app(app);
             });
+
+            console.log(" * Installing custom apps \n");
+            this.config.custom_apps.forEach((item) => {
+                let app: App.App = {
+                    status: {
+                        done: false,
+                        routes: false,
+                        api: false
+                    },
+                    config: item
+                };
+                this.apps.push(app);
+                this.install_app(app);
+            });
+            
         }).catch(err => {
             console.error("Something went wrong");
             console.error(err);
