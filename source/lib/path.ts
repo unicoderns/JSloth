@@ -54,7 +54,7 @@ export default class JSPath {
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
-                this.files.exists(__dirname + "/../../views/" + customPath).then((exist) => {
+                this.files.exists(__dirname + "/../views/" + customPath).then((exist) => {
                     resolve(customPath);
                 }).catch((err: NodeJS.ErrnoException) => {
                     resolve(path);
