@@ -123,8 +123,9 @@ class Server {
                     },
                     config: item
                 };
+                app.config.folder = "system";
                 this.apps.push(app);
-                this.install_app(app);
+                this.install_app(app, "system");
             });
 
             console.log(" * Installing custom apps \n");
@@ -137,8 +138,9 @@ class Server {
                     },
                     config: item
                 };
+                app.config.folder = "apps";
                 this.apps.push(app);
-                this.install_app(app);
+                this.install_app(app, "custom");
             });
             
         }).catch(err => {
@@ -190,7 +192,8 @@ class Server {
     }
 
     /*** Install app */
-    private install_app(app: App.App): void {
+    private install_app(app: App.App, type: string): void {
+        let folder: string = "system";
         // Compiling styles
         let done = () => {
             if ((app.status.routes) && (app.status.api)) {
@@ -202,6 +205,10 @@ class Server {
             }
         };
 
+        if (type == "custom") {
+            folder = "apps"
+        }
+
         console.log("------------------------------------------------------");
         console.log("");
         console.log(app.config.name + " app...");
@@ -209,12 +216,12 @@ class Server {
         console.log("------------------------------------------------------");
         console.log("");
         console.log("Generating styles");
-        this.compileSCSS(__dirname + "/apps/" + app.config.name, "./dist/" + app.config.name);
+        this.compileSCSS(__dirname + "/" + folder + "/" + app.config.name, "./dist/" + app.config.name);
         console.log("");
         // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/routes.ts").then(() => {
+        this.jsloth.files.exists(__dirname + "/" + folder + "/" + app.config.name + "/routes.ts").then(() => {
             let url: string = "" + (app.config.basepath || "/");
-            let appRoute = require("./apps/" + app.config.name + "/routes");
+            let appRoute = require("./" + folder + "/" + app.config.name + "/routes");
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
             this.express.use(url, route.router);
 
@@ -232,9 +239,9 @@ class Server {
         });
 
         // Installing api routes
-        this.jsloth.files.exists(__dirname + "/apps/" + app.config.name + "/api.ts").then(() => {
+        this.jsloth.files.exists(__dirname + "/" + folder + "/" + app.config.name + "/api.ts").then(() => {
             let url: string = "/api" + (app.config.basepath || "/");
-            let appRoute = require("./apps/" + app.config.name + "/api");
+            let appRoute = require("./" + folder + "/" + app.config.name + "/api");
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
             this.express.use(url, route.router);
 

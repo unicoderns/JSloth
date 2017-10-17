@@ -44,7 +44,7 @@ export default class HtmlController extends Controller {
      * @param file string
      */
     protected render(res: Response, file: string, params?: any): void {
-        this.jsloth.path.get(this.config.name, file).then((path) => {
+        this.jsloth.path.get(this.config.folder, this.config.name, file).then((path) => {
             res.render(path, params);
         });
     }

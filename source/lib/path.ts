@@ -46,18 +46,18 @@ export default class JSPath {
      * @param file string Filename
      * @return void
      */
-    public get(app: string, file: string): Promise<string> {
-        let path: string = "../source/apps/" + app + "/views/" + file;
-        let customPath: string = "./" + app + "/" + file;
+    public get(folder: string, app: string, file: string): Promise<string> {
+        let path: string = app + "/views/" + file;
+        let customPath: string = app + "/" + file;
 
         // Create promise
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
                 this.files.exists(__dirname + "/../views/" + customPath).then((exist) => {
-                    resolve(customPath);
+                    resolve("../source/views/" + customPath);
                 }).catch((err: NodeJS.ErrnoException) => {
-                    resolve(path);
+                    resolve("../source/" + folder + "/" + path);
                     throw err;
                 });
             });

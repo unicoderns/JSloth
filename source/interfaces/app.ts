@@ -32,6 +32,7 @@ export interface App {
 export interface Config {
   name: String;
   basepath?: String;
+  folder?: string;
 }
 
 /*** App configuration interface. */
