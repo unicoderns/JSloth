@@ -31,7 +31,8 @@ function tests() {
 
         // Async test
         it("view.testfile exists in /sample/views", done => {
-            path.get(appName, "view.testfile").then((filepath) => {
+            path.get("apps", appName, "view.testfile").then((filepath) => {
+                console.log(filepath);
                 expect(filepath).to.contain('/source/apps/sample/views/view.testfile');
                 done();
             });
@@ -39,8 +40,8 @@ function tests() {
 
         // Async test
         it("view2.testfile exists in /views/sample/", done => {
-            path.get(appName, "view2.testfile").then((filepath) => {
-                expect(filepath).to.contain('/views/sample/view2.testfile');
+            path.get("apps", appName, "view2.testfile").then((filepath) => {
+                expect(filepath).to.contain('/source/views/sample/view2.testfile');
                 done();
             });
         });
