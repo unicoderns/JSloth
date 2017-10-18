@@ -92,14 +92,6 @@ export class Datatypes {
         return this.mergeTypes(commonType, customType);
     }
 
-    public FLOAT(settings: settings.General = {}): fields.DataType {
-        let commonType = this.fillDefault(settings);
-        let customType: fields.DataType = {
-            type: "FLOAT"
-        };
-        return this.mergeTypes(commonType, customType);
-    }
-
     // ------------------------------------------------------------------
     // Special Numbers
     // ------------------------------------------------------------------
@@ -123,6 +115,33 @@ export class Datatypes {
             type: "INT",
             size: settings.size || 0,
             keys: keys
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    // ------------------------------------------------------------------
+    // Float Numbers
+    // ------------------------------------------------------------------
+    public FLOAT(settings: settings.General = {}): fields.FloatType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "FLOAT"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public DOUBLE(settings: settings.General = {}): fields.FloatType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "DOUBLE"
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    public DECIMAL(settings: settings.General = {}): fields.FloatType {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.DataType = {
+            type: "DECIMAL"
         };
         return this.mergeTypes(commonType, customType);
     }

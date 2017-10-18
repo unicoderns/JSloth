@@ -54,6 +54,11 @@ export interface VarCharType extends CommonTypes {
     size: number;
 }
 
+export interface FloatType extends CommonTypes {
+    size?: number;
+    precision?: number;
+}
+
 export interface BoolType extends CommonTypes {
     default: defaults.Binary;
 }
