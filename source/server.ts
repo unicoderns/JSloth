@@ -172,6 +172,26 @@ class Server {
         }
     }
 
+    /*** Copy folders */
+    private copy(from: string, to: string): void {
+        try {
+            this.exec("rm -r " + to, { stdio: [0, 1, 2] });
+        } catch (e) {
+
+        }
+        try {
+            this.exec("mkdir " + to, { stdio: [0, 1, 2] }); // Unix only
+        } catch (e) {
+
+        }
+        try {
+            this.exec("cp -r " + from + "* " + to, { stdio: [0, 1, 2] });
+            console.log("\n");
+        } catch (e) {
+
+        }
+    }
+
     /*** Run the server */
     private start(): void {
         let testCount = 0; // Number of checked apps so far
@@ -217,6 +237,15 @@ class Server {
         console.log("");
         console.log("Generating styles");
         this.compileSCSS(__dirname + "/" + folder + "/" + app.config.name, "./dist/" + app.config.name);
+        console.log("");
+        console.log("Publishing images");
+        this.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/imgs/", "./dist/" + app.config.name + "/public/imgs/");
+        console.log("");
+        console.log("Publishing docs");
+        this.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/docs/", "./dist/" + app.config.name + "/public/docs/");
+        console.log("");
+        console.log("Publishing others");
+        this.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/others/", "./dist/" + app.config.name + "/public/others/");
         console.log("");
         // Installing regular routes
         this.jsloth.files.exists(__dirname + "/" + folder + "/" + app.config.name + "/routes.ts").then(() => {
