@@ -22,29 +22,39 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Core from "./abstract/server/core";
+class Log {
 
-/**
- * Creates and configure an ExpressJS web server.
- *
- * @return express.Application
- */
-class Server extends Core {
-    /**
-     * Load configuration settings
-     * Set up JSloth Global Library
-     * Install endpoints
-     * Configure and run the Express App instance. 
-     */
-    constructor() {
-        super()
+    public hello = (): void => {
+        console.log("******************************************************");
+        console.log("*                                                    *");
+        console.log("*      ██╗███████╗██╗      ██████╗ ████████╗██╗  ██╗ *");
+        console.log("*      ██║██╔════╝██║     ██╔═══██╗╚══██╔══╝██║  ██║ *");
+        console.log("*      ██║███████╗██║     ██║   ██║   ██║   ███████║ *");
+        console.log("* ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║ *");
+        console.log("* ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║ *");
+        console.log("*  ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ *");
+        console.log("*                                    by Chriss Mejía *");
+        console.log("*                                                    *");
+        console.log("******************************************************");
+        console.log("*                                                    *");
+        console.log("*                      Welcome                       *");
+        console.log("*                                                    *");
+        console.log("******************************************************");
+        console.log("");
     }
 
-    /*** Configure Express middlewares */
-    protected middleware(): void {
-        super.middleware();
-    }
+    public title = (text: string, notFound?: string, number?: number): void => {
+        let log: string = " ✔ ";
 
+        if (number) {
+            log = log + text + " (" + number + ")";
+        } else if (number === 0) {
+            log = log + notFound;
+        } else {
+            log = log + text;
+        }
+        console.log(log);
+    }
 }
 
-export default new Server().express;
+export default new Log();

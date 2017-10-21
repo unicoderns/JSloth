@@ -22,29 +22,41 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Core from "./abstract/server/core";
+class Batch {
 
-/**
- * Creates and configure an ExpressJS web server.
- *
- * @return express.Application
- */
-class Server extends Core {
-    /**
-     * Load configuration settings
-     * Set up JSloth Global Library
-     * Install endpoints
-     * Configure and run the Express App instance. 
-     */
-    constructor() {
-        super()
+    /*** Batch process */
+    private exec = require("child_process").execSync;
+
+    /*** Compile SCSS sources */
+    public compileSCSS = (from: string, to: string): void => {
+        try {
+            // this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+            console.log("\n");
+        } catch (err) {
+        }
     }
 
-    /*** Configure Express middlewares */
-    protected middleware(): void {
-        super.middleware();
+    /*** Copy folders */
+    public copy = (from: string, to: string): void => {
+        try {
+            this.exec("rm -r " + to, { stdio: [0, 1, 2] });
+        } catch (e) {
+
+        }
+        try {
+            this.exec("mkdir " + to, { stdio: [0, 1, 2] }); // Unix only
+        } catch (e) {
+
+        }
+        try {
+            this.exec("cp -r " + from + "* " + to, { stdio: [0, 1, 2] });
+            console.log("\n");
+        } catch (e) {
+
+        }
     }
 
 }
 
-export default new Server().express;
+export default new Batch();
