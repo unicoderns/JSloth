@@ -22,16 +22,22 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Batch commands.
+ */
 class Batch {
 
     /*** Batch process */
     private exec = require("child_process").execSync;
 
+    private toPrefix : string = __dirname + "/../../../dist/";
+    private fromPrefix : string = __dirname + "/../../";
+    
     /*** Compile SCSS sources */
     public compileSCSS = (from: string, to: string): void => {
         try {
             // this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
-            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from, { stdio: [0, 1, 2] });
             console.log("\n");
         } catch (err) {
         }
@@ -40,17 +46,17 @@ class Batch {
     /*** Copy folders */
     public copy = (from: string, to: string): void => {
         try {
-            this.exec("rm -r " + to, { stdio: [0, 1, 2] });
+            this.exec("rm -r " + this.toPrefix + to, { stdio: [0, 1, 2] });
         } catch (e) {
 
         }
         try {
-            this.exec("mkdir " + to, { stdio: [0, 1, 2] }); // Unix only
+            this.exec("mkdir " + this.toPrefix + to, { stdio: [0, 1, 2] }); // Unix only
         } catch (e) {
 
         }
         try {
-            this.exec("cp -r " + from + "* " + to, { stdio: [0, 1, 2] });
+            this.exec("cp -r " + this.fromPrefix + from + "* " + this.toPrefix + to, { stdio: [0, 1, 2] });
             console.log("\n");
         } catch (e) {
 

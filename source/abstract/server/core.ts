@@ -27,6 +27,7 @@ import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
 
+import Apps from "./apps";
 import Batch from "./batch";
 import Config from "../../interfaces/config";
 import JSFiles from "../../lib/files";
@@ -85,15 +86,16 @@ export default class Core {
             this.install();
         }).catch(err => {
             if (err.code === "ENOENT") {
-                console.error("Configuration file not found");
+                Log.error("Configuration file not found");
             } else {
-                console.error("Something went wrong");
+                Log.error("Something went wrong");
             }
-            console.error(err);
+            Log.error(err);
         });
     }
 
     protected install(): void {
+        let appsModule: Apps;
         // Loading JSloth Global Library
         Log.title("Loading core library");
         this.jsloth = new JSloth(this.config);
@@ -103,40 +105,10 @@ export default class Core {
         Log.title("Installing middlewares");
         this.middleware();
 
-        // Installing Middlewares
-        // console.log(" * Installing default apps");
-        // this.defaultApps();
-
-        // Installing Apps
-        Log.title("Installing system apps", "No system apps found", this.config.system_apps.length);
-        this.config.system_apps.forEach((item) => {
-            let app: app.App = {
-                status: {
-                    done: false,
-                    routes: false,
-                    api: false
-                },
-                config: item
-            };
-            app.config.folder = "system";
-            this.apps.push(app);
-            this.install_app(app, "system");
-        });
-
-        Log.title("Installing custom apps");
-        Log.title("Installing custom apps", "No custom apps found", this.config.custom_apps.length);
-        this.config.custom_apps.forEach((item) => {
-            let app: app.App = {
-                status: {
-                    done: false,
-                    routes: false,
-                    api: false
-                },
-                config: item
-            };
-            app.config.folder = "apps";
-            this.apps.push(app);
-            this.install_app(app, "custom");
+        appsModule = new Apps(this.config, this.jsloth, this.express);
+        appsModule.install((apps: app.App[]) => {
+            this.apps = apps;
+            this.start();
         });
     }
 
@@ -165,11 +137,11 @@ export default class Core {
                     this.express.listen(this.port);
                     console.log("The magic happens on port " + this.port);
                 } catch (e) {
-                    console.error(e);
+                    Log.error(e);
                 }
             }
         };
-        
+
         this.apps.forEach((app) => {
             if (!app.status.done) {
                 done = false;
@@ -180,83 +152,6 @@ export default class Core {
             }
         });
 
-    }
-
-    /*** Install app */
-    protected install_app(app: app.App, type: string): void {
-        let folder: string = "system";
-        // Compiling styles
-        let done = () => {
-            if ((app.status.routes) && (app.status.api)) {
-                console.log("");
-                console.log("___");
-                console.log("\n");
-                app.status.done = true;
-                this.start();
-            }
-        };
-
-        if (type == "custom") {
-            folder = "apps"
-        }
-
-        console.log("------------------------------------------------------");
-        console.log("");
-        console.log(app.config.name + " app...");
-        console.log("");
-        console.log("------------------------------------------------------");
-        console.log("");
-        console.log("Generating styles");
-        Batch.compileSCSS(__dirname + "/../../" + folder + "/" + app.config.name, __dirname + "/../../../dist/" + app.config.name);
-        console.log("");
-        console.log("Publishing images");
-        Batch.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/imgs/", "./dist/" + app.config.name + "/public/imgs/");
-        console.log("");
-        console.log("Publishing docs");
-        Batch.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/docs/", "./dist/" + app.config.name + "/public/docs/");
-        console.log("");
-        console.log("Publishing others");
-        Batch.copy(__dirname + "/" + folder + "/" + app.config.name + "/public/others/", "./dist/" + app.config.name + "/public/others/");
-        console.log("");
-        // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/" + folder + "/" + app.config.name + "/routes.ts").then(() => {
-            let url: string = "" + (app.config.basepath || "/");
-            let appRoute = require("./" + folder + "/" + app.config.name + "/routes");
-            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
-            this.express.use(url, route.router);
-
-            app.status.routes = true;
-            console.log("- " + app.config.name + " routes installed");
-            done();
-        }).catch(err => {
-            if (err.code === "ENOENT") {
-                console.log("- " + app.config.name + " routes not found");
-            } else {
-                console.error(err);
-            }
-            app.status.routes = true;
-            done();
-        });
-
-        // Installing api routes
-        this.jsloth.files.exists(__dirname + "/" + folder + "/" + app.config.name + "/api.ts").then(() => {
-            let url: string = "/api" + (app.config.basepath || "/");
-            let appRoute = require("./" + folder + "/" + app.config.name + "/api");
-            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
-            this.express.use(url, route.router);
-
-            app.status.api = true;
-            console.log("- " + app.config.name + " endpoints installed");
-            done();
-        }).catch(err => {
-            if (err.code === "ENOENT") {
-                console.log("- " + app.config.name + " endpoints not found");
-            } else {
-                console.error(err);
-            }
-            app.status.api = true;
-            done();
-        });
     }
 
 }

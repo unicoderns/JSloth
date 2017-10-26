@@ -30,14 +30,14 @@ export interface App {
 
 /*** App configuration interface. */
 export interface Config {
-  name: String;
-  basepath?: String;
+  name: string;
+  basepath?: string;
   folder?: string;
 }
 
 /*** App configuration interface. */
 export interface Status {
-  done: Boolean;
-  routes: Boolean;
-  api: Boolean;
+  done: boolean;
+  routes: boolean;
+  api: boolean;
 }

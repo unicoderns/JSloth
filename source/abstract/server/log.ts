@@ -22,6 +22,9 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Log in the terminal.
+ */
 class Log {
 
     public hello = (): void => {
@@ -41,6 +44,10 @@ class Log {
         console.log("*                                                    *");
         console.log("******************************************************");
         console.log("");
+    }
+
+    public error = (text: string): void => {
+        console.error(text);
     }
 
     public title = (text: string, notFound?: string, number?: number): void => {
