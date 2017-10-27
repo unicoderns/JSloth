@@ -65,8 +65,7 @@ export default class Core {
     /**
      * Load configuration settings
      * Set up JSloth Global Library
-     * Install endpoints
-     * Configure and run the Express App instance. 
+     * Load installation
      */
     constructor() {
         // Loading JSloth Files directly to load the config file.
@@ -78,7 +77,7 @@ export default class Core {
         Log.hello();
 
         // Loading Configuration
-        Log.title("Loading configuration");
+        Log.module("Loading configuration");
         jslothFiles.exists(__dirname + this.configPath).then(() => {
             this.config = require(__dirname + this.configPath);
             this.express.set("token", this.config.token); // secret token
@@ -94,17 +93,23 @@ export default class Core {
         });
     }
 
+    /**
+     * Install endpoints
+     * Configure and run the Express App instance. 
+     * Load middlewares
+     */
     protected install(): void {
         let appsModule: Apps;
         // Loading JSloth Global Library
-        Log.title("Loading core library");
+        Log.module("Loading core library");
         this.jsloth = new JSloth(this.config);
         this.express.set("jsloth", this.jsloth);
 
         // Installing Middlewares
-        Log.title("Installing middlewares");
+        Log.module("Installing middlewares");
         this.middleware();
 
+        // Installing Apps
         appsModule = new Apps(this.config, this.jsloth, this.express);
         appsModule.install((apps: app.App[]) => {
             this.apps = apps;

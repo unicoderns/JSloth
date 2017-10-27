@@ -22,45 +22,64 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as app from "../../interfaces/app";
+import * as clc from "cli-color";
+
 /**
  * Batch commands.
  */
 class Batch {
 
     /*** Batch process */
-    private exec = require("child_process").execSync;
+    private exec = require("child_process").exec;
 
-    private toPrefix : string = __dirname + "/../../../dist/";
-    private fromPrefix : string = __dirname + "/../../";
-    
+    private toPrefix: string = __dirname + "/../../../dist/";
+    private fromPrefix: string = __dirname + "/../../";
+
+    /*** Compile SCSS sources */
+    /*    public compileSCSS = (from: string, to: string): void => {
+            try {
+                // this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
+                this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from, { stdio: [0, 1, 2] });
+                console.log("\n");
+            } catch (err) {
+            }
+        }
+    */
     /*** Compile SCSS sources */
     public compileSCSS = (from: string, to: string): void => {
         try {
-            // this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from, { stdio: [0, 1, 2] });
-            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from, { stdio: [0, 1, 2] });
-            console.log("\n");
-        } catch (err) {
-        }
+            // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from
+            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from, function (error: any, stdout: any, stderr: any) {
+                try {
+                    let parse = JSON.parse(stderr);
+                    if (error !== null) {
+                        console.log(clc.red(error));
+                    }
+                } catch (err) { }
+            });
+        } catch (err) { }
     }
 
     /*** Copy folders */
     public copy = (from: string, to: string): void => {
         try {
-            this.exec("rm -r " + this.toPrefix + to, { stdio: [0, 1, 2] });
-        } catch (e) {
+            this.exec("rm -r " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
+                if ((error !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
+                    console.log(clc.red(error));
+                }
+            });
 
-        }
-        try {
-            this.exec("mkdir " + this.toPrefix + to, { stdio: [0, 1, 2] }); // Unix only
-        } catch (e) {
+            this.exec("mkdir -p " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
+                console.log(clc.red(error));
+            }); // Unix only
 
-        }
-        try {
-            this.exec("cp -r " + this.fromPrefix + from + "* " + this.toPrefix + to, { stdio: [0, 1, 2] });
-            console.log("\n");
-        } catch (e) {
-
-        }
+            this.exec("cp -r " + this.fromPrefix + from + "* " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
+                if ((error !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
+                    console.log(clc.red(error));
+                }
+            });
+        } catch (err) { }
     }
 
 }

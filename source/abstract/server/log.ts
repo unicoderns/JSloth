@@ -50,7 +50,7 @@ class Log {
         console.error(text);
     }
 
-    public title = (text: string, notFound?: string, number?: number): void => {
+    public module = (text: string, notFound?: string, number?: number): void => {
         let log: string = " ✔ ";
 
         if (number) {
@@ -62,6 +62,16 @@ class Log {
         }
         console.log(log);
     }
+
+    public app = (text: string): void => {
+        console.log("------------------------------------------------------");
+        console.log("");
+        console.log(text  + " app...");
+        console.log("");
+        console.log("------------------------------------------------------");
+        console.log("");
+    }
+    
 }
 
 export default new Log();
