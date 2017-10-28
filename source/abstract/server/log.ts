@@ -22,6 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as clc from "cli-color";
+
 /**
  * Log in the terminal.
  */
@@ -50,13 +52,13 @@ class Log {
         console.error(text);
     }
 
-    public module = (text: string, notFound?: string, number?: number): void => {
+    public module = (text: string, fail?: string, number?: number): void => {
         let log: string = " ✔ ";
 
         if (number) {
             log = log + text + " (" + number + ")";
         } else if (number === 0) {
-            log = log + notFound;
+            log = log + fail;
         } else {
             log = log + text;
         }
@@ -66,12 +68,23 @@ class Log {
     public app = (text: string): void => {
         console.log("------------------------------------------------------");
         console.log("");
-        console.log(text  + " app...");
+        console.log(text + " app...");
         console.log("");
         console.log("------------------------------------------------------");
         console.log("");
     }
-    
+
+    public appModule = (text: string, fail: string, success: boolean): void => {
+        let log: string = "";
+
+        if (success) {
+            log = " ✔ " + text;
+            console.log(clc.green(log));
+        } else {
+            log = " ✘ " + fail;
+            console.error(clc.white(log));
+        }
+    }
 }
 
 export default new Log();

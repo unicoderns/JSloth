@@ -24,9 +24,10 @@
 
 /*** App interface. */
 export interface App {
-  status: FullStatus;
-  installed: Status;
   config: Config;
+  done: boolean;
+  complete: Status;
+  success: Status;
 }
 
 /*** App configuration interface. */
@@ -38,11 +39,8 @@ export interface Config {
 
 /*** App status interface. */
 export interface Status {
-  routes: boolean;
   api: boolean;
-}
-
-/*** App status with done flag interface. */
-export interface FullStatus extends Status {
-  done: boolean;
+  public: boolean;
+  routes: boolean;
+  scss: boolean;
 }

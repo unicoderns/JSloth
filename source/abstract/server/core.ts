@@ -148,7 +148,7 @@ export default class Core {
         };
 
         this.apps.forEach((app) => {
-            if (!app.status.done) {
+            if (!app.done) {
                 done = false;
             }
             appCount++;

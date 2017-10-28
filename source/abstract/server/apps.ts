@@ -23,7 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as app from "../../interfaces/app";
-import * as express from "express";
+
+import { Application, NextFunction } from "express";
 
 import Batch from "./batch";
 import Config from "../../interfaces/config";
@@ -42,7 +43,7 @@ export default class Apps {
     private config: Config;
 
     /*** Express instance */
-    private express: express.Application;
+    private express: Application;
 
     /*** JSloth library */
     private jsloth: JSloth;
@@ -50,127 +51,116 @@ export default class Apps {
     /**
      * Load configuration settings
      */
-    constructor(config: Config, jsloth: JSloth, express: express.Application) {
+    constructor(config: Config, jsloth: JSloth, express: Application) {
         this.config = config;
         this.jsloth = jsloth;
         this.express = express;
     }
 
-    // Installing Apps
-    public install(next: express.NextFunction): void {
+    /*** Trigger app installation */
+    public install(next: NextFunction): void {
         Log.module("Installing system apps", "No system apps found", this.config.system_apps.length);
-        this.config.system_apps.forEach((item) => {
-            let app: app.App = {
-                status: {
-                    done: false,
-                    routes: false,
-                    api: false
-                },
-                installed: {
-                    routes: false,
-                    api: false
-                },
-                config: item
-            };
-            app.config.folder = "system";
-            this.apps.push(app);
-            this.install_app(app, "system", next);
-        });
+        this.installApps(this.config.system_apps, "system", next);
 
         Log.module("Installing custom apps", "No custom apps found", this.config.custom_apps.length);
-        this.config.custom_apps.forEach((item) => {
-            let app: app.App = {
-                status: {
-                    done: false,
-                    routes: false,
-                    api: false
-                },
-                installed: {
-                    routes: false,
-                    api: false
-                },
-                config: item
-            };
-            app.config.folder = "apps";
+        this.installApps(this.config.custom_apps, "apps", next);
+    }
+
+    /*** Return a empty app object */
+    private emptyApp(): app.App {
+        let app: app.App = {
+            config: null,
+            done: false,
+            complete: {
+                api: false,
+                routes: false,
+                public: false,
+                scss: false
+            },
+            success: {
+                api: false,
+                routes: false,
+                public: false,
+                scss: false
+            }
+        };
+
+        return app;
+    }
+
+    /*** Install apps */
+    private installApps(apps: app.Config[], type: string, next: NextFunction): void {
+        apps.forEach((item) => {
+            let app = this.emptyApp();
+            app.config = item;
+            app.config.folder = type;
             this.apps.push(app);
-            this.install_app(app, "custom", next);
+            this.installApp(app, type, next);
         });
     }
 
     /*** Install app */
-    private install_app(app: app.App, type: string, next: express.NextFunction): void {
-        let folder: string = "system";
-        // Compiling styles
-        if (type == "custom") {
-            folder = "apps"
-        }
+    private installApp(app: app.App, type: string, next: NextFunction): void {
+        let compileSCSS = () => {
+            Batch.compileSCSS(type + "/" + app.config.name, app.config.name, (success: boolean) => {
+                app.complete.scss = true;
+                app.success.scss = success;
+                this.installed(app, next);
+            });
+        };
+
+        Batch.copyPublic(type + "/" + app.config.name + "/public/", app.config.name, (success: boolean) => {
+            app.complete.public = true;
+            app.success.public = success;
+            compileSCSS(); // Wait the structure to compile
+        });
 
         // Installing regular routes
-        this.jsloth.files.exists(__dirname + "/../../" + folder + "/" + app.config.name + "/routes.ts").then(() => {
-            let url: string = "" + (app.config.basepath || "/");
-            let appRoute = require("../../" + folder + "/" + app.config.name + "/routes");
-            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
-            this.express.use(url, route.router);
-
-            app.status.routes = true;
-            app.installed.routes = true;
-            this.installed(app, folder, next);
-        }).catch(err => {
-            if (err.code !== "ENOENT") {
-                console.error(err);
-            }
-            app.status.routes = true;
-            app.installed.routes = false;
-            this.installed(app, folder, next);
-        });
-
+        this.loadRoutes(app, type, "routes", "", next);
         // Installing api routes
-        this.jsloth.files.exists(__dirname + "/../../" + folder + "/" + app.config.name + "/api.ts").then(() => {
-            let url: string = "/api" + (app.config.basepath || "/");
-            let appRoute = require("../../" + folder + "/" + app.config.name + "/api");
+        this.loadRoutes(app, type, "api", "/api", next);
+    }
+
+    /*** Load routes */
+    private loadRoutes(app: app.App, appType: string, routeType: string, basepath: string, next: NextFunction): void {
+        this.jsloth.files.exists(__dirname + "/../../" + appType + "/" + app.config.name + "/" + routeType + ".ts").then(() => {
+            let url: string = basepath + (app.config.basepath || "/");
+            let appRoute = require("../../" + appType + "/" + app.config.name + "/" + routeType);
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
             this.express.use(url, route.router);
 
-            app.status.api = true;
-            app.installed.api = true;
-            this.installed(app, folder, next);
+            if (routeType == "routes") {
+                app.complete.routes = true;
+                app.success.routes = true;
+            } else {
+                app.complete.api = true;
+                app.success.api = true;
+            }
+            this.installed(app, next);
         }).catch(err => {
             if (err.code !== "ENOENT") {
-                console.error(err);
+                Log.error(err);
             }
-            app.status.api = true;
-            app.installed.api = false;
-            this.installed(app, folder, next);
+            if (routeType == "routes") {
+                app.complete.routes = true;
+                app.success.routes = false;
+            } else {
+                app.complete.api = true;
+                app.success.api = false;
+            }
+            this.installed(app, next);
         });
     }
+
     /*** Check if everything is ok, and mark as installed */
-    private installed(app: app.App, folder: string, next: express.NextFunction): void {
-        if ((app.status.routes) && (app.status.api)) {
+    private installed(app: app.App, next: NextFunction): void {
+        if ((app.complete.routes) && (app.complete.api) && (app.complete.public) && (app.complete.scss)) {
             Log.app(app.config.name);
-            if (app.installed.routes) {
-                console.log("- " + app.config.name + " routes installed");
-            }
-            if (app.installed.api) {
-                console.log("- " + app.config.name + " endpoints installed");
-            }
-            
-            console.log("Generating styles");
-            Batch.compileSCSS(folder + "/" + app.config.name, app.config.name);
-            
-            console.log("");
-            console.log("Publishing images");
-            Batch.copy(folder + "/" + app.config.name + "/public/imgs/", "public/imgs/");
-            console.log("");
-            console.log("Publishing docs");
-            Batch.copy(folder + "/" + app.config.name + "/public/docs/", app.config.name + "/public/docs/");
-            console.log("");
-            console.log("Publishing others");
-            Batch.copy(folder + "/" + app.config.name + "/public/others/", app.config.name + "/public/others/");
-            console.log("");
-            console.log("___");
-            console.log("\n");
-            
-            app.status.done = true;
+            Log.appModule("Routes installed", "Routes not found", app.success.routes);
+            Log.appModule("Endpoints installed", "Endpoints not found", app.success.api);
+            Log.appModule("Public folder published", "Public folder publication failed", app.success.public);
+            Log.appModule("Styles generated", "No styles to compile", app.success.scss);
+            app.done = true;
             next(this.apps);
         }
     }
