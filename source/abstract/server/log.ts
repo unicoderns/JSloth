@@ -30,30 +30,33 @@ import * as clc from "cli-color";
 class Log {
 
     public hello = (): void => {
-        console.log("******************************************************");
-        console.log("*                                                    *");
-        console.log("*      ██╗███████╗██╗      ██████╗ ████████╗██╗  ██╗ *");
-        console.log("*      ██║██╔════╝██║     ██╔═══██╗╚══██╔══╝██║  ██║ *");
-        console.log("*      ██║███████╗██║     ██║   ██║   ██║   ███████║ *");
-        console.log("* ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║ *");
-        console.log("* ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║ *");
-        console.log("*  ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ *");
-        console.log("*                                    by Chriss Mejía *");
-        console.log("*                                                    *");
-        console.log("******************************************************");
-        console.log("*                                                    *");
-        console.log("*                      Welcome                       *");
-        console.log("*                                                    *");
-        console.log("******************************************************");
+        console.log("");
+        console.log("**********************************************************");
+        console.log("*                                                        *");
+        console.log("*        ██╗███████╗██╗      ██████╗ ████████╗██╗  ██╗   *");
+        console.log("*        ██║██╔════╝██║     ██╔═══██╗╚══██╔══╝██║  ██║   *");
+        console.log("*        ██║███████╗██║     ██║   ██║   ██║   ███████║   *");
+        console.log("*   ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║   *");
+        console.log("*   ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║   *");
+        console.log("*    ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   *");
+        console.log("*                                      by Chriss Mejía   *");
+        console.log("*                                                        *");
+        console.log("**********************************************************");
+        console.log("*                                                        *");
+        console.log("*                        Welcome                         *");
+        console.log("*                                                        *");
+        console.log("**********************************************************");
+        console.log("");
+        console.log(clc.bgBlackBright("                          Core                            "));
         console.log("");
     }
 
     public error = (text: string): void => {
-        console.error(text);
+        console.error(clc.red(text));
     }
 
     public module = (text: string, fail?: string, number?: number): void => {
-        let log: string = " ✔ ";
+        let log: string = "  ✔ ";
 
         if (number) {
             log = log + text + " (" + number + ")";
@@ -62,15 +65,18 @@ class Log {
         } else {
             log = log + text;
         }
-        console.log(log);
+        console.log(clc.green(log));
     }
 
+    public appTitle = (): void => {
+        console.log("");
+        console.log(clc.bgBlackBright("                          Apps                            "));
+    }
+   
+
     public app = (text: string): void => {
-        console.log("------------------------------------------------------");
         console.log("");
-        console.log(text + " app...");
-        console.log("");
-        console.log("------------------------------------------------------");
+        console.log(clc.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
         console.log("");
     }
 
@@ -78,13 +84,22 @@ class Log {
         let log: string = "";
 
         if (success) {
-            log = " ✔ " + text;
+            log = "    ✔ " + text;
             console.log(clc.green(log));
         } else {
-            log = " ✘ " + fail;
-            console.error(clc.white(log));
+            log = "    ✘ " + fail;
+            console.error(clc.blackBright(log));
         }
     }
+
+    public run = (port: number): void => {
+        console.log("");
+        console.log(clc.bgBlackBright("                          Run                             "));
+        console.log("");
+        console.log(" The magic happens on port " + port + " ☆ﾟ.*･｡ﾟ");
+        console.log("");
+    }
+    
 }
 
 export default new Log();

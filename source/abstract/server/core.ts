@@ -77,11 +77,10 @@ export default class Core {
         Log.hello();
 
         // Loading Configuration
-        Log.module("Loading configuration");
         jslothFiles.exists(__dirname + this.configPath).then(() => {
             this.config = require(__dirname + this.configPath);
             this.express.set("token", this.config.token); // secret token
-
+            Log.module("Configuration loaded");
             this.install();
         }).catch(err => {
             if (err.code === "ENOENT") {
@@ -101,12 +100,11 @@ export default class Core {
     protected install(): void {
         let appsModule: Apps;
         // Loading JSloth Global Library
-        Log.module("Loading core library");
         this.jsloth = new JSloth(this.config);
         this.express.set("jsloth", this.jsloth);
-
+        Log.module("Core library loaded");
+        
         // Installing Middlewares
-        Log.module("Installing middlewares");
         this.middleware();
 
         // Installing Apps
@@ -128,6 +126,7 @@ export default class Core {
         // Use body parser so we can get info from POST and/or URL parameters
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+        Log.module("Middlewares loaded");
     }
 
     /*** Run the server */
@@ -140,7 +139,7 @@ export default class Core {
             if (done) {
                 try {
                     this.express.listen(this.port);
-                    console.log("The magic happens on port " + this.port);
+                    Log.run(this.port);
                 } catch (e) {
                     Log.error(e);
                 }

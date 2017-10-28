@@ -71,7 +71,9 @@ class Batch {
     /*** Make directory and basepath */
     private mkdir = (to: string, next: NextFunction): void => {
         this.exec("mkdir -p " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
-            console.log(clc.yellow(error));
+            if (error !== null) {
+                console.log(clc.yellow(error));
+            }
             next();
         }); // Unix only
     }

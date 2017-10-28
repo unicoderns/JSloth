@@ -59,11 +59,13 @@ export default class Apps {
 
     /*** Trigger app installation */
     public install(next: NextFunction): void {
-        Log.module("Installing system apps", "No system apps found", this.config.system_apps.length);
+        Log.module("System apps scanned", "No system apps found", this.config.system_apps.length);
         this.installApps(this.config.system_apps, "system", next);
 
-        Log.module("Installing custom apps", "No custom apps found", this.config.custom_apps.length);
+        Log.module("Custom apps scanned", "No custom apps found", this.config.custom_apps.length);
         this.installApps(this.config.custom_apps, "apps", next);
+
+        Log.appTitle();
     }
 
     /*** Return a empty app object */
