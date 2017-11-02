@@ -29,7 +29,7 @@ import * as logger from "morgan";  // Log requests
 
 import Apps from "./apps";
 import Batch from "./batch";
-import Config from "../../interfaces/config";
+import SysConfig from "../../interfaces/config";
 import JSFiles from "../../lib/files";
 import JSloth from "../../lib/core";
 import Log from "./log";
@@ -54,7 +54,7 @@ export default class Core {
     protected configPath: string = "/../../../config.json";
 
     /*** Configuration object */
-    protected config: Config;
+    protected config: SysConfig;
 
     /*** Apps object */
     protected apps: app.App[] = [];

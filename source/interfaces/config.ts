@@ -26,7 +26,7 @@ import * as MySQL from "./db/connections";
 import * as App from "./app";
 
 /*** Configuration interface */
-interface Config {
+interface SysConfig {
   dev: boolean;
   mysql: MySQL.Settings;
   system_apps: App.Config[];
@@ -34,4 +34,4 @@ interface Config {
   token: string;
 }
 
-export default Config;
+export default SysConfig;

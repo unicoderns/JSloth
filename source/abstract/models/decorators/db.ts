@@ -72,7 +72,7 @@ export function getList(target: string): Map<string, Map<string, string>> {
     let secretFields = original.get("secret");
 
     // Force string clone
-    let strCopy = function (text: string): string {
+    let strCopy = (text: string): string => {
         return (' ' + text).slice(1);
     }
 

@@ -32,11 +32,6 @@ import { Response } from "express";
 export default class HtmlController extends Controller {
     protected name: string;
 
-    /*** Load library */
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-    }
-
     /**
      * Load Routes 
      * 

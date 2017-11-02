@@ -34,8 +34,9 @@ class Batch {
 
     /*** Batch process */
     private exec = require("child_process").exec;
-
+    /*** To path prefix */
     private toPrefix: string = __dirname + "/../../../dist/";
+    /*** From path prefix */
     private fromPrefix: string = __dirname + "/../../";
 
     /*** Compile SCSS sources */

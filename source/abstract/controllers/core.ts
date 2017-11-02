@@ -24,6 +24,7 @@
 
 import JSloth from "../../lib/core";
 import { Router } from "express";
+import SysConfig from "../../interfaces/config";
 
 /**
  * Controller Abstract
@@ -44,7 +45,7 @@ export default class Controller {
     /**
      * Load library, app configuration and install routes 
      */
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+    constructor(jsloth: JSloth, config: SysConfig, url: string, namespaces: string[]) {
         this.jsloth = jsloth;
         this.config = config;
         this.namespaces = namespaces;

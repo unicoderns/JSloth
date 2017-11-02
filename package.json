@@ -10,6 +10,7 @@
         "preinstall": "npm install -g typescript && npm install -g ts-node && npm install -g nodemon",
         "start": "nodemon --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
         "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
+        "typedoc": "typedoc --out ./docs/typedoc/ ./source/",
         "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
         "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register"
     },
@@ -54,6 +55,7 @@
         "jscoverage": "^0.6.0",
         "mocha": "^3.2.0",
         "mocha-lcov-reporter": "^1.2.0",
-        "tslint": "^4.2.0"
+        "tslint": "^4.2.0",
+        "typedoc": "^0.9.0"
     }
 }

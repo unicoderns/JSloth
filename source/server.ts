@@ -25,25 +25,12 @@
 import Core from "./abstract/server/core";
 
 /**
- * Creates and configure an ExpressJS web server.
- *
+ * Custom JSloth server that extends from JSloth abstract server.
+ * Place for your custom server code.
+ * 
  * @return express.Application
  */
 class Server extends Core {
-    /**
-     * Load configuration settings
-     * Set up JSloth Global Library
-     * Install endpoints
-     * Configure and run the Express App instance. 
-     */
-    constructor() {
-        super()
-    }
-
-    /*** Configure Express middlewares */
-    protected middleware(): void {
-        super.middleware();
-    }
 
 }
 

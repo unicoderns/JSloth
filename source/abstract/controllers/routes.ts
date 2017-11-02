@@ -32,19 +32,6 @@ import { Router } from "express";
 export default class Routes extends Controller {
 
     /**
-     * Constructor
-     * 
-     * @param jsloth Library reference
-     * @param config Configuration object
-     * @param url Concatenated url across the imports
-     * @param namespace Complete array of namespaces from imports
-     * @return void
-     */
-    constructor(jsloth: JSloth, config: any, url: string = "/", namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-    }
-
-    /**
      * Load and install routes 
      * 
      * @param controller

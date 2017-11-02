@@ -22,42 +22,49 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as app from "../../interfaces/app";
-
+import { App, Config } from "../../interfaces/app";
 import { Application, NextFunction } from "express";
 
 import Batch from "./batch";
-import Config from "../../interfaces/config";
 import JSloth from "../../lib/core";
 import Log from "./log";
+import SysConfig from "../../interfaces/config";
 
 /**
- * Configuration for JSloth apps.
+ * JSloth apps related tools.
  */
 export default class Apps {
 
-    /*** Apps object */
-    private apps: app.App[] = [];
+    /*** List of apps (System + Custom) */
+    private apps: App[] = [];
 
-    /*** Configuration object */
-    private config: Config;
+    /*** System configuration */
+    private config: SysConfig;
 
-    /*** Express instance */
+    /*** Express app */
     private express: Application;
 
     /*** JSloth library */
     private jsloth: JSloth;
 
     /**
-     * Load configuration settings
+     * Load configuration, JSloth library and Express application.
+     * 
+     * @param config System configuration
+     * @param jsloth JSloth Library
+     * @param express Express app
      */
-    constructor(config: Config, jsloth: JSloth, express: Application) {
+    constructor(config: SysConfig, jsloth: JSloth, express: Application) {
         this.config = config;
         this.jsloth = jsloth;
         this.express = express;
     }
 
-    /*** Trigger app installation */
+    /**
+     * Start installation process
+     * 
+     * @param next
+     */
     public install(next: NextFunction): void {
         Log.module("System apps scanned", "No system apps found", this.config.system_apps.length);
         this.installApps(this.config.system_apps, "system", next);
@@ -68,9 +75,13 @@ export default class Apps {
         Log.appTitle();
     }
 
-    /*** Return a empty app object */
-    private emptyApp(): app.App {
-        let app: app.App = {
+    /**
+     * Return a empty app object
+     * 
+     * @return app.App
+     */
+    private emptyApp(): App {
+        let app: App = {
             config: null,
             done: false,
             complete: {
@@ -90,8 +101,14 @@ export default class Apps {
         return app;
     }
 
-    /*** Install apps */
-    private installApps(apps: app.Config[], type: string, next: NextFunction): void {
+    /**
+     * Install a group of apps
+     * 
+     * @param apps List of apps and configuration to install
+     * @param type Apps family (system|apps)
+     * @param next
+     */
+    private installApps(apps: Config[], type: string, next: NextFunction): void {
         apps.forEach((item) => {
             let app = this.emptyApp();
             app.config = item;
@@ -101,8 +118,14 @@ export default class Apps {
         });
     }
 
-    /*** Install app */
-    private installApp(app: app.App, type: string, next: NextFunction): void {
+    /**
+     * Copy public folder, compile SCSS, load routes and apis.
+     * 
+     * @param app App configuration.
+     * @param type App family (system|apps)
+     * @param next
+     */
+    private installApp(app: App, type: string, next: NextFunction): void {
         let compileSCSS = () => {
             Batch.compileSCSS(type + "/" + app.config.name, app.config.name, (success: boolean) => {
                 app.complete.scss = true;
@@ -123,8 +146,16 @@ export default class Apps {
         this.loadRoutes(app, type, "api", "/api", next);
     }
 
-    /*** Load routes */
-    private loadRoutes(app: app.App, appType: string, routeType: string, basepath: string, next: NextFunction): void {
+    /**
+     * Load and install routes
+     * 
+     * @param app App configuration.
+     * @param appType App family (system|apps)
+     * @param routeType Route family (routes|api)
+     * @param basepath Url prefix
+     * @param next
+     */
+    private loadRoutes(app: App, appType: string, routeType: string, basepath: string, next: NextFunction): void {
         this.jsloth.files.exists(__dirname + "/../../" + appType + "/" + app.config.name + "/" + routeType + ".ts").then(() => {
             let url: string = basepath + (app.config.basepath || "/");
             let appRoute = require("../../" + appType + "/" + app.config.name + "/" + routeType);
@@ -154,8 +185,13 @@ export default class Apps {
         });
     }
 
-    /*** Check if everything is ok, and mark as installed */
-    private installed(app: app.App, next: NextFunction): void {
+    /**
+     * Check if everything is done, and set done flag as true
+     * 
+     * @param app App configuration.
+     * @param next
+     */
+    private installed(app: App, next: NextFunction): void {
         if ((app.complete.routes) && (app.complete.api) && (app.complete.public) && (app.complete.scss)) {
             Log.app(app.config.name);
             Log.appModule("Routes installed", "Routes not found", app.success.routes);
