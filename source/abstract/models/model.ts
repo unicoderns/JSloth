@@ -28,13 +28,7 @@ import { getList } from "../models/decorators/db";
 
 import * as mysql from "mysql";
 import * as datatypes from "../../lib/db/datatypes";
-/*
-// Private settings object
-export interface Private {
-    name: string;
-    private: boolean;
-}
-*/
+
 /**
  * Model Abstract
  */
@@ -47,8 +41,8 @@ export default class Model {
     /**
      * Create a table object.
      * 
-     * To get all fields (secrets included), you need to ser privacy as "unsafe" explicitly, 
-     * in that way we ensure that this will not be a security breach in any wrong future upgrade.
+     * @param jsloth Core library
+     * @param privacy To get all fields (secrets included), you need to set privacy as "unsafe" explicitly, in that way we ensure that this will not be a security breach in any wrong future upgrade.
      */
     constructor(jsloth: JSloth, privacy?: string) {
         this.jsloth = jsloth;
@@ -61,6 +55,8 @@ export default class Model {
      * Create cache and return the model field list.
      * 
      * If this.unsafe is set then merge public with secret fields.
+     * 
+     * @return Fields Mapped
      */
     public getFields(): Map<string, string> {
         let fields =  this.fields;
@@ -278,7 +274,6 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
-     * @var limit Number of rows to get
      * @return Promise with query result
      */
     public getAll(fields?: string[], where?: any): Promise<any> {

@@ -29,6 +29,9 @@ import * as clc from "cli-color";
  */
 class Log {
 
+    /**
+     * JSloth welcome message
+     */
     public hello = (): void => {
         console.log("");
         console.log("**********************************************************");
@@ -51,10 +54,23 @@ class Log {
         console.log("");
     }
 
+    /**
+     * Log an error
+     */
     public error = (text: string): void => {
         console.error(clc.red(text));
     }
 
+    /**
+     * Log a warning
+     */
+    public moduleWarning = (text: string): void => {
+        console.error(clc.yellow(text));
+    }
+
+    /**
+     * Log a module
+     */
     public module = (text: string, fail?: string, number?: number): void => {
         let log: string = "  ✔ ";
 
@@ -68,18 +84,27 @@ class Log {
         console.log(clc.green(log));
     }
 
+    /**
+     * Log apps section
+     */
     public appTitle = (): void => {
         console.log("");
         console.log(clc.bgBlackBright("                          Apps                            "));
     }
-   
 
+
+    /**
+     * Log an app
+     */
     public app = (text: string): void => {
         console.log("");
         console.log(clc.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
         console.log("");
     }
 
+    /**
+     * Log app steps
+     */
     public appModule = (text: string, fail: string, success: boolean): void => {
         let log: string = "";
 
@@ -92,6 +117,9 @@ class Log {
         }
     }
 
+    /**
+     * Log system run
+     */
     public run = (port: number): void => {
         console.log("");
         console.log(clc.bgBlackBright("                          Run                             "));
@@ -99,7 +127,7 @@ class Log {
         console.log(" The magic happens on port " + port + " ☆ﾟ.*･｡ﾟ");
         console.log("");
     }
-    
+
 }
 
 export default new Log();

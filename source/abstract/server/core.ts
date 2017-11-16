@@ -45,8 +45,8 @@ export default class Core {
 
     /**
      * Stores the app port
-     * @default System environment port or 3000
-     * Please note: the unary + converts to number
+     * @default port System environment port or 3000
+     * Please note: the unary + cast to number
      */
     protected port: number = +process.env.PORT || 3000;
 
@@ -63,9 +63,7 @@ export default class Core {
     protected jsloth: JSloth;
 
     /**
-     * Load configuration settings
-     * Set up JSloth Global Library
-     * Load installation
+     * Load configuration settings, set up JSloth Global Library and start installation.
      */
     constructor() {
         // Loading JSloth Files directly to load the config file.
@@ -76,6 +74,10 @@ export default class Core {
 
         Log.hello();
 
+        // Mount static files
+        Log.module("Static files published");
+        this.express.use('/', express.static(__dirname + '/../../../dist/'));
+        
         // Loading Configuration
         jslothFiles.exists(__dirname + this.configPath).then(() => {
             this.config = require(__dirname + this.configPath);
@@ -93,9 +95,7 @@ export default class Core {
     }
 
     /**
-     * Install endpoints
-     * Configure and run the Express App instance. 
-     * Load middlewares
+     * Install endpoints, configure and run the Express App instance and load middlewares
      */
     protected install(): void {
         let appsModule: Apps;

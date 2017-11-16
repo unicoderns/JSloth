@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Batch | JSloth</title>
+	<title>Batch | jsloth</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">JSloth</a>
+					<a href="../index.html" class="title">jsloth</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -117,7 +117,7 @@
 					<div class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;require(&quot;child_process&quot;).exec</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L36">abstract/server/batch.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L36">abstract/server/batch.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -132,7 +132,7 @@
 					<div class="tsd-signature tsd-kind-icon">from<wbr>Prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;__dirname + &quot;/../../&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L40">abstract/server/batch.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L40">abstract/server/batch.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -147,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">to<wbr>Prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;__dirname + &quot;/../../../dist/&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L38">abstract/server/batch.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L38">abstract/server/batch.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -169,24 +169,38 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L43">abstract/server/batch.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L49">abstract/server/batch.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Compile SCSS sources</p>
+									<p>Compile SCSS</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Source style path</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Path for compiled styles</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -203,24 +217,38 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L95">abstract/server/batch.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L123">abstract/server/batch.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Copy public folder</p>
+									<p>Clean and copy public folder</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Source path</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Path to place the copy</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -237,7 +265,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L83">abstract/server/batch.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L105">abstract/server/batch.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -249,12 +277,26 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Source path</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Path to place the copy</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -271,7 +313,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L73">abstract/server/batch.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L89">abstract/server/batch.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -283,9 +325,18 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Path to create</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -302,7 +353,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/f87f363/source/abstract/server/batch.ts#L63">abstract/server/batch.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/chrissmejia/expressAPI/blob/95628c3/source/abstract/server/batch.ts#L74">abstract/server/batch.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -314,9 +365,18 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Path to remove</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>next: <span class="tsd-signature-type">NextFunction</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>

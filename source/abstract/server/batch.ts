@@ -23,7 +23,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import * as app from "../../interfaces/app";
-import * as clc from "cli-color";
 
 import { NextFunction } from "express"
 
@@ -39,69 +38,159 @@ class Batch {
     /*** From path prefix */
     private fromPrefix: string = __dirname + "/../../";
 
-    /*** Compile SCSS sources */
-    public compileSCSS = (from: string, to: string, next: NextFunction): void => {
-        try {
-            // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from
-            this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + " " + this.fromPrefix + from, function (error: any, stdout: any, stderr: any) {
+    /**
+     * Compile SCSS
+     * 
+     * @param from Source style path
+     * @param to Path for compiled styles
+     * @param next
+     */
+    public compileSCSS = (from: string, to: string): Promise<any> => {
+        // Create promise
+        const p: Promise<boolean> = new Promise(
+            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 try {
-                    let parse = JSON.parse(stderr);
-                    if (error !== null) {
-                        console.log(clc.yellow(error));
-                        next(false);
-                    } else {
-                        next(true);
-                    }
-                } catch (err) {
-                    next(true);
-                }
-            });
-        } catch (err) { }
-    }
-
-    /*** Remove recursive folders */
-    private rm = (to: string, next: NextFunction): void => {
-        this.exec("rm -r " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
-            if ((error !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
-                console.log(clc.yellow(error));
-            }
-            next();
-        });
-    }
-
-    /*** Make directory and basepath */
-    private mkdir = (to: string, next: NextFunction): void => {
-        this.exec("mkdir -p " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
-            if (error !== null) {
-                console.log(clc.yellow(error));
-            }
-            next();
-        }); // Unix only
-    }
-
-    /*** Copy recursive folders */
-    private cp = (from: string, to: string, next: NextFunction): void => {
-        this.exec("cp -r " + this.fromPrefix + from + " " + this.toPrefix + to, function (error: any, stdout: any, stderr: any) {
-            if ((error !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
-                console.log(clc.yellow(error));
-                next(false);
-            } else {
-                next(true);
-            }
-        });
-    }
-
-    /*** Copy public folder */
-    public copyPublic = (from: string, to: string, next: NextFunction): void => {
-        try {
-            this.rm(to, () => {
-                this.mkdir(to, () => {
-                    this.cp(from, to, (success: boolean) => {
-                        next(success);
+                    // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from
+                    this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from + "/", function (err: any, stdout: any, stderr: any) {
+                        try {
+                            let parse = JSON.parse(stderr);
+                            if (err !== null) {
+                                reject(err);
+                            } else {
+                                resolve(true);
+                            }
+                        } catch (err) {
+                            reject(err);
+                        }
                     });
+                } catch (err) {
+                    reject(err);
+                }
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Compile Typescript
+     * 
+     * @param from Source style path
+     * @param to Path for compiled styles
+     * @param next
+     */
+    public compileTS = (from: string, to: string): Promise<any> => {
+        const p: Promise<boolean> = new Promise(
+            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                try {
+                    this.exec("tsc --outDir " + this.toPrefix + to + "/app/ " + this.fromPrefix + from + "/client/app.ts", function (err: any, stdout: any, stderr: any) {
+                        if ((stdout.substr(stdout.length - 11)) != "not found.\n") {
+                            reject(stdout);
+                        } else {
+                            reject(null);
+                        }
+                    });
+                } catch (err) {
+                    reject(err);
+                }
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Remove recursive folders
+     * 
+     * @param to Path to remove
+     * @param next
+     */
+    private rm = (to: string): Promise<any> => {
+        const p: Promise<boolean> = new Promise(
+            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                this.exec("rm -r " + this.toPrefix + to, function (err: any, stdout: any, stderr: any) {
+                    if ((err !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
                 });
-            });
-        } catch (err) { }
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Make directory and basepath
+     * 
+     * @param to Path to create
+     * @param next
+     */
+    private mkdir = (to: string): Promise<any> => {
+        const p: Promise<boolean> = new Promise(
+            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                this.exec("mkdir -p " + this.toPrefix + to, function (err: any, stdout: any, stderr: any) {
+                    if (err !== null) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                }); // Unix only
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Copy recursive folders
+     * 
+     * @param from Source path
+     * @param to Path to place the copy
+     * @param next
+     */
+    private cp = (from: string, to: string): Promise<any> => {
+        const p: Promise<boolean> = new Promise(
+            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                this.exec("cp -r " + this.fromPrefix + from + " " + this.toPrefix + to, function (err: any, stdout: any, stderr: any) {
+                    if ((err !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+        );
+        return p;
+    }
+
+    /**
+     * Clean and copy public folder
+     * 
+     * @param from Source path
+     * @param to Path to place the copy
+     * @param next
+     */
+    public copyPublic = (from: string, to: string): Promise<any> => {
+        const p: Promise<boolean> = new Promise(
+            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                try {
+                    this.rm(to).then(() => {
+                        this.mkdir(to).then(() => {
+                            this.cp(from, to).then(() => {
+                                resolve();
+                            }).catch(err => {
+                                reject(err);
+                            });
+                        }).catch(err => {
+                            reject(err);
+                        });
+                    }).catch(err => {
+                        reject(err);
+                    });
+                } catch (err) {
+                    reject(err);
+                }
+            }
+        );
+        return p;
     }
 
 }

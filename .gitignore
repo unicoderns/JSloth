@@ -7,5 +7,5 @@ dist/*
 node_modules/*
 bower_components/*
 ts-node*/
-.vscode/
-.history/
+.vscode/*
+.history/*
