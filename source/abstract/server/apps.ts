@@ -163,7 +163,7 @@ export default class Apps {
             });
         };
 
-        Batch.copyPublic(type + "/" + app.config.name + "/public/", app.config.name + "/public").then(() => {
+        Batch.copyPublic(type + "/" + app.config.name + "/public/", app.config.name + "/").then(() => {
             app.complete.public = true;
             app.success.public = true;
             compileSCSS(); // Wait the structure to compile
