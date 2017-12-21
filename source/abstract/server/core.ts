@@ -48,7 +48,7 @@ export default class Core {
      * @default port System environment port or 3000
      * Please note: the unary + cast to number
      */
-    protected port: number = +process.env.PORT || 3000;
+    protected port: number = +process.env.PORT || 8080;
 
     /*** Default configuration filepath */
     protected configPath: string = "/../../../config.json";
@@ -77,7 +77,8 @@ export default class Core {
         // Mount static files
         Log.module("Static files published");
         this.express.use('/', express.static(__dirname + '/../../../dist/'));
-        
+
+
         // Loading Configuration
         jslothFiles.exists(__dirname + this.configPath).then(() => {
             this.config = require(__dirname + this.configPath);
@@ -103,7 +104,7 @@ export default class Core {
         this.jsloth = new JSloth(this.config);
         this.express.set("jsloth", this.jsloth);
         Log.module("Core library loaded");
-        
+
         // Installing Middlewares
         this.middleware();
 

@@ -22,6 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as express from "express";
+
 import Core from "./abstract/server/core";
 
 /**

@@ -32,36 +32,18 @@ import { Promise } from "es6-promise";
 */
 export default class JSPath {
 
-    /*** JSloth Files instance */
-    private files: JSFiles;
-
     /*** Configuration methods */
     constructor(config: Config) {
-        this.files = new JSFiles(config);
     }
 
     /**
      * Get the new full path.
      *
      * @param file string Filename
-     * @return void
+     * @return string
      */
-    public get(folder: string, app: string, file: string): Promise<string> {
-        let path: string = app + "/views/" + file;
-        let customPath: string = app + "/" + file;
-
-        // Create promise
-        const p: Promise<string> = new Promise(
-            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                // Resolve promise
-                this.files.exists(__dirname + "/../views/" + customPath).then((exist) => {
-                    resolve("../source/views/" + customPath);
-                }).catch((err: NodeJS.ErrnoException) => {
-                    resolve("../source/" + folder + "/" + path);
-                    throw err;
-                });
-            });
-        return p;
+    public get(folder: string, app: string, file: string): string {
+        return "../dist/browser/" + app + "/" + file;
     }
 
 

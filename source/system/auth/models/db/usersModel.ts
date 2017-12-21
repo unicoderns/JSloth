@@ -74,15 +74,13 @@ export class Users extends Model {
     @secret()
     public password: fields.DataType = new datatypes.Datatypes().CHAR({
         notNull: true,
-        size: 60,
-        protected: true
+        size: 60
     });
 
-    @field()
+    @secret()
     public salt: fields.DataType = new datatypes.Datatypes().VARCHAR({
         notNull: true,
-        size: 20,
-        protected: true
+        size: 20
     });
 
     @field()

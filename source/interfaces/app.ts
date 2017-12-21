@@ -41,17 +41,11 @@ export interface Config {
 /*** App status interface. */
 export interface Status {
   api: boolean;
-  public: boolean;
   routes: boolean;
-  scss: boolean;
-  ts: boolean;
 }
 
 /*** App errors interface. */
 export interface Errors {
   api: string;
-  public: string;
   routes: string;
-  scss: string;
-  ts: string;
 }

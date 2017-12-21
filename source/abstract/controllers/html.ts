@@ -22,15 +22,60 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../lib/core";
 import Controller from "./core";
-import { Response } from "express";
+import Log from "../server/log";
+import JSloth from "../../lib/core";
+
+import * as express from "express";
+import { Request, Response } from "express";
 
 /**
  * Routes Abstract
  */
 export default class HtmlController extends Controller {
     protected name: string;
+    protected app: express.Application;
+
+    /*** Init Controller */
+    protected init(): void {
+        super.init();
+
+        try {
+            const path = require("path");
+            const fs = require("fs");
+            const compression = require("compression");
+            const ngExpressEngine = require("@nguniversal/express-engine").ngExpressEngine;
+    
+            require("zone.js/dist/zone-node");
+            require("rxjs/add/operator/filter");
+            require("rxjs/add/operator/map");
+            require("rxjs/add/operator/mergeMap");
+    
+            var hash;
+            fs.readdirSync(__dirname + "/../../../dist/server/auth/").forEach(function (file: any) {
+                if (file.startsWith("main")) {
+                    hash = file.split(".")[1];
+                }
+            });
+    
+            const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server/auth/main." + hash + ".bundle")).AppServerModuleNgFactory;
+    
+            this.app = express();
+            const port = Number(process.env.PORT || 8080);
+    
+            this.app.engine('html', ngExpressEngine({
+                baseUrl: 'http://localhost:' + port,
+                bootstrap: AppServerModuleNgFactory
+            }));
+    
+    
+            this.app.set('view engine', 'html');
+    
+            this.app.use(compression());
+        } catch (e) {
+            Log.error(e);
+        }
+    }
 
     /**
      * Load Routes 
@@ -38,10 +83,11 @@ export default class HtmlController extends Controller {
      * @param res Response
      * @param file string
      */
-    protected render(res: Response, file: string, params?: any): void {
-        this.jsloth.path.get(this.config.folder, this.config.name, file).then((path) => {
-            res.render(path, params);
-        });
+    protected render(req: Request, res: Response, file: string, params: any = {}): void {
+        let path = this.jsloth.path.get(this.config.folder, this.config.name, file);
+
+        params.req = req;
+        res.render(path, params);
     }
 
 }

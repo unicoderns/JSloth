@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>DB Models &mdash; JSloth 0.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="JSloth 0.4 documentation" href="../index.html"/>
+        <link rel="next" title="Static Models" href="static.html"/>
+        <link rel="prev" title="Models" href="../models.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> JSloth
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers.html">Controllers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/api.html">Api Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/html.html">Html Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../controllers/routes.html">Routes Controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DB Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#field-decorators">Field decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static.html">Static Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jsloth.html">JSloth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jsloth/db.html">JSloth DB</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jsloth/files.html">JSloth Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jsloth/path.html">JSloth Path</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">JSloth</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>DB Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/models/db.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="db-models">
+<h1>DB Models<a class="headerlink" href="#db-models" title="Permalink to this headline">¶</a></h1>
+<p>Placed at <code class="docutils literal"><span class="pre">/basepath/models/db/</span></code>, DB models help you manage data in a DB table.</p>
+<div class="section" id="field-decorators">
+<h2>Field decorators<a class="headerlink" href="#field-decorators" title="Permalink to this headline">¶</a></h2>
+<p>&#64;field() and &#64;secret() defines fields and security</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-typescript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84</pre></div></td><td class="code"><div class="highlight"><pre><span></span> <span class="kr">import</span> <span class="nx">Model</span> <span class="nx">from</span> <span class="s2">&quot;../../../../abstract/models/model&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="p">{</span> <span class="nx">field</span><span class="p">,</span> <span class="nx">secret</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&quot;../../../../abstract/models/decorators/db&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">fields</span> <span class="nx">from</span> <span class="s2">&quot;../../../../interfaces/db/fields&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">defaults</span> <span class="nx">from</span> <span class="s2">&quot;../../../../interfaces/db/defaults&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">datatypes</span> <span class="nx">from</span> <span class="s2">&quot;../../../../lib/db/datatypes&quot;</span><span class="p">;</span>
+ <span class="kr">import</span> <span class="o">*</span> <span class="kr">as</span> <span class="nx">timezones</span> <span class="nx">from</span> <span class="s2">&quot;../static/timezoneModel&quot;</span><span class="p">;</span>
+
+ <span class="kr">export</span> <span class="kr">interface</span> <span class="nx">Row</span> <span class="p">{</span>
+     <span class="nx">id?</span>: <span class="kt">number</span><span class="p">;</span>
+     <span class="nx">created?</span>: <span class="kt">number</span><span class="p">;</span>
+     <span class="nx">username</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">email</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">password</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">salt</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">first_name?</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">last_name?</span>: <span class="kt">string</span><span class="p">;</span>
+     <span class="nx">timezone?</span>: <span class="kt">number</span><span class="p">;</span>
+     <span class="nx">admin?</span>: <span class="kt">boolean</span><span class="p">;</span>
+     <span class="nx">verified?</span>: <span class="kt">boolean</span><span class="p">;</span>
+     <span class="nx">active?</span>: <span class="kt">boolean</span><span class="p">;</span>
+ <span class="p">}</span>
+
+ <span class="cm">/**</span>
+<span class="cm">  * User Model</span>
+<span class="cm">  */</span>
+ <span class="kr">export</span> <span class="kr">class</span> <span class="nx">Users</span> <span class="kr">extends</span> <span class="nx">model</span><span class="p">.</span><span class="nx">Model</span> <span class="p">{</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">id</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">ID</span><span class="p">();</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">created</span>: <span class="kt">fields.DataTimestampType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">TIMESTAMP</span><span class="p">({</span>
+         <span class="nx">notNull</span>: <span class="kt">true</span><span class="p">,</span>
+         <span class="k">default</span><span class="o">:</span> <span class="nx">defaults</span><span class="p">.</span><span class="nx">Timestamp</span><span class="p">.</span><span class="nx">CURRENT_TIMESTAMP</span>
+     <span class="p">});</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">username</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">size</span>: <span class="kt">45</span><span class="p">,</span>
+         <span class="nx">unique</span>: <span class="kt">true</span>
+     <span class="p">});</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">email</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">notNull</span>: <span class="kt">true</span><span class="p">,</span>
+         <span class="nx">size</span>: <span class="kt">45</span><span class="p">,</span>
+         <span class="nx">unique</span>: <span class="kt">true</span>
+     <span class="p">});</span>
+
+     <span class="kd">@secret</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">password</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">CHAR</span><span class="p">({</span>
+         <span class="nx">notNull</span>: <span class="kt">true</span><span class="p">,</span>
+         <span class="nx">size</span>: <span class="kt">60</span>
+     <span class="p">});</span>
+
+     <span class="kd">@secret</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">salt</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">notNull</span>: <span class="kt">true</span><span class="p">,</span>
+         <span class="nx">size</span>: <span class="kt">20</span>
+     <span class="p">});</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">first_name</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">size</span>: <span class="kt">45</span>
+     <span class="p">});</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">last_name</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">VARCHAR</span><span class="p">({</span>
+         <span class="nx">size</span>: <span class="kt">45</span>
+     <span class="p">});</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">timezone</span>: <span class="kt">fields.DataType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">STATICKEY</span><span class="p">(</span><span class="nx">timezones</span><span class="p">);</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">admin</span>: <span class="kt">fields.BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">verified</span>: <span class="kt">fields.BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
+
+     <span class="kd">@field</span><span class="p">()</span>
+     <span class="kr">public</span> <span class="nx">active</span>: <span class="kt">fields.BoolType</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">datatypes</span><span class="p">.</span><span class="nx">Datatypes</span><span class="p">().</span><span class="nx">BOOL</span><span class="p">();</span>
+
+ <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="static.html" class="btn btn-neutral float-right" title="Static Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../models.html" class="btn btn-neutral" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Chriss Mejía.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
