@@ -12,9 +12,10 @@
         "typedoc": "typedoc --out ./docs/typedoc/ ./source/",
         "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
         "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register",
-        "build": "ng build --prod --app sample && ng build --prod --app sample-server && ng build --prod --app auth && ng build --prod --app auth-server",
+        "build": "ng build --prod --app home && ng build --prod --app home-server && ng build --prod --app sample && ng build --prod --app sample-server && ng build --prod --app auth && ng build --prod --app auth-server",
         "build-sample": "ng build --prod --app sample && ng build --prod --app sample-server",
-        "build-auth": "ng build --prod --app auth && ng build --prod --app auth-server"
+        "build-auth": "ng build --prod --app auth && ng build --prod --app auth-server",
+        "build-home": "ng build --prod --app home && ng build --prod --app home-server"
     },
     "bugs": {
         "url": "https://github.com/chrissmejia/JSloth/issues",
@@ -54,7 +55,7 @@
         "zone.js": "^0.8.14"
     },
     "devDependencies": {
-        "@angular/cli": "1.6.1",
+        "@angular/cli": "^1.6.2",
         "@angular/compiler-cli": "^5.0.0",
         "@angular/language-service": "^5.0.0",
         "@angular/platform-server": "^5.1.1",

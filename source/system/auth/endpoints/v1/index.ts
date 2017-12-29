@@ -105,7 +105,7 @@ export default class IndexEndPoint extends ApiController {
                         if (match) {
                             // if user is found and password is right
                             // create a token
-                            let token = jwt.sign(user, req.app.get("token"), {
+                            let token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
                                 expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                             });
 
@@ -134,8 +134,8 @@ export default class IndexEndPoint extends ApiController {
     private renewToken = (req: Request, res: Response): void => {
         // Clean data
         let data = req.decoded;
-        data.iat = undefined;
-        data.exp = undefined;
+        delete data.iat;
+        delete data.exp;
         // create a new token
         let token = jwt.sign(req.decoded, req.app.get("token"), {
             expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
@@ -169,7 +169,7 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private updatePassword = (req: Request, res: Response): void => {
-        this.usersTable.update({ password: bcrypt.hashSync("123queso", null, null) }, { id: 1 }).then((data) => {
+        this.usersTable.update({ password: bcrypt.hashSync("q123queso", null, null) }, { id: 1 }).then((data) => {
             res.json(data);
         });
     };

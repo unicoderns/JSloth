@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
+// JSloth Auth App                                                                      //
 //                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
@@ -24,19 +24,19 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import Routes from "../../../abstract/controllers/routes";
+import IndexEndpoint from "./v1/index";
 
 /**
- * Centralized Controller Routes Loader
+ * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
 export class Urls extends Routes {
 
-    /*** Configure routes */
+    /*** Configure endpoints */
     protected init(): void {
-        this.include(IndexController)
+        this.include(IndexEndpoint, "/v1/", "1");
     }
 
 }

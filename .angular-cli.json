@@ -103,6 +103,56 @@
         "dev": "source/abstract/angular/environments/environment.ts",
         "prod": "source/abstract/angular/environments/environment.prod.ts"
       }
+    },
+    {
+      "name": "home",
+      "root": "source/apps/home/client",
+      "outDir": "dist/browser",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "scss/styles.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "name": "home-server",
+      "root": "source/apps/home/client",
+      "outDir": "dist/server",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "platform": "server",
+      "index": "index.html",
+      "main": "main.server.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.server.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "scss/styles.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "source/abstract/angular/environments/environment.ts",
+      "environments": {
+        "dev": "source/abstract/angular/environments/environment.ts",
+        "prod": "source/abstract/angular/environments/environment.prod.ts"
+      }
     }
   ],
   "e2e": {
@@ -131,7 +181,6 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "component": {
-    }
+    "component": {}
   }
 }

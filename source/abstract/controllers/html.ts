@@ -34,12 +34,14 @@ import { Request, Response } from "express";
  */
 export default class HtmlController extends Controller {
     protected name: string;
+
     protected app: express.Application;
 
     /*** Init Controller */
     protected init(): void {
         super.init();
 
+        var app = express();
         try {
             const path = require("path");
             const fs = require("fs");
@@ -52,29 +54,30 @@ export default class HtmlController extends Controller {
             require("rxjs/add/operator/mergeMap");
     
             var hash;
-            fs.readdirSync(__dirname + "/../../../dist/server/auth/").forEach(function (file: any) {
+            fs.readdirSync(__dirname + "/../../../dist/server" + this.config.basepath).forEach(function (file: any) {
                 if (file.startsWith("main")) {
                     hash = file.split(".")[1];
                 }
             });
     
-            const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server/auth/main." + hash + ".bundle")).AppServerModuleNgFactory;
+            const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server" + this.config.basepath + "main." + hash + ".bundle")).AppServerModuleNgFactory;
     
-            this.app = express();
             const port = Number(process.env.PORT || 8080);
     
-            this.app.engine('html', ngExpressEngine({
+            app.engine('html', ngExpressEngine({
                 baseUrl: 'http://localhost:' + port,
                 bootstrap: AppServerModuleNgFactory
             }));
+
+            app.set('view engine', 'html');
     
-    
-            this.app.set('view engine', 'html');
-    
-            this.app.use(compression());
+            app.use(compression());
+
+            this.app = app;
         } catch (e) {
             Log.error(e);
         }
+        
     }
 
     /**
@@ -84,9 +87,9 @@ export default class HtmlController extends Controller {
      * @param file string
      */
     protected render(req: Request, res: Response, file: string, params: any = {}): void {
-        let path = this.jsloth.path.get(this.config.folder, this.config.name, file);
-
+        let path = this.jsloth.path.get(this.config.folder, this.config.basepath, file);
         params.req = req;
+        console.log(path);
         res.render(path, params);
     }
 

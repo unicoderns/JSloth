@@ -37,7 +37,8 @@ export default class IndexController extends HtmlController {
 
     /*** Define routes */
     protected routes(): void {
-        this.router.get("/", this.index);
+        this.app.get("/", this.index);
+        this.router.use("/*", this.app);
     }
 
     /**
@@ -48,7 +49,7 @@ export default class IndexController extends HtmlController {
      * @return html
      */
     private index = (req: Request, res: Response): void => {
-        this.render(res, "index.ejs");
+        this.render(req, res, "index");
     };
 
 }
