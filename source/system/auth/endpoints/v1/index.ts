@@ -76,6 +76,7 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllUsers = (req: Request, res: Response): void => {
+        console.log(this.config);
         this.usersTable.delete({ id: 3 }).then((done) => {
             this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
                 res.json(data);
@@ -105,10 +106,13 @@ export default class IndexEndPoint extends ApiController {
                         if (match) {
                             // if user is found and password is right
                             // create a token
-                            let token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
-                                expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-                            });
-
+                            if (this.config.config.session == "stateful") {
+                                
+                            } else {
+                                let token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
+                                    expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
+                                });
+                            }
                             // return the information including token as JSON
                             res.json({
                                 success: true,
