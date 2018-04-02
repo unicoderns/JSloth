@@ -34,14 +34,12 @@ export interface Row {
     created?: number;
     ip: string;
     user: number;
-    agent : number;
-
 }
 
 /**
  * User Model
  */
-export class Users extends Model {
+export class SessionTrack extends Model {
 
     @field()
     public id: fields.DataType = new datatypes.Datatypes().ID();    

@@ -28,6 +28,7 @@
 
 import * as jwt from "jsonwebtoken";
 import * as users from "../../models/db/usersModel";
+import * as session from "../../models/db/sessionTrackModel";
 import * as sessions from "../../middlewares/sessions";
 
 import { Request, Response } from "express";
@@ -46,11 +47,13 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
+    private sessionTable: session.SessionTrack;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
+        this.sessionTable = new session.SessionTrack(jsloth);
     }
 
     /*** Define routes */
@@ -93,6 +96,7 @@ export default class IndexEndPoint extends ApiController {
      */
     private getToken = (req: Request, res: Response): void => {
         let email: string = req.body.email;
+        let token: string = "";
 
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
@@ -107,18 +111,33 @@ export default class IndexEndPoint extends ApiController {
                             // if user is found and password is right
                             // create a token
                             if (this.config.config.session == "stateful") {
-                                
+                                let ip: string = req.headers['x-forwarded-for'][0] ||
+                                    req.connection.remoteAddress;
+                                console.log(ip); //PRINT
+                                let temp: session.Row = {
+                                    ip: ip,
+                                    user: user.id
+                                };
+                                this.sessionTable.insert(temp).then((data: any) => {
+                                    // return the information including token as JSON
+                                    res.json({
+                                        success: true,
+                                        message: "Enjoy your token!",
+                                        token: data
+                                    });
+
+                                });
                             } else {
-                                let token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
+                                token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
                                     expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                                 });
+                                // return the information including token as JSON
+                                res.json({
+                                    success: true,
+                                    message: "Enjoy your token!",
+                                    token: token
+                                });
                             }
-                            // return the information including token as JSON
-                            res.json({
-                                success: true,
-                                message: "Enjoy your token!",
-                                token: token
-                            });
                         } else {
                             res.json({ success: false, message: "Authentication failed. User and password don't match." });
                         }
