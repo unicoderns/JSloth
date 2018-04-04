@@ -97,6 +97,7 @@ export default class IndexEndPoint extends ApiController {
     private getToken = (req: Request, res: Response): void => {
         let email: string = req.body.email;
         let token: string = "";
+        let config: any = this.config;
 
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
@@ -110,9 +111,13 @@ export default class IndexEndPoint extends ApiController {
                         if (match) {
                             // if user is found and password is right
                             // create a token
-                            if (this.config.config.session == "stateful") {
-                                let ip: string = req.headers['x-forwarded-for'][0] ||
-                                    req.connection.remoteAddress;
+                            if (config.config.session == "stateful") {
+                                let ip: string = "";
+                                if (req.headers['x-forwarded-for']) {
+                                    ip = req.headers['x-forwarded-for'][0];
+                                } else {
+                                    ip = req.connection.remoteAddress;
+                                }
                                 console.log(ip); //PRINT
                                 let temp: session.Row = {
                                     ip: ip,
@@ -140,7 +145,7 @@ export default class IndexEndPoint extends ApiController {
                             }
                         } else {
                             res.json({ success: false, message: "Authentication failed. User and password don't match." });
-                        }
+                        };
                     });
                 }
             });
