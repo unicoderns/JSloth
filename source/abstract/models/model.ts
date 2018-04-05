@@ -294,7 +294,7 @@ export default class Model {
             wildcards.push("?");
             values.push(data[key]);
         }
-        let query = "INSERT INTO `" + this.tableName + "` (`" + fields.join("`, `") + "`) VALUES (`" + wildcards.join("`, `") + "`);";
+        let query = "INSERT INTO `" + this.tableName + "` (`" + fields.join("`, `") + "`) VALUES (" + wildcards.join(", ") + ");";
         return this.jsloth.db.query(query, values);
     }
 
