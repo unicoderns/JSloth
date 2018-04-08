@@ -62,12 +62,12 @@ export default class IndexEndPoint extends ApiController {
         this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
-        this.post("/token/renew/", "renewToken", sessions.auth, this.renewToken);
+        this.post("/token/renew/", "renewToken", sessions.auth.bind(this), this.renewToken);
 
         this.get("/users/", "userList", this.getList);
         this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.get("/fields/", "fields", sessions.auth, this.getFieds);
+        this.get("/fields/", "fields", sessions.auth.bind(this), this.getFieds);
 
         this.get("/context/", "context", this.getSysContext);
     }
@@ -100,11 +100,13 @@ export default class IndexEndPoint extends ApiController {
         let token: string = "";
         let config: any = this.config;
         let sessionTable = this.sessionTable;
+        let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
+
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
         } else {
             // find the user
-            this.usersTable.get([], { email: email, active: 1 }).then((user) => {
+            unsafeUsersTable.get([], { email: email, active: 1 }).then((user) => {
                 if (typeof user === "undefined") {
                     res.json({ success: false, message: "Authentication failed. User and password don't match." });
                 } else {
@@ -118,7 +120,7 @@ export default class IndexEndPoint extends ApiController {
                                     user: user.id
                                 };
                                 sessionTable.insert(temp).then((data: any) => {
-                                    token = jwt.sign({session: data.insertId}, req.app.get("token"), {
+                                    token = jwt.sign({session: data.insertId, user: user.id}, req.app.get("token"), {
                                         expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                                     });
                                     // return the information including token as JSON
@@ -127,7 +129,6 @@ export default class IndexEndPoint extends ApiController {
                                         message: "Enjoy your token!",
                                         token: token
                                     });
-
                                 });
                             } else {
                                 token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {

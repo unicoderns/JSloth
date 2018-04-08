@@ -23,8 +23,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSloth from "../../lib/core";
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import SysConfig from "../../interfaces/config";
+
+import * as jwt from "jsonwebtoken";
 
 /**
  * Controller Abstract

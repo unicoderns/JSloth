@@ -76,26 +76,29 @@ export function getList(target: string): Map<string, Map<string, string>> {
         return (' ' + text).slice(1);
     }
 
-    let clonePublicfields: Map<string, string> = new Map<string, string>();
-    publicFields.forEach((value, key, map) => {
-        if (typeof value !== "undefined") {
-            clonePublicfields.set(strCopy(key), strCopy(value));
-        } else {
-            clonePublicfields.set(strCopy(key), undefined);
-        }
-    });
-    clone.set("public", clonePublicfields);
+    if ((publicFields) && (publicFields.size)) {
+        let clonePublicfields: Map<string, string> = new Map<string, string>();
+        publicFields.forEach((value, key, map) => {
+            if (typeof value !== "undefined") {
+                clonePublicfields.set(strCopy(key), strCopy(value));
+            } else {
+                clonePublicfields.set(strCopy(key), undefined);
+            }
+        });
+        clone.set("public", clonePublicfields);
+    }
 
-    
-    let cloneSecretfields: Map<string, string> = new Map<string, string>();
-    secretFields.forEach((value, key, map) => {
-        if (typeof value !== "undefined") {
-            cloneSecretfields.set(strCopy(key), strCopy(value));
-        } else {
-            cloneSecretfields.set(strCopy(key), undefined);
-        }
-    });
-    clone.set("secret", cloneSecretfields);
+    if ((secretFields) && (secretFields.size)) {
+        let cloneSecretfields: Map<string, string> = new Map<string, string>();
+        secretFields.forEach((value, key, map) => {
+            if (typeof value !== "undefined") {
+                cloneSecretfields.set(strCopy(key), strCopy(value));
+            } else {
+                cloneSecretfields.set(strCopy(key), undefined);
+            }
+        });
+        clone.set("secret", cloneSecretfields);
+    }
     return clone;
 }
 
@@ -108,7 +111,7 @@ export function getList(target: string): Map<string, Map<string, string>> {
  */
 export function field(alias?: string) {
     return function (target: any, key: string) {
-        register((target.constructor.name).toLowerCase(), "public", key, alias);
+        register((target.constructor.name).toLowerCase(), "public", key, alias || key);
     }
 }
 
@@ -121,6 +124,6 @@ export function field(alias?: string) {
  */
 export function secret(alias?: string) {
     return function (target: any, key: string) {
-        register((target.constructor.name).toLowerCase(), "secret", key, alias);
+        register((target.constructor.name).toLowerCase(), "secret", key, alias || key);
     }
 }
