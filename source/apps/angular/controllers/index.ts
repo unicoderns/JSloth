@@ -38,6 +38,7 @@ export default class IndexController extends HtmlController {
     /*** Define routes */
     protected routes(): void {
         this.app.get("/", this.index);
+        // Please notice: In order to work, angular requires * scope, but that may block any other app installed after that path
         this.router.use("/*", this.app);
     }
 

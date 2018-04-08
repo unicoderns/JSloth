@@ -27,70 +27,84 @@ import Log from "../server/log";
 import JSloth from "../../lib/core";
 
 import * as express from "express";
-import { Request, Response } from "express";
+import { Response, Request, Application } from "express";
 
 /**
  * Routes Abstract
  */
 export default class HtmlController extends Controller {
+    protected app: Application;
     protected name: string;
-
-    protected app: express.Application;
 
     /*** Init Controller */
     protected init(): void {
         super.init();
+        this.app = this.getApp();
+    }
 
-        var app = express();
-        try {
-            const path = require("path");
-            const fs = require("fs");
-            const compression = require("compression");
-            const ngExpressEngine = require("@nguniversal/express-engine").ngExpressEngine;
-    
-            require("zone.js/dist/zone-node");
-            require("rxjs/add/operator/filter");
-            require("rxjs/add/operator/map");
-            require("rxjs/add/operator/mergeMap");
-    
-            var hash;
-            fs.readdirSync(__dirname + "/../../../dist/server" + this.config.basepath).forEach(function (file: any) {
-                if (file.startsWith("main")) {
-                    hash = file.split(".")[1];
-                }
-            });
-    
-            const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server" + this.config.basepath + "main." + hash + ".bundle")).AppServerModuleNgFactory;
-    
-            const port = Number(process.env.PORT || 8080);
-    
-            app.engine('html', ngExpressEngine({
-                baseUrl: 'http://localhost:' + port,
-                bootstrap: AppServerModuleNgFactory
-            }));
+    /*** Get configured app for engine */
+    private getApp(): Application {
+        let app = express();
+        const compression = require("compression");
 
-            app.set('view engine', 'html');
-    
-            app.use(compression());
+        if (this.config.engine == "angular") {
+            try {
+                const path = require("path");
+                const fs = require("fs");
+                const ngExpressEngine = require("@nguniversal/express-engine").ngExpressEngine;
 
-            this.app = app;
-        } catch (e) {
-            Log.error(e);
+                require("zone.js/dist/zone-node");
+                require("rxjs/add/operator/filter");
+                require("rxjs/add/operator/map");
+                require("rxjs/add/operator/mergeMap");
+
+                let hash;
+                fs.readdirSync(__dirname + "/../../../dist/server" + this.config.basepath).forEach(function (file: any) {
+                    if (file.startsWith("main")) {
+                        hash = file.split(".")[1];
+                    }
+                });
+
+                const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server" + this.config.basepath + "main." + hash + ".bundle")).AppServerModuleNgFactory;
+
+                const port = Number(process.env.PORT || 8080);
+
+                app.engine('html', ngExpressEngine({
+                    baseUrl: 'http://localhost:' + port,
+                    bootstrap: AppServerModuleNgFactory
+                }));
+
+                app.set('view engine', 'html');
+
+            } catch (e) {
+                Log.error(e);
+            }
+        } else {
+            app.set('view engine', 'ejs');
         }
-        
+
+        app.use(compression());
+        return app;
     }
 
     /**
      * Load Routes 
      * 
+     * @param req Request
      * @param res Response
      * @param file string
+     * @param params object
      */
     protected render(req: Request, res: Response, file: string, params: any = {}): void {
-        let path = this.jsloth.path.get(this.config.folder, this.config.basepath, file);
-        params.req = req;
-        console.log(path);
-        res.render(path, params);
+        if (this.config.engine == "angular") {
+            let path = this.jsloth.path.getAngular(this.config.folder, this.config.basepath, file);
+            params.req = req;
+            res.render(path, params);
+        } else {
+            this.jsloth.path.get(this.config.folder, this.config.name, file).then((path: string) => {
+                res.render(path, params);
+            });
+        }
     }
 
 }

@@ -36,7 +36,7 @@ export default class IndexController extends HtmlController {
     /*** Define routes */
     protected routes(): void {
         this.app.get("/", this.index);
-        this.router.use("/*", this.app);
+        this.router.use("/", this.app);
     }
 
     /**

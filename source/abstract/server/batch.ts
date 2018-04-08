@@ -49,23 +49,14 @@ class Batch {
         // Create promise
         const p: Promise<boolean> = new Promise(
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                try {
-                    // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from
-                    this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from + "/", function (err: any, stdout: any, stderr: any) {
-                        try {
-                            let parse = JSON.parse(stderr);
-                            if (err !== null) {
-                                reject(err);
-                            } else {
-                                resolve(true);
-                            }
-                        } catch (err) {
-                            reject(err);
-                        }
-                    });
-                } catch (err) {
-                    reject(err);
-                }
+                // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from
+                this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from + "/", function (err: any, stdout: any, stderr: any) {
+                    if ((stderr.substr(0, 39)) == "Rendering Complete, saving .css file...") {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                });
             }
         );
         return p;

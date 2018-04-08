@@ -5,9 +5,9 @@
   },
   "apps": [
     {
-      "name": "auth",
-      "root": "source/system/auth/client",
-      "outDir": "dist/browser/auth",
+      "name": "angular",
+      "root": "source/apps/angular/client",
+      "outDir": "dist/browser/angular",
       "assets": [
         "assets",
         "favicon.ico"
@@ -30,109 +30,9 @@
       }
     },
     {
-      "name": "auth-server",
-      "root": "source/system/auth/client",
-      "outDir": "dist/server/auth",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
-      "platform": "server",
-      "index": "index.html",
-      "main": "main.server.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.server.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
-      "styles": [
-        "scss/styles.scss"
-      ],
-      "scripts": [],
-      "environmentSource": "source/abstract/angular/environments/environment.ts",
-      "environments": {
-        "dev": "source/abstract/angular/environments/environment.ts",
-        "prod": "source/abstract/angular/environments/environment.prod.ts"
-      }
-    },
-    {
-      "name": "sample",
-      "root": "source/apps/sample/client",
-      "outDir": "dist/browser/sample",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
-      "index": "index.html",
-      "main": "main.ts",
-      "polyfills": "polyfills.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.app.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
-      "styles": [
-        "scss/styles.scss"
-      ],
-      "scripts": [],
-      "environmentSource": "environments/environment.ts",
-      "environments": {
-        "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
-      }
-    },
-    {
-      "name": "sample-server",
-      "root": "source/apps/sample/client",
-      "outDir": "dist/server/sample",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
-      "platform": "server",
-      "index": "index.html",
-      "main": "main.server.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.server.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
-      "styles": [
-        "scss/styles.scss"
-      ],
-      "scripts": [],
-      "environmentSource": "source/abstract/angular/environments/environment.ts",
-      "environments": {
-        "dev": "source/abstract/angular/environments/environment.ts",
-        "prod": "source/abstract/angular/environments/environment.prod.ts"
-      }
-    },
-    {
-      "name": "home",
-      "root": "source/apps/home/client",
-      "outDir": "dist/browser",
-      "assets": [
-        "assets",
-        "favicon.ico"
-      ],
-      "index": "index.html",
-      "main": "main.ts",
-      "polyfills": "polyfills.ts",
-      "test": "test.ts",
-      "tsconfig": "tsconfig.app.json",
-      "testTsconfig": "tsconfig.spec.json",
-      "prefix": "app",
-      "styles": [
-        "scss/styles.scss"
-      ],
-      "scripts": [],
-      "environmentSource": "environments/environment.ts",
-      "environments": {
-        "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
-      }
-    },
-    {
-      "name": "home-server",
-      "root": "source/apps/home/client",
-      "outDir": "dist/server",
+      "name": "angular-server",
+      "root": "source/apps/angular/client",
+      "outDir": "dist/server/angular",
       "assets": [
         "assets",
         "favicon.ico"

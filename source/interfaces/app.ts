@@ -34,6 +34,7 @@ export interface App {
 /*** App configuration interface. */
 export interface Config {
   name: string;
+  engine?: string;
   basepath?: string;
   folder?: string;
 }
@@ -41,11 +42,15 @@ export interface Config {
 /*** App status interface. */
 export interface Status {
   api: boolean;
+  public: boolean;
   routes: boolean;
+  scss: boolean;
 }
 
 /*** App errors interface. */
 export interface Errors {
   api: string;
+  public: string;
   routes: string;
+  scss: string;
 }

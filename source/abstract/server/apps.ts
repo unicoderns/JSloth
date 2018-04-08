@@ -89,14 +89,20 @@ export default class Apps {
             complete: {
                 api: false,
                 routes: false,
+                public: false,
+                scss: false
             },
             success: {
                 api: false,
                 routes: false,
+                public: false,
+                scss: false
             },
             errors: {
                 api: "",
                 routes: "",
+                public: "",
+                scss: ""
             }
         };
 
@@ -128,6 +134,39 @@ export default class Apps {
      * @param next
      */
     private installApp(app: App, type: string, next: NextFunction): void {
+        if (app.config.engine != "angular") {
+            let compileSCSS = () => {
+                Batch.compileSCSS(type + "/" + app.config.name, app.config.name).then((success: boolean) => {
+                    app.complete.scss = true;
+                    app.success.scss = success;
+                    this.installed(app, next);
+                }).catch(err => {
+                    app.complete.scss = true;
+                    app.success.scss = false;
+                    app.errors.scss = err;
+                    console.log(err);
+                    this.installed(app, next);
+                });
+            };
+
+            Batch.copyPublic(type + "/" + app.config.name + "/public/", app.config.name).then((success: boolean) => {
+                app.complete.public = true;
+                app.success.public = success;
+                compileSCSS(); // Wait the structure to compile
+            }).catch(err => {
+                app.complete.public = true;
+                app.success.public = false;
+                app.errors.public = err;
+                console.log(err);
+                compileSCSS(); // Wait the structure to compile
+            });
+        } else {
+            app.complete.public = true;
+            app.success.public = false;
+            app.complete.scss = true;
+            app.success.scss = false;
+        }
+
         // Installing regular routes
         this.loadRoutes(app, type, "routes", "", next);
         // Installing api routes
@@ -178,7 +217,7 @@ export default class Apps {
      */
     private installed(app: App, next: NextFunction): void {
         let err: string;
-        if ((app.complete.routes) && (app.complete.api)) {
+        if ((app.complete.routes) && (app.complete.api) && (app.complete.public) && (app.complete.scss)) {
             Log.app(app.config.name);
             Log.appModule("Routes installed", "Routes not found", app.success.routes);
             err = app.errors.routes;
@@ -189,6 +228,18 @@ export default class Apps {
             err = app.errors.api;
             if ((err) && (err.length)) {
                 Log.moduleWarning(err);
+            }
+            if (app.config.engine != "angular") {
+                Log.appModule("Public folder published", "Public folder publication failed", app.success.public);
+                err = app.errors.public;
+                if ((err) && (err.length)) {
+                    Log.moduleWarning(err);
+                }
+                Log.appModule("Styles generated", "No styles to compile", app.success.scss);
+                err = app.errors.scss;
+                if ((err) && (err.length)) {
+                    Log.moduleWarning(err);
+                }
             }
             app.done = true;
             next(this.apps);

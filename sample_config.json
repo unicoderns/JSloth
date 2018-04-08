@@ -14,18 +14,26 @@
     },
     "system_apps": [{
         "name": "auth",
+        "engine": "ejs",
         "basepath": "/auth/",
         "config": {
             "session": "stateless"
         }
     }, {
         "name": "health",
+        "engine": "ejs",
         "basepath": "/health/",
         "config": {}
     }],
     "custom_apps": [{
         "name": "sample",
+        "engine": "ejs",
         "basepath": "/",
+        "config": {}
+    }, {
+        "name": "angular",
+        "engine": "angular",
+        "basepath": "/angular/",
         "config": {}
     }]
 }
