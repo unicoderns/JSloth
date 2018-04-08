@@ -36,6 +36,7 @@ import { Request, Response } from "express";
 import JSloth from "../../../../lib/core";
 import ApiController from "../../../../abstract/controllers/api";
 
+let ip = require("ip");
 let bcrypt = require("bcrypt-nodejs");
 // import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
 
@@ -47,13 +48,13 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionTable: session.SessionTrack;
+    private sessionTable: session.Session_Track;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
-        this.sessionTable = new session.SessionTrack(jsloth);
+        this.sessionTable = new session.Session_Track(jsloth);
     }
 
     /*** Define routes */
@@ -98,7 +99,7 @@ export default class IndexEndPoint extends ApiController {
         let email: string = req.body.email;
         let token: string = "";
         let config: any = this.config;
-
+        let sessionTable = this.sessionTable;
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
         } else {
@@ -112,23 +113,19 @@ export default class IndexEndPoint extends ApiController {
                             // if user is found and password is right
                             // create a token
                             if (config.config.session == "stateful") {
-                                let ip: string = "";
-                                if (req.headers['x-forwarded-for']) {
-                                    ip = req.headers['x-forwarded-for'][0];
-                                } else {
-                                    ip = req.connection.remoteAddress;
-                                }
-                                console.log(ip); //PRINT
                                 let temp: session.Row = {
-                                    ip: ip,
+                                    ip: ip.address(),
                                     user: user.id
                                 };
-                                this.sessionTable.insert(temp).then((data: any) => {
+                                sessionTable.insert(temp).then((data: any) => {
+                                    token = jwt.sign({session: data.insertId}, req.app.get("token"), {
+                                        expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
+                                    });
                                     // return the information including token as JSON
                                     res.json({
                                         success: true,
                                         message: "Enjoy your token!",
-                                        token: data
+                                        token: token
                                     });
 
                                 });
