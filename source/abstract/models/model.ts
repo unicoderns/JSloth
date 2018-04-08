@@ -59,7 +59,7 @@ export default class Model {
      * @return Fields Mapped
      */
     public getFields(): Map<string, string> {
-        let fields =  this.fields;
+        let fields = this.fields;
         if (typeof fields == "undefined") {
             let tmp: Map<string, Map<string, string>> = getList(this.tableName);
             fields = tmp.get("public");
@@ -74,6 +74,18 @@ export default class Model {
         return fields;
     }
 
+    /**
+     * Convert a map in a array.
+     */
+    private mapInArray(target: Map<string, string>): string[] {
+        let keys: string[] = [];
+
+        target.forEach(item => {
+            keys.push(item);
+        });
+        return keys;
+    }
+    
     /**
      * Filter one array if keys don't exists in other array.
      */
@@ -125,31 +137,30 @@ export default class Model {
     private getSelectFieldsSQL(fields: string[]): string {
         let fieldsSQL = "";
         let filteredFields: string[] = [];
+        let selectableFields: string[] = [];
+        let modelFields = this.getFields();
 
-        // Check if there's any data in @fields or fail with a default `all` SQL code
-        if ((typeof fields !== "undefined") && (fields.length)) {
-            // Check if is an array or just SQL code
-            if (Array.isArray(fields)) {
-                let selectableFields: string[] = [];
-                let modelFields = this.getFields();
-                // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
-                if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
-                    selectableFields = this.filterArrayInArray(fields, modelFields);
-                } else {
-                    if (this.jsloth.config.dev) {
-                        this.logArrayInArray(fields, modelFields);
-                    }
-                    selectableFields = fields;
-                }
-                fieldsSQL = fieldsSQL + "`";
-                fieldsSQL = fieldsSQL + selectableFields.join("`, `") + "`";
-            } else {
-                fieldsSQL = fields;
+        // Check if is an array or just SQL code
+        if ((Array.isArray(fields)) && (fields.length)) {
+
+            // Log missing fields in dev mode
+            if (this.jsloth.config.dev) {
+                this.logArrayInArray(fields, modelFields);
             }
+
+            // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
+            if (this.jsloth.config.mysql.validations.fields) {
+                selectableFields = this.filterArrayInArray(fields, modelFields);
+            } else {
+                selectableFields = this.mapInArray(modelFields);
+            }
+
         } else {
-            fieldsSQL = "*";
+            selectableFields = this.mapInArray(modelFields);
         }
 
+        fieldsSQL = fieldsSQL + "`";
+        fieldsSQL = fieldsSQL + selectableFields.join("`, `") + "`";
 
         return fieldsSQL;
     }

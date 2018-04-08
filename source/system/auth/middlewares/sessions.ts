@@ -28,6 +28,8 @@ import JSloth from "../../../lib/core";
 import { Router, Request, Response, NextFunction, RequestHandler } from "express";
 
 import * as jwt from "jsonwebtoken";
+import * as session from "../models/db/sessionTrackModel";
+import * as user from "../models/db/usersModel";
 
 /**
  * Session token verification
@@ -39,7 +41,9 @@ import * as jwt from "jsonwebtoken";
 export function auth(req: Request, res: Response, next: NextFunction) {
     // Check header or url parameters or post parameters for token
     let token = req.body.token || req.query.token || req.headers["x-access-token"];
-
+    let config: any = this.config;
+    let sessionTable = new session.Session_Track(this.jsloth);
+    let userTable = new user.Users(this.jsloth);
     // Decode token
     if (token) {
         // Verifies secret and checks exp
@@ -47,9 +51,31 @@ export function auth(req: Request, res: Response, next: NextFunction) {
             if (err) {
                 return res.json({ success: false, message: "Failed to authenticate token." });
             } else {
-                // If everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                return next();
+                if (config.config.session == "stateful") {
+                    sessionTable.get([], { id: decoded.session, user: decoded.user }).then((session: any) => {
+                        if (typeof session == "undefined") {
+                            return res.status(403).send({
+                                success: false,
+                                message: "Session is not longer available."
+                            });
+                        } else {
+                            userTable.get([], { id: decoded.user }).then((user: any) => {
+                                req.decoded = user;
+                                return next();
+                            });
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        return res.status(403).send({
+                            success: false,
+                            message: "Something went wrong."
+                        });
+                    });
+                } else {
+                    // If everything is good, save to request for use in other routes
+                    req.decoded = decoded;
+                    return next();
+                }
             }
         });
     } else {

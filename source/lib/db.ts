@@ -66,13 +66,13 @@ export default class JSDB {
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
                 // Get connection
-                this.connections.getConnection((err, connection) => {
+                this.connections.getConnection((err: mysql.IError, connection) => {
                     if (err) { // Improve error log
                         reject(err);
                         throw err;
                     }
                     // Query Mysql
-                    let query = connection.query(sql, params, (err, rows: any) => {
+                    let query = connection.query(sql, params, (err: mysql.IError, rows: any) => {
                         connection.release();
                         if (this.config.dev) {
                             console.log("SQL Query: " + query.sql);
