@@ -54,19 +54,19 @@ export function auth(req: Request, res: Response, next: NextFunction) {
                 if (config.config.session == "stateful") {
                     sessionTable.get([], { id: decoded.session, user: decoded.user }).then((session: any) => {
                         if (typeof session == "undefined") {
-                            return res.status(403).send({
+                            return res.status(401).send({
                                 success: false,
                                 message: "Session is not longer available."
                             });
                         } else {
                             userTable.get([], { id: decoded.user }).then((user: any) => {
-                                req.decoded = user;
+                                req.decoded = JSON.parse(JSON.stringify(user));
                                 return next();
                             });
                         }
                     }).catch(err => {
                         console.error(err);
-                        return res.status(403).send({
+                        return res.status(401).send({
                             success: false,
                             message: "Something went wrong."
                         });
@@ -81,7 +81,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
     } else {
         // if there is no token
         // return an error
-        return res.status(403).send({
+        return res.status(400).send({
             success: false,
             message: "No token provided."
         });
