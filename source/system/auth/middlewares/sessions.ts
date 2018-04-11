@@ -88,3 +88,14 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 
     }
 }
+
+export function isVerified(req: Request, res: Response, next: NextFunction) {
+    if (req.decoded.isVerified) {
+        return next();
+    }else {
+        return res.status(401).send({
+            success: false,
+            message: "User is not verified."
+        });
+    }
+}
