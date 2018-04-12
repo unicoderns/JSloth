@@ -63,6 +63,7 @@ export default class IndexEndPoint extends ApiController {
 
         this.post("/token/", "getToken", this.getToken);
         this.post("/token/renew/", "renewToken", sessions.auth.bind(this), this.renewToken);
+        this.post("/token/revoke/", "revokeToken", sessions.auth.bind(this), this.revokeToken);
 
         this.get("/users/", "userList", this.getList);
         this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
@@ -70,6 +71,7 @@ export default class IndexEndPoint extends ApiController {
         this.get("/fields/", "fields", sessions.auth.bind(this), this.getFieds);
 
         this.get("/context/", "context", this.getSysContext);
+
     }
 
     /**
@@ -84,6 +86,18 @@ export default class IndexEndPoint extends ApiController {
         this.usersTable.delete({ id: 3 }).then((done) => {
             this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
                 res.json(data);
+            }).catch(err => {
+                return res.status(500).send({
+                    success: false,
+                    message: "Something went wrong.",
+                    error: err
+                });
+            });
+        }).catch(err => {
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong.",
+                error: err
             });
         });
     };
@@ -120,7 +134,7 @@ export default class IndexEndPoint extends ApiController {
                                     user: user.id
                                 };
                                 sessionTable.insert(temp).then((data: any) => {
-                                    token = jwt.sign({session: data.insertId, user: user.id}, req.app.get("token"), {
+                                    token = jwt.sign({ session: data.insertId, user: user.id }, req.app.get("token"), {
                                         expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
                                     });
                                     // return the information including token as JSON
@@ -128,6 +142,12 @@ export default class IndexEndPoint extends ApiController {
                                         success: true,
                                         message: "Enjoy your token!",
                                         token: token
+                                    });
+                                }).catch(err => {
+                                    return res.status(500).send({
+                                        success: false,
+                                        message: "Something went wrong.",
+                                        error: err
                                     });
                                 });
                             } else {
@@ -146,6 +166,12 @@ export default class IndexEndPoint extends ApiController {
                         };
                     });
                 }
+            }).catch(err => {
+                return res.status(500).send({
+                    success: false,
+                    message: "Something went wrong.",
+                    error: err
+                });
             });
         }
     };
@@ -175,6 +201,36 @@ export default class IndexEndPoint extends ApiController {
     };
 
     /**
+    * Revoke a token for a stateful session.
+    *
+    * @param req { Request } The request object.
+    * @param res { Response } The response object.
+    * @return json
+    */
+    private revokeToken = (req: Request, res: Response): void => {
+        if (this.config.config.session == "stateful") {
+            this.sessionTable.delete({ user: req.decoded.id }).then((done) => {
+                res.json({
+                    success: true,
+                    message: "Session revoked!"
+                });
+            }).catch(err => {
+                console.error(err);
+                return res.status(500).send({
+                    success: false,
+                    message: "Something went wrong.",
+                    error: err
+                });
+            });
+        } else {
+            res.json({
+                success: false,
+                message: "This kind of sessions can't be revoked!"
+            });
+        }
+    };
+
+    /**
      * Get user list.
      *
      * @param req { Request } The request object.
@@ -184,6 +240,12 @@ export default class IndexEndPoint extends ApiController {
     private getList = (req: Request, res: Response): void => {
         this.usersTable.getAll().then((data) => {
             res.json(data);
+        }).catch(err => {
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong.",
+                error: err
+            });
         });
     };
 
@@ -197,6 +259,12 @@ export default class IndexEndPoint extends ApiController {
     private updatePassword = (req: Request, res: Response): void => {
         this.usersTable.update({ password: bcrypt.hashSync("q123queso", null, null) }, { id: 1 }).then((data) => {
             res.json(data);
+        }).catch(err => {
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong.",
+                error: err
+            });
         });
     };
 
