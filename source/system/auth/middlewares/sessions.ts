@@ -46,6 +46,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
     let userTable = new user.Users(this.jsloth);
     // Decode token
     if (token) {
+        req.token = token;
         // Verifies secret and checks exp
         jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
             if (err) {
