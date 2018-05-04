@@ -65,9 +65,11 @@ export default class Model {
             fields = tmp.get("public");
             if (this.unsafe) {
                 var secret: Map<string, string> = tmp.get("secret");
-                secret.forEach(function (value, key) {
-                    fields.set(key, value);
-                });
+                if ((secret) && (secret.size)) {
+                    secret.forEach(function (value, key) {
+                        fields.set(key, value);
+                    });
+                }
             }
             this.fields = fields;
         }

@@ -61,7 +61,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
                             });
                         } else {
                             userTable.get([], { id: decoded.user }).then((user: any) => {
-                                req.decoded = JSON.parse(JSON.stringify(user));
+                                req.user = JSON.parse(JSON.stringify(user));
                                 return next();
                             });
                         }
@@ -74,7 +74,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
                     });
                 } else {
                     // If everything is good, save to request for use in other routes
-                    req.decoded = decoded;
+                    req.user = decoded;
                     return next();
                 }
             }
@@ -91,7 +91,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 }
 
 export function isVerified(req: Request, res: Response, next: NextFunction) {
-    if (req.decoded.isVerified) {
+    if (req.user.isVerified) {
         return next();
     }else {
         return res.status(401).send({

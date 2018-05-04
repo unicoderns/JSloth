@@ -87,17 +87,17 @@ export default class IndexEndPoint extends ApiController {
             this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
                 res.json(data);
             }).catch(err => {
+                console.error(err);
                 return res.status(500).send({
                     success: false,
-                    message: "Something went wrong.",
-                    error: err
+                    message: "Something went wrong."
                 });
             });
         }).catch(err => {
+            console.error(err);
             return res.status(500).send({
                 success: false,
-                message: "Something went wrong.",
-                error: err
+                message: "Something went wrong."
             });
         });
     };
@@ -144,10 +144,10 @@ export default class IndexEndPoint extends ApiController {
                                         token: token
                                     });
                                 }).catch(err => {
+                                    console.error(err);                                    
                                     return res.status(500).send({
                                         success: false,
-                                        message: "Something went wrong.",
-                                        error: err
+                                        message: "Something went wrong."
                                     });
                                 });
                             } else {
@@ -167,10 +167,10 @@ export default class IndexEndPoint extends ApiController {
                     });
                 }
             }).catch(err => {
+                console.error(err);
                 return res.status(500).send({
                     success: false,
-                    message: "Something went wrong.",
-                    error: err
+                    message: "Something went wrong."
                 });
             });
         }
@@ -185,11 +185,11 @@ export default class IndexEndPoint extends ApiController {
      */
     private renewToken = (req: Request, res: Response): void => {
         // Clean data
-        let data = req.decoded;
+        let data = req.user;
         delete data.iat;
         delete data.exp;
         // create a new token
-        let token = jwt.sign(req.decoded, req.app.get("token"), {
+        let token = jwt.sign(req.user, req.app.get("token"), {
             expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
         });
 
@@ -209,7 +209,7 @@ export default class IndexEndPoint extends ApiController {
     */
     private revokeToken = (req: Request, res: Response): void => {
         if (this.config.config.session == "stateful") {
-            this.sessionTable.delete({ user: req.decoded.id }).then((done) => {
+            this.sessionTable.delete({ user: req.user.id }).then((done) => {
                 res.json({
                     success: true,
                     message: "Session revoked!"
@@ -218,8 +218,7 @@ export default class IndexEndPoint extends ApiController {
                 console.error(err);
                 return res.status(500).send({
                     success: false,
-                    message: "Something went wrong.",
-                    error: err
+                    message: "Something went wrong."
                 });
             });
         } else {
@@ -241,10 +240,10 @@ export default class IndexEndPoint extends ApiController {
         this.usersTable.getAll().then((data) => {
             res.json(data);
         }).catch(err => {
+            console.error(err);
             return res.status(500).send({
                 success: false,
-                message: "Something went wrong.",
-                error: err
+                message: "Something went wrong."
             });
         });
     };
@@ -260,10 +259,10 @@ export default class IndexEndPoint extends ApiController {
         this.usersTable.update({ password: bcrypt.hashSync("q123queso", null, null) }, { id: 1 }).then((data) => {
             res.json(data);
         }).catch(err => {
+            console.error(err);
             return res.status(500).send({
                 success: false,
-                message: "Something went wrong.",
-                error: err
+                message: "Something went wrong."
             });
         });
     };
