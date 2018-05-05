@@ -17,7 +17,9 @@
         "engine": "ejs",
         "basepath": "/auth/",
         "config": {
-            "session": "stateless"
+            "session": "stateless",
+            "cookie": false,
+            "expiration": 1800
         }
     }, {
         "name": "health",

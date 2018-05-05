@@ -24,6 +24,7 @@
 
 import * as app from "../../interfaces/app";
 import * as bodyParser from "body-parser"; // Parse incoming request bodies
+import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
 
@@ -127,6 +128,7 @@ export default class Core {
         // Use body parser so we can get info from POST and/or URL parameters
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+        this.express.use(cookieParser(this.config.token));
         Log.module("Middlewares loaded");
     }
 

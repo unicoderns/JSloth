@@ -103,6 +103,33 @@ export default class IndexEndPoint extends ApiController {
     };
 
     /**
+     * Sign JWT token and reply.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @param config { Object } The config object.
+     * @param data { Object } Data to sign and create token.
+     * @return json
+     */
+    private signAndReply = (req: Request, res: Response, config: any, data: any): void => {
+        let token = jwt.sign(data, req.app.get("token"), {
+            expiresIn: config.config.expiration // 5 years
+        });
+
+        // Set cookie
+        if (config.config.cookie) {
+            res.cookie('token', token, { signed: true, httpOnly: true, maxAge: config.config.expiration * 1000 });
+        }
+
+        // return the information including token as JSON
+        res.json({
+            success: true,
+            message: "Enjoy your token!",
+            token: token
+        });
+    }
+
+    /**
      * Get auth token.
      *
      * @param req { Request } The request object.
@@ -114,7 +141,10 @@ export default class IndexEndPoint extends ApiController {
         let token: string = "";
         let config: any = this.config;
         let sessionTable = this.sessionTable;
+        let signAndReply = this.signAndReply;
         let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
+
+        let expiration = 5 * 365 * 24 * 60 * 60; // 5 years
 
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
@@ -134,32 +164,16 @@ export default class IndexEndPoint extends ApiController {
                                     user: user.id
                                 };
                                 sessionTable.insert(temp).then((data: any) => {
-                                    token = jwt.sign({ session: data.insertId, user: user.id }, req.app.get("token"), {
-                                        expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-                                    });
-                                    // return the information including token as JSON
-                                    res.json({
-                                        success: true,
-                                        message: "Enjoy your token!",
-                                        token: token
-                                    });
+                                    signAndReply(req, res, config, { session: data.insertId, user: user.id });
                                 }).catch(err => {
-                                    console.error(err);                                    
+                                    console.error(err);
                                     return res.status(500).send({
                                         success: false,
                                         message: "Something went wrong."
                                     });
                                 });
                             } else {
-                                token = jwt.sign(JSON.parse(JSON.stringify(user)), req.app.get("token"), {
-                                    expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-                                });
-                                // return the information including token as JSON
-                                res.json({
-                                    success: true,
-                                    message: "Enjoy your token!",
-                                    token: token
-                                });
+                                signAndReply(req, res, config, JSON.parse(JSON.stringify(user)));
                             }
                         } else {
                             res.json({ success: false, message: "Authentication failed. User and password don't match." });
@@ -188,16 +202,8 @@ export default class IndexEndPoint extends ApiController {
         let data = req.user;
         delete data.iat;
         delete data.exp;
-        // create a new token
-        let token = jwt.sign(req.user, req.app.get("token"), {
-            expiresIn: 5 * 365 * 24 * 60 * 60 // 5 years
-        });
 
-        res.json({
-            success: true,
-            message: "Enjoy your token!",
-            token: token
-        });
+        this.signAndReply(req, res, this.config, data);
     };
 
     /**
@@ -210,6 +216,10 @@ export default class IndexEndPoint extends ApiController {
     private revokeToken = (req: Request, res: Response): void => {
         if (this.config.config.session == "stateful") {
             this.sessionTable.delete({ user: req.user.id }).then((done) => {
+                // Expire cookie
+                if (this.config.config.cookie) {
+                    res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
+                }
                 res.json({
                     success: true,
                     message: "Session revoked!"
