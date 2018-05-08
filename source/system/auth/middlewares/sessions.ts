@@ -32,6 +32,55 @@ import * as session from "../models/db/sessionTrackModel";
 import * as user from "../models/db/usersModel";
 
 /**
+ * Get Context user
+ * 
+ * @param req {Request} The request object.
+ * @param res {Response} The response object.
+ * @param next Callback.
+ */
+export function context(req: Request, res: Response, next: NextFunction) {
+    // Check header or url parameters or post parameters for token
+    let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
+    let config: any = this.config;
+    let sessionTable = new session.Session_Track(this.jsloth);
+    let userTable = new user.Users(this.jsloth);
+    // Clean user
+    req.user = undefined;
+    // Decode token
+    if (token) {
+        req.token = token;
+        // Verifies secret and checks exp
+        jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
+            if (err) {
+                return next();
+            } else {
+                if (config.config.session == "stateful") {
+                    sessionTable.get([], { id: decoded.session, user: decoded.user }).then((session: any) => {
+                        if (typeof session == "undefined") {
+                            return next();
+                        } else {
+                            userTable.get([], { id: decoded.user }).then((user: any) => {
+                                req.user = JSON.parse(JSON.stringify(user));
+                                return next();
+                            });
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        return next();
+                    });
+                } else {
+                    // If everything is good, save to request for use in other routes
+                    req.user = decoded;
+                    return next();
+                }
+            }
+        });
+    } else {
+        return next();
+    }
+}
+
+/**
  * Session token verification
  * 
  * @param req {Request} The request object.
@@ -91,7 +140,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 }
 
 export function isVerified(req: Request, res: Response, next: NextFunction) {
-    if (req.user.isVerified) {
+    if (req.user.verified) {
         return next();
     }else {
         return res.status(401).send({

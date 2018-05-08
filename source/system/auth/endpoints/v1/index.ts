@@ -144,8 +144,6 @@ export default class IndexEndPoint extends ApiController {
         let signAndReply = this.signAndReply;
         let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
 
-        let expiration = 5 * 365 * 24 * 60 * 60; // 5 years
-
         if (!this.emailRegex.test(email)) {
             res.json({ success: false, message: "Invalid email address." });
         } else {

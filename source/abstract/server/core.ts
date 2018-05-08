@@ -27,6 +27,7 @@ import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
+import * as sessions from "../../system/auth/middlewares/sessions";
 
 import Apps from "./apps";
 import Batch from "./batch";
@@ -129,6 +130,7 @@ export default class Core {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
         this.express.use(cookieParser(this.config.token));
+        this.express.use(sessions.context.bind(this));        
         Log.module("Middlewares loaded");
     }
 
