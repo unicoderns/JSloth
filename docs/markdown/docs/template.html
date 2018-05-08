@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JSloth Documentation</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <style>
+        .navbar {
+            padding: 0;
+            color: #0975bf;
+            font-weight: 200;
+            border-bottom: 2rem solid #1880c5;
+        }
+        
+        img {
+            max-width: 100%;
+        }
+        
+        #content {
+            margin-top: 2rem;
+        }
+        
+        .list-group ul {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .list-group li {
+            position: relative;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-flow: row wrap;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        
+        .heading {
+            margin-top: 1.8rem;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            color: #464a4c8c;
+        }
+        
+        .list-group li a {
+            padding: .75rem 1.25rem;
+            margin-bottom: -1px;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, .125);
+            width: 100%;
+            color: #464a4c;
+            text-align: inherit;
+        }
+        
+        .list-group li:first-child a {
+            border-top-right-radius: .25rem;
+            border-top-left-radius: .25rem;
+        }
+        
+        .list-group li:last-child a {
+            margin-bottom: 2rem;
+            border-bottom-right-radius: .25rem;
+            border-bottom-left-radius: .25rem;
+        }
+        
+        .list-group li a.active {
+            z-index: 2;
+            color: #fff;
+            background-color: #187fc5;
+            border-color: #0275d8;
+        }
+        
+        .list-group li a:focus,
+        .list-group li a:hover {
+            color: #464a4c;
+            text-decoration: none;
+            background-color: #f7f7f9;
+        }
+        
+        #cover {
+            width: 100%;
+            height: 100%;
+            page-break-after: always;
+            position: relative;
+            text-align: center;
+        }
+        
+        #cover img {
+            margin-top: 40%;
+            width: 80%;
+        }
+        
+        #cover ul {
+            list-style-type: none;
+        }
+        
+        #cover a {
+            display: none;
+        }
+        
+        #cover .heading {
+            display: none;
+        }
+        
+        #cover a.active {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #b6b4b4;
+            position: relative;
+            top: -1rem;
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cover" class="d-print-block">
+        <img src="../img/logoprint.png" class="img-responsive" alt="Image">
+        <!--NAV-->
+    </div>
+    <header class="header d-print-none">
+        <!-- Navigation -->
+        <nav class="navbar main-menu" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <h1 id="logo">
+                        <a target="_blank" class="navbar-brand page-scroll" href="">
+                            <img src="../img/newlogo.png" class="img-responsive" alt="Image">
+                        </a>
+                    </h1>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="navbar-right">
+                    ...
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container -->
+        </nav>
+        <!-- .nav -->
+    </header>
+
+    <section id="content" class="container">
+        <div class="row row-offcanvas row-offcanvas-left">
+            <div class="col-6 col-md-3 sidebar-offcanvas d-print-none" id="sidebar">
+                <div class="list-group">
+                    <!--NAV-->
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                <div>
+                    <!--CONTENT-->
+
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
