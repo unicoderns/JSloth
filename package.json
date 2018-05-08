@@ -9,11 +9,11 @@
     "scripts": {
         "start": "nodemon -e js,ts --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
         "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
+        "docs": "markdown-folder-to-html docs/markdown/docs",
         "typedoc": "typedoc --out ./docs/typedoc/ ./source/",
         "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
         "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register",
-        "build": "ng build --prod --app angular && ng build --prod --app angular-server",
-        "build-angular": "ng build --prod --app angular && ng build --prod --app angular-server"
+        "build": "ng build --prod --app angular && ng build --prod --app angular-server"
     },
     "bugs": {
         "url": "https://github.com/chrissmejia/JSloth/issues",
@@ -47,6 +47,7 @@
         "express": "^4.16.2",
         "ip": "^1.1.5",
         "jsonwebtoken": "^8.1.0",
+        "markdown-folder-to-html": "^1.6.0",
         "morgan": "^1.9.0",
         "mysql": "^2.15.0",
         "node-sass": "^4.7.2",

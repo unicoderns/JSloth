@@ -3,6 +3,7 @@ npm-debug.log
 config.json
 coverage/
 dist/*
+_docs/*
 node_modules/*
 bower_components/*
 ts-node*/
