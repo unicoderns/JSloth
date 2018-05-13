@@ -27,10 +27,10 @@ import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
-import * as sessions from "../../system/auth/middlewares/sessions";
 
 import Apps from "./apps";
 import Batch from "./batch";
+import Sessions from "../../system/auth/middlewares/sessions";
 import SysConfig from "../../interfaces/config";
 import JSFiles from "../../lib/files";
 import JSloth from "../../lib/core";
@@ -120,6 +120,8 @@ export default class Core {
 
     /*** Configure Express middlewares */
     protected middleware(): void {
+        let auth_config = this.config.system_apps.find((x: any) => x.name == 'auth');
+        let sessions = new Sessions(this.jsloth, auth_config);
         // Log hits using morgan
         if (this.jsloth.config.dev) {
             this.express.use(logger("dev"));
@@ -130,7 +132,7 @@ export default class Core {
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
         this.express.use(cookieParser(this.config.token));
-        this.express.use(sessions.context.bind(this));        
+        this.express.use(sessions.context);        
         Log.module("Middlewares loaded");
     }
 
