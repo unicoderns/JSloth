@@ -29,12 +29,12 @@
 import * as jwt from "jsonwebtoken";
 import * as users from "../../models/db/usersModel";
 import * as session from "../../models/db/sessionTrackModel";
-import * as sessions from "../../middlewares/sessions";
 
 import { Request, Response } from "express";
 
-import JSloth from "../../../../lib/core";
 import ApiController from "../../../../abstract/controllers/api";
+import JSloth from "../../../../lib/core";
+import Sessions from "../../middlewares/sessions";
 
 let ip = require("ip");
 let bcrypt = require("bcrypt-nodejs");
@@ -49,12 +49,14 @@ let bcrypt = require("bcrypt-nodejs");
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
     private sessionTable: session.Session_Track;
+    private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
         this.sessionTable = new session.Session_Track(jsloth);
+        this.sessionsMiddleware = new Sessions(jsloth, config)
     }
 
     /*** Define routes */
@@ -62,13 +64,13 @@ export default class IndexEndPoint extends ApiController {
         this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
-        this.post("/token/renew/", "renewToken", sessions.auth.bind(this), this.renewToken);
-        this.post("/token/revoke/", "revokeToken", sessions.auth.bind(this), this.revokeToken);
+        this.post("/token/renew/", "renewToken",  this.renewToken);
+        this.post("/token/revoke/", "revokeToken", this.revokeToken);
 
         this.get("/users/", "userList", this.getList);
         this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.get("/fields/", "fields", sessions.auth.bind(this), this.getFieds);
+        this.get("/fields/", "fields", this.getFieds);
 
         this.get("/context/", "context", this.getSysContext);
 
