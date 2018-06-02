@@ -136,7 +136,7 @@ export default class Apps {
     private installApp(app: App, type: string, next: NextFunction): void {
         if (app.config.engine != "angular") {
             let compileSCSS = () => {
-                Batch.compileSCSS(type + "/" + app.config.name, app.config.name).then((success: boolean) => {
+                Batch.compileSCSS(type + "/" + app.config.name, "static/" + app.config.name).then((success: boolean) => {
                     app.complete.scss = true;
                     app.success.scss = success;
                     this.installed(app, next);
@@ -149,7 +149,7 @@ export default class Apps {
                 });
             };
 
-            Batch.copyPublic(type + "/" + app.config.name + "/public/", app.config.name).then((success: boolean) => {
+            Batch.copyPublic(type + "/" + app.config.name + "/public/", "static/" + app.config.name).then((success: boolean) => {
                 app.complete.public = true;
                 app.success.public = success;
                 compileSCSS(); // Wait the structure to compile

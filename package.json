@@ -7,7 +7,7 @@
         "url": "https://chrissmejia.com/"
     },
     "scripts": {
-        "start": "nodemon -e js,ts --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
+        "start": "nodemon -e js,ts,scss --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
         "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
         "docs": "markdown-folder-to-html docs/markdown/docs",
         "typedoc": "typedoc --out ./docs/typedoc/ ./source/",

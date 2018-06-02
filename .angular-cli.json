@@ -7,7 +7,7 @@
     {
       "name": "angular",
       "root": "source/apps/angular/client",
-      "outDir": "dist/browser/angular",
+      "outDir": "dist/angular/browser/angular",
       "assets": [
         "assets",
         "favicon.ico"
@@ -32,7 +32,7 @@
     {
       "name": "angular-server",
       "root": "source/apps/angular/client",
-      "outDir": "dist/server/angular",
+      "outDir": "dist/angular/server/angular",
       "assets": [
         "assets",
         "favicon.ico"

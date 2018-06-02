@@ -91,6 +91,25 @@ export default class Sessions {
         }
     }
 
+    /**
+     * Force an update context user
+     * 
+     * @param req {Request} The request object.
+     * @param res {Response} The response object.
+     * @param next Callback.
+     */
+    public updateContext = (req: Request, res: Response, next: NextFunction) => {
+        let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
+        // Verifies secret and checks exp
+        jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
+            this.userCache(decoded.user, false).then((user: any) => {
+                return next();
+            }).catch(err => {
+                console.error(err);
+                return next();
+            });
+        });
+    }
 
     /**
      * Get context user
