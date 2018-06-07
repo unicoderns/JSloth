@@ -51,7 +51,7 @@ class Batch {
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // "node-sass --include-path " + __dirname + "/../../../node_modules/foundation-sites/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from
                 this.exec("node-sass --include-path " + __dirname + "/../../../node_modules/bootstrap/scss --output-style compressed -o " + this.toPrefix + to + "/ " + this.fromPrefix + from + "/", function (err: any, stdout: any, stderr: any) {
-                    if ((stderr.substr(0, 39)) == "Rendering Complete, saving .css file...") {
+                    if ((stdout.substr(0, 39)) == "Rendering Complete, saving .css file...") {
                         resolve(true);
                     } else {
                         resolve(false);
@@ -161,12 +161,12 @@ class Batch {
      */
     public copyPublic = (from: string, to: string): Promise<any> => {
         const p: Promise<boolean> = new Promise(
-            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
+            (resolve: (success: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 try {
                     this.rm(to).then(() => {
                         this.mkdir(to).then(() => {
                             this.cp(from, to).then(() => {
-                                resolve();
+                                resolve(true);
                             }).catch(err => {
                                 reject(err);
                             });
