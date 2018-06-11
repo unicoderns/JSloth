@@ -87,7 +87,7 @@ export default class Model {
         });
         return keys;
     }
-    
+
     /**
      * Filter one array if keys don't exists in other array.
      */
@@ -233,12 +233,22 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
+     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var limit Number of rows to retrieve
      * @return Promise with query result
+     * 
+     * TODO: 
+     * @var orderBy should be an array of fields, then they can be tested
+     * Join at least 2 tables is important
+     * Group this using functions like select("").orderBy() is just easier to understand
      */
-    private select(fields?: string[], where?: any, limit?: number): Promise<any> {
+    private select(fields?: string[], where?: any, orderBy?: string, limit?: number): Promise<any> {
         let fieldsSQL = this.getSelectFieldsSQL(fields);
         let whereData = this.generateWhereData(where);
         let extra = "";
+        if (orderBy) {
+            extra = " ORDER BY " + orderBy;
+        }
         if (limit) {
             extra = " LIMIT " + limit;
         }
@@ -252,13 +262,14 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
+     * @var orderBy Way to order the rows E.g.: "id ASC"
      * @return Promise with query result
      */
-    public get(fields?: string[], where?: any): Promise<any> {
+    public get(fields?: string[], where?: any, orderBy?: string): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
-                let sqlPromise = this.select(fields, where, 1);
+                let sqlPromise = this.select(fields, where, orderBy, 1);
                 sqlPromise.then((data) => {
                     resolve(data[0]);
                 }).catch(err => {
@@ -275,10 +286,12 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
+     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var limit Number of rows to retrieve
      * @return Promise with query result
      */
-    public getSome(fields?: string[], where?: any, limit?: number): Promise<any> {
-        return this.select(fields, where, limit);
+    public getSome(fields?: string[], where?: any, orderBy?: string, limit?: number): Promise<any> {
+        return this.select(fields, where, orderBy, limit);
     }
 
     /**
@@ -287,10 +300,11 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
+     * @var orderBy Way to order the rows E.g.: "id ASC"
      * @return Promise with query result
      */
-    public getAll(fields?: string[], where?: any): Promise<any> {
-        return this.select(fields, where);
+    public getAll(fields?: string[], where?: any, orderBy?: string): Promise<any> {
+        return this.select(fields, where, orderBy);
     }
     /**
      * Insert query
