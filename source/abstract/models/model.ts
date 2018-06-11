@@ -233,19 +233,24 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
-     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var orderBy String with column_name and direction E.g.: "id, name ASC"
+     * @var groupBy String with column_name E.g.: "id, name"
      * @var limit Number of rows to retrieve
      * @return Promise with query result
      * 
      * TODO: 
      * @var orderBy should be an array of fields, then they can be tested
+     * @var groupBy should be an array of fields, then they can be tested
      * Join at least 2 tables is important
      * Group this using functions like select("").orderBy() is just easier to understand
      */
-    private select(fields?: string[], where?: any, orderBy?: string, limit?: number): Promise<any> {
+    private select(fields?: string[], where?: any, groupBy?: string, orderBy?: string, limit?: number): Promise<any> {
         let fieldsSQL = this.getSelectFieldsSQL(fields);
         let whereData = this.generateWhereData(where);
         let extra = "";
+        if (groupBy) {
+            extra = " GROUP BY " + groupBy;
+        }
         if (orderBy) {
             extra = " ORDER BY " + orderBy;
         }
@@ -262,14 +267,15 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
-     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var orderBy String with column_name and direction E.g.: "id, name ASC"
+     * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
      */
-    public get(fields?: string[], where?: any, orderBy?: string): Promise<any> {
+    public get(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
-                let sqlPromise = this.select(fields, where, orderBy, 1);
+                let sqlPromise = this.select(fields, where, groupBy, orderBy, 1);
                 sqlPromise.then((data) => {
                     resolve(data[0]);
                 }).catch(err => {
@@ -286,12 +292,13 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
-     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var orderBy String with column_name and direction E.g.: "id, name ASC"
+     * @var groupBy String with column_name E.g.: "id, name"
      * @var limit Number of rows to retrieve
      * @return Promise with query result
      */
-    public getSome(fields?: string[], where?: any, orderBy?: string, limit?: number): Promise<any> {
-        return this.select(fields, where, orderBy, limit);
+    public getSome(fields?: string[], where?: any, groupBy?: string, orderBy?: string, limit?: number): Promise<any> {
+        return this.select(fields, where, groupBy, orderBy, limit);
     }
 
     /**
@@ -300,11 +307,12 @@ export default class Model {
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
      * @var where Key/Value array used to filter the query
-     * @var orderBy Way to order the rows E.g.: "id ASC"
+     * @var orderBy String with column_name and direction E.g.: "id, name ASC"
+     * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
      */
-    public getAll(fields?: string[], where?: any, orderBy?: string): Promise<any> {
-        return this.select(fields, where, orderBy);
+    public getAll(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
+        return this.select(fields, where, groupBy, orderBy);
     }
     /**
      * Insert query
