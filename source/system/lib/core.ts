@@ -30,8 +30,7 @@ import JSPath from "./path";
 import JSDB from "./db";
 
 /**
- * JSloth Loader
- * Load components.
+ * JSloth Library Loader
  */
 export default class JSloth {
     public config: Config;
@@ -42,12 +41,13 @@ export default class JSloth {
     public db: JSDB;
 
     /*** Configuration methods */
-    constructor(config: Config) {
+    constructor(config: Config, baseURL: string) {
         this.config = config;
-        
-        this.context = new JSContext(config);
+
+        this.context = new JSContext(baseURL);
+        this.path = new JSPath(this);
+
         this.files = new JSFiles(config);
-        this.path = new JSPath(config);
         this.db = new JSDB(config);
     }
 

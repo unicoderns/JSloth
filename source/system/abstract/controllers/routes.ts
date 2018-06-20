@@ -22,57 +22,28 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSFiles from "./files";
-import Config from "../interfaces/config";
-import { Promise } from "es6-promise";
+import Controller from "./core";
 
 /**
-* JSloth Path
-* Check the right path, search /core/ first and /app/ if is not found it.
-*/
-export default class JSPath {
-
-    /*** JSloth Files instance */
-    private files: JSFiles;
-
-    /*** Configuration methods */
-    constructor(config: Config) {
-        this.files = new JSFiles(config);
-    }
+ * Routes Abstract
+ */
+export default class Routes extends Controller {
 
     /**
-     * Get the new full path.
-     *
-     * @param file string Filename
-     * @return void
+     * Load and install routes 
+     * 
+     * @param controller
+     * @param url Concatenated url across the imports
+     * @param namespace Current namespace name
+     * @return express.Router
      */
-    public get(folder: string, app: string, file: string): Promise<string> {
-        let path: string = app + "/views/" + file;
-        let customPath: string = app + "/" + file;
-
-        // Create promise
-        const p: Promise<string> = new Promise(
-            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                // Resolve promise
-                this.files.exists(__dirname + "/../views/" + customPath).then((exist) => {
-                    resolve("../source/views/" + customPath);
-                }).catch((err: NodeJS.ErrnoException) => {
-                    resolve("../source/" + folder + "/" + path);
-                    throw err;
-                });
-            });
-        return p;
+    protected include(controller: any, url: string = "/", namespace: string = "index"): void {
+        // Load
+        this.namespaces.push(namespace);
+        let instance: Controller = new controller(this.jsloth, this.config, this.url + url, this.namespaces);
+        instance.setup();
+        // Install
+        this.router.use(url, instance.router);
     }
-
-    /**
-     * Get the new full angular path.
-     *
-     * @param file string Filename
-     * @return string
-     */
-    public getAngular(folder: string, app: string, file: string): string {
-        return "../dist/browser/" + app + "/" + file;
-    }
-
 
 }

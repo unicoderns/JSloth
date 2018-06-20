@@ -61,7 +61,7 @@ export default class Sessions {
         function fromSQL() {
             // Create promise
             const p: Promise<any> = new Promise(
-                (resolve: (data: any) => void, reject: (err: any) => void) => {
+                (resolve: (data: any) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                     userTable.get([], { id: id }).then((user: any) => {
                         let user_temp = JSON.parse(JSON.stringify(user));
                         that.cache[id] = user_temp;
@@ -81,9 +81,10 @@ export default class Sessions {
                 return fromSQL();
             } else {
                 const p: Promise<any> = new Promise(
-                    (resolve: (data: any) => void) => {
+                    (resolve: (data: any) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                         resolve(user_temp);
-                    });
+                    }
+                );
                 return p;
             }
         } else {
@@ -123,7 +124,7 @@ export default class Sessions {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
         let config: any = this.config;
         let userCache = this.userCache;
-        let sessionTable = new session.Session_Track(this.jsloth);
+        let sessionTable = new session.SessionTrack(this.jsloth);
         // Clean user
         req.user = undefined;
         // Decode token
@@ -174,7 +175,7 @@ export default class Sessions {
         // Check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
         let config: any = this.config;
-        let sessionTable = new session.Session_Track(this.jsloth);
+        let sessionTable = new session.SessionTrack(this.jsloth);
         let userTable = new user.Users(this.jsloth);
         // Decode token
         if (token) {

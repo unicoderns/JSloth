@@ -23,8 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Controller from "./core";
-import Log from "../server/log";
-import JSloth from "../../lib/core";
+import Log from "../../server/log";
 
 import * as express from "express";
 import { Response, Request, Application } from "express";

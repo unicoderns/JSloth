@@ -22,50 +22,63 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../lib/core";
-import { Router, Request, Response, NextFunction } from "express";
-import SysConfig from "../../interfaces/config";
-
-import * as jwt from "jsonwebtoken";
+import JSFiles from "./files";
+import Config from "../interfaces/config";
+import { Promise } from "es6-promise";
+import JSloth from "./core";
 
 /**
- * Controller Abstract
- */
-export default class Controller {
+* JSloth Path
+* Check the right path, search /core/ first and /app/ if is not found it.
+*/
+export default class JSPath {
+
+    /*** JSloth library */
     protected jsloth: JSloth;
-    protected config: any;
-    protected namespaces: string[] = [];
-    protected url: string;
 
-    /**
-     * Express Router instance
-     *
-     * @return Router
-     */
-    public router: Router = Router();
-
-    /**
-     * Load library, app configuration and install routes 
-     */
-    constructor(jsloth: JSloth, config: SysConfig, url: string, namespaces: string[]) {
+    /*** Configuration methods */
+    constructor(jsloth: JSloth) {
         this.jsloth = jsloth;
-        this.config = config;
-        this.namespaces = namespaces;
-        this.url = url;
-        this.init();
     }
 
-    /*** Init Controller */
-    protected init(): void {
+    /**
+     * Get the new full path.
+     *
+     * @param file string Filename
+     * @return void
+     */
+    public get(type: string, app: string, file: string): Promise<string> {
+        let customPath: string = "../source/views/" + app + "/" + file;
+        console.log(customPath);
+        let path: string = "../source/apps/" + app + "/views/" + file;
+        if (type == "system") {
+            path = "../source/system/apps/" + app + "/views/" + file;
+        }
+
+        // Create promise
+        const p: Promise<string> = new Promise(
+            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                // Resolve promise
+                this.jsloth.files.exists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
+                    resolve(customPath);
+                }).catch((err: NodeJS.ErrnoException) => {
+                    console.log(path)
+                    resolve(path);
+                    throw err;
+                });
+            });
+        return p;
     }
 
-    /*** Setup Controller */
-    public setup(): void {
-        this.routes();
+    /**
+     * Get the new full angular path.
+     *
+     * @param file string Filename
+     * @return string
+     */
+    public getAngular(folder: string, app: string, file: string): string {
+        return "../dist/browser/" + app + "/" + file;
     }
 
-    /*** Define routes */
-    protected routes(): void {
-    }
 
 }

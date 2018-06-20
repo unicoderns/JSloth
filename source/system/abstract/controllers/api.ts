@@ -22,7 +22,6 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../lib/core";
 import Controller from "./core";
 import { RequestHandler } from "express";
 

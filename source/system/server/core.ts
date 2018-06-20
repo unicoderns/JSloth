@@ -22,18 +22,17 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as app from "../../interfaces/app";
+import * as app from "../interfaces/app";
 import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";  // Log requests
 
 import Apps from "./apps";
-import Batch from "./batch";
-import Sessions from "../../system/auth/middlewares/sessions";
-import SysConfig from "../../interfaces/config";
-import JSFiles from "../../lib/files";
-import JSloth from "../../lib/core";
+import Sessions from "../apps/auth/middlewares/sessions";
+import SysConfig from "../interfaces/config";
+import JSFiles from "../lib/files";
+import JSloth from "../lib/core";
 import Log from "./log";
 
 /**
@@ -104,7 +103,7 @@ export default class Core {
     protected install(): void {
         let appsModule: Apps;
         // Loading JSloth Global Library
-        this.jsloth = new JSloth(this.config);
+        this.jsloth = new JSloth(this.config, __dirname);
         this.express.set("jsloth", this.jsloth);
         Log.module("Core library loaded");
 

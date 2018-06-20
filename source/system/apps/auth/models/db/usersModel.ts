@@ -36,8 +36,8 @@ export interface Row {
     email: string;
     password: string;
     salt: string;
-    first_name?: string;
-    last_name?: string;
+    firstName?: string;
+    lastName?: string;
     timezone?: number;
     admin?: boolean;
     verified?: boolean;
@@ -84,12 +84,12 @@ export class Users extends Model {
     });
 
     @field()
-    public first_name: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public firstName: fields.DataType = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
 
     @field()
-    public last_name: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public lastName: fields.DataType = new datatypes.Datatypes().VARCHAR({
         size: 45
     });
 

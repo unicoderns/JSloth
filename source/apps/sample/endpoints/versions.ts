@@ -24,7 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../../abstract/controllers/routes";
+import Routes from "../../../system/abstract/controllers/routes";
 import IndexEndpoint from "./v1/index";
 
 /**

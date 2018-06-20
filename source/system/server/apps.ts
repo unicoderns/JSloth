@@ -22,15 +22,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as clc from "cli-color";
-
-import { App, Config } from "../../interfaces/app";
+import { App, Config } from "../interfaces/app";
 import { Application, NextFunction } from "express";
 
 import Batch from "./batch";
-import JSloth from "../../lib/core";
+import JSloth from "../lib/core";
 import Log from "./log";
-import SysConfig from "../../interfaces/config";
+import SysConfig from "../interfaces/config";
 
 /**
  * JSloth apps related tools.
@@ -49,6 +47,9 @@ export default class Apps {
     /*** JSloth library */
     private jsloth: JSloth;
 
+    /*** Batch server library */
+    private batch: Batch;
+
     /**
      * Load configuration, JSloth library and Express application.
      * 
@@ -60,6 +61,7 @@ export default class Apps {
         this.config = config;
         this.jsloth = jsloth;
         this.express = express;
+        this.batch = new Batch(jsloth);
     }
 
     /**
@@ -134,9 +136,13 @@ export default class Apps {
      * @param next
      */
     private installApp(app: App, type: string, next: NextFunction): void {
+        let appUrl = this.jsloth.context.sourceURL + "apps/";
+        if (type == "system") {
+            appUrl = this.jsloth.context.sourceURL + "system/apps/"
+        }
         if (app.config.engine != "angular") {
             let compileSCSS = () => {
-                Batch.compileSCSS(type + "/" + app.config.name, "static/" + app.config.name).then((success: boolean) => {
+                this.batch.compileSCSS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
                     app.complete.scss = true;
                     app.success.scss = success;
                     this.installed(app, next);
@@ -144,12 +150,12 @@ export default class Apps {
                     app.complete.scss = true;
                     app.success.scss = false;
                     app.errors.scss = err;
-                    console.log(err);
+                    console.error(err);
                     this.installed(app, next);
                 });
             };
 
-            Batch.copyPublic(type + "/" + app.config.name + "/public/", "static/" + app.config.name).then((success: boolean) => {
+            this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
                 app.complete.public = true;
                 app.success.public = success;
                 compileSCSS(); // Wait the structure to compile
@@ -157,7 +163,7 @@ export default class Apps {
                 app.complete.public = true;
                 app.success.public = false;
                 app.errors.public = err;
-                console.log(err);
+                console.error(err);
                 compileSCSS(); // Wait the structure to compile
             });
         } else {
@@ -183,9 +189,14 @@ export default class Apps {
      * @param next
      */
     private loadRoutes(app: App, appType: string, routeType: string, basepath: string, next: NextFunction): void {
-        this.jsloth.files.exists(__dirname + "/../../" + appType + "/" + app.config.name + "/" + routeType + ".ts").then(() => {
+        let appUrl = this.jsloth.context.sourceURL + "apps/";
+        if (appType == "system") {
+            appUrl = this.jsloth.context.sourceURL + "system/apps/"
+        }
+        let appFileUrl = appUrl + app.config.name + "/" + routeType;
+        this.jsloth.files.exists(appFileUrl + ".ts").then(() => {
             let url: string = basepath + (app.config.basepath || "/");
-            let appRoute = require("../../" + appType + "/" + app.config.name + "/" + routeType);
+            let appRoute = require(appFileUrl);
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
             this.express.use(url, route.router);
 
@@ -205,6 +216,7 @@ export default class Apps {
                 app.complete.api = true;
                 app.success.api = false;
             }
+            console.error(err);
             this.installed(app, next);
         });
     }

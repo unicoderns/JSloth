@@ -1,6 +1,6 @@
-import app from '../../source/server';
-import JSFiles from "../../source/lib/files";
-import IConfig from '../../source/interfaces/config';
+import app from '../../server';
+import JSFiles from "../../system/lib/files";
+import IConfig from '../../system/interfaces/config';
 
 import * as chai from 'chai';
 import * as mocha from 'mocha';
@@ -15,7 +15,7 @@ let files = new JSFiles();
 // ---------------------------------------------------------------------------------------------------------------
 // Loading configuration.
 // ---------------------------------------------------------------------------------------------------------------
-const configPath: string = "/../../config.json";
+const configPath: string = "/../../../config.json";
 var config: IConfig;
 
 files.exists(__dirname + configPath).then(() => {

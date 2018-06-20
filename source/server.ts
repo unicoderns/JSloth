@@ -24,7 +24,7 @@
 
 import * as express from "express";
 
-import Core from "./abstract/server/core";
+import Core from "./system/server/core";
 
 /**
  * Custom JSloth server that extends from JSloth abstract server.

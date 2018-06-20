@@ -23,29 +23,47 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import JSloth from "../../lib/core";
-import Controller from "./core";
 import { Router } from "express";
+import SysConfig from "../../interfaces/config";
 
 /**
- * Routes Abstract
+ * Controller Abstract
  */
-export default class Routes extends Controller {
+export default class Controller {
+    protected jsloth: JSloth;
+    protected config: any;
+    protected namespaces: string[] = [];
+    protected url: string;
 
     /**
-     * Load and install routes 
-     * 
-     * @param controller
-     * @param url Concatenated url across the imports
-     * @param namespace Current namespace name
-     * @return express.Router
+     * Express Router instance
+     *
+     * @return Router
      */
-    protected include(controller: any, url: string = "/", namespace: string = "index"): void {
-        // Load
-        this.namespaces.push(namespace);
-        let instance: Controller = new controller(this.jsloth, this.config, this.url + url, this.namespaces);
-        instance.setup();
-        // Install
-        this.router.use(url, instance.router);
+    public router: Router = Router();
+
+    /**
+     * Load library, app configuration and install routes 
+     */
+    constructor(jsloth: JSloth, config: SysConfig, url: string, namespaces: string[]) {
+        this.jsloth = jsloth;
+        this.config = config;
+        this.namespaces = namespaces;
+        this.url = url;
+        this.init();
+    }
+
+    /*** Init Controller */
+    protected init(): void {
+    }
+
+    /*** Setup Controller */
+    public setup(): void {
+        this.routes();
+    }
+
+    /*** Define routes */
+    protected routes(): void {
     }
 
 }

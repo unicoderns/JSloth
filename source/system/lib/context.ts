@@ -33,10 +33,16 @@ import { Promise } from "es6-promise";
 export default class JSContext {
 
     /*** System Urls */
+    public baseURL: string = "";
+    public sourceURL: string = "";
+
+    /*** System Urls */
     private urls: any = {};
 
     /*** Configuration methods */
-    constructor(config: Config) {
+    constructor(baseURL:string) {
+        this.sourceURL = baseURL + "/../../";
+        this.baseURL = this.sourceURL + "../";
     }
 
     /**
