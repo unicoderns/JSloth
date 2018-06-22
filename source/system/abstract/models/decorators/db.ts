@@ -111,7 +111,7 @@ export function getList(target: string): Map<string, Map<string, string>> {
  */
 export function field(alias?: string) {
     return function (target: any, key: string) {
-        register((target.constructor.name).toLowerCase(), "public", key, alias || key);
+        register((target.constructor.name).charAt(0).toLowerCase() + (target.constructor.name).slice(1), "public", key, alias || key);
     }
 }
 
@@ -124,6 +124,6 @@ export function field(alias?: string) {
  */
 export function secret(alias?: string) {
     return function (target: any, key: string) {
-        register((target.constructor.name).toLowerCase(), "secret", key, alias || key);
+        register((target.constructor.name).charAt(0).toLowerCase() + (target.constructor.name).slice(1), "secret", key, alias || key);
     }
 }

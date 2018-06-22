@@ -48,14 +48,14 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionTable: session.Session_Track;
+    private sessionTable: session.SessionTrack;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
-        this.sessionTable = new session.Session_Track(jsloth);
+        this.sessionTable = new session.SessionTrack(jsloth);
         this.sessionsMiddleware = new Sessions(jsloth, config)
     }
 
@@ -64,13 +64,13 @@ export default class IndexEndPoint extends ApiController {
         this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
-        this.post("/token/renew/", "renewToken",  this.renewToken);
-        this.post("/token/revoke/", "revokeToken", this.revokeToken);
+        this.post("/token/renew/", "renewToken",  this.sessionsMiddleware.auth, this.renewToken);
+        this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth, this.revokeToken);
 
         this.get("/users/", "userList", this.getList);
         this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.get("/fields/", "fields", this.getFieds);
+        this.get("/fields/", "fields", this.sessionsMiddleware.auth, this.getFieds);
 
         this.get("/context/", "context", this.getSysContext);
 

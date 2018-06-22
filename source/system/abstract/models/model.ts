@@ -34,7 +34,7 @@ import * as datatypes from "../../lib/db/datatypes";
  */
 export default class Model {
     private jsloth: JSloth;
-    protected tableName: string = ((<any>this).constructor.name).toLowerCase(); // Get the table name from the model name in lowercase.
+    protected tableName: string = ((<any>this).constructor.name).charAt(0).toLowerCase() + ((<any>this).constructor.name).slice(1); // Get the table name from the model name in camelcase.
     public unsafe: boolean = false;
     public fields: Map<string, string>;
 
