@@ -345,8 +345,12 @@ export default class Model {
         let values = [];
         let unifiedValues = [];
         for (let key in data) {
-            fields.push("`" + key + "` = ?");
-            values.push(data[key]);
+            if (data[key] == "now()") {
+                fields.push("`" + key + "` = now()");
+            } else {
+                fields.push("`" + key + "` = ?");
+                values.push(data[key]);
+            }
         }
         let whereData = this.generateWhereData(where);
         let query = "UPDATE `" + this.tableName + "` SET " + fields.join(", ") + whereData.sql + ";";
