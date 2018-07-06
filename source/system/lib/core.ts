@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,19 +22,33 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import Config from "../interfaces/config";
+
+import JSContext from "./context";
+import JSFiles from "./files";
+import JSPath from "./path";
+import JSDB from "./db";
 
 /**
- * Centralized Controller Routes Loader 
- * 
- * @return RoutesController
+ * JSloth Library Loader
  */
-export class Urls extends Routes {
+export default class JSloth {
+    public config: Config;
 
-    /*** Configure routes */
-    protected init(): void {
-        this.include(IndexController);
+    public context: JSContext;
+    public files: JSFiles;
+    public path: JSPath;
+    public db: JSDB;
+
+    /*** Configuration methods */
+    constructor(config: Config, baseURL: string) {
+        this.config = config;
+
+        this.context = new JSContext(baseURL);
+        this.path = new JSPath(this);
+
+        this.files = new JSFiles(config);
+        this.db = new JSDB(config);
     }
 
 }

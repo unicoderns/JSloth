@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,19 +22,28 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import Controller from "./core";
 
 /**
- * Centralized Controller Routes Loader 
- * 
- * @return RoutesController
+ * Routes Abstract
  */
-export class Urls extends Routes {
+export default class Routes extends Controller {
 
-    /*** Configure routes */
-    protected init(): void {
-        this.include(IndexController);
+    /**
+     * Load and install routes 
+     * 
+     * @param controller
+     * @param url Concatenated url across the imports
+     * @param namespace Current namespace name
+     * @return express.Router
+     */
+    protected include(controller: any, url: string = "/", namespace: string = "index"): void {
+        // Load
+        this.namespaces.push(namespace);
+        let instance: Controller = new controller(this.jsloth, this.config, this.url + url, this.namespaces);
+        instance.setup();
+        // Install
+        this.router.use(url, instance.router);
     }
 
 }

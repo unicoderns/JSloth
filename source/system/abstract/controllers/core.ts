@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,19 +22,48 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import JSloth from "../../lib/core";
+import { Router } from "express";
+import SysConfig from "../../interfaces/config";
 
 /**
- * Centralized Controller Routes Loader 
- * 
- * @return RoutesController
+ * Controller Abstract
  */
-export class Urls extends Routes {
+export default class Controller {
+    protected jsloth: JSloth;
+    protected config: any;
+    protected namespaces: string[] = [];
+    protected url: string;
 
-    /*** Configure routes */
+    /**
+     * Express Router instance
+     *
+     * @return Router
+     */
+    public router: Router = Router();
+
+    /**
+     * Load library, app configuration and install routes 
+     */
+    constructor(jsloth: JSloth, config: SysConfig, url: string, namespaces: string[]) {
+        this.jsloth = jsloth;
+        this.config = config;
+        this.namespaces = namespaces;
+        this.url = url;
+        this.init();
+    }
+
+    /*** Init Controller */
     protected init(): void {
-        this.include(IndexController);
+    }
+
+    /*** Setup Controller */
+    public setup(): void {
+        this.routes();
+    }
+
+    /*** Define routes */
+    protected routes(): void {
     }
 
 }

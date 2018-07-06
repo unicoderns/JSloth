@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,19 +22,50 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import JSFiles from "./files";
+import Config from "../interfaces/config";
+import { Promise } from "es6-promise";
 
 /**
- * Centralized Controller Routes Loader 
- * 
- * @return RoutesController
- */
-export class Urls extends Routes {
+* JSloth Context
+* System context storage.
+*/
+export default class JSContext {
 
-    /*** Configure routes */
-    protected init(): void {
-        this.include(IndexController);
+    /*** System Urls */
+    public baseURL: string = "";
+    public sourceURL: string = "";
+
+    /*** System Urls */
+    private urls: any = {};
+
+    /*** Configuration methods */
+    constructor(baseURL:string) {
+        this.sourceURL = baseURL + "/../../";
+        this.baseURL = this.sourceURL + "../";
     }
+
+    /**
+     * Set new url.
+     *
+     * @param token url token
+     * @param url url path
+     * @return void
+     */
+    public setUrl(token: string, url: string): void {
+        this.urls[token] = url;
+    }
+
+    /**
+     * Export full context.
+     *
+     * @return Object
+     */
+    public export(): any {
+        return {
+            urls: this.urls
+        }
+    }
+    
 
 }

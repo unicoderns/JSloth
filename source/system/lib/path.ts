@@ -1,9 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
-// JSloth Health App                                                                      //
-//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -24,19 +22,63 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
-import IndexController from "./controllers/index";
+import JSFiles from "./files";
+import Config from "../interfaces/config";
+import { Promise } from "es6-promise";
+import JSloth from "./core";
 
 /**
- * Centralized Controller Routes Loader 
- * 
- * @return RoutesController
- */
-export class Urls extends Routes {
+* JSloth Path
+* Check the right path, search /core/ first and /app/ if is not found it.
+*/
+export default class JSPath {
 
-    /*** Configure routes */
-    protected init(): void {
-        this.include(IndexController);
+    /*** JSloth library */
+    protected jsloth: JSloth;
+
+    /*** Configuration methods */
+    constructor(jsloth: JSloth) {
+        this.jsloth = jsloth;
     }
+
+    /**
+     * Get the new full path.
+     *
+     * @param file string Filename
+     * @return void
+     */
+    public get(type: string, app: string, file: string): Promise<string> {
+        let customPath: string = "../source/views/" + app + "/" + file;
+        console.log(customPath);
+        let path: string = "../source/apps/" + app + "/views/" + file;
+        if (type == "system") {
+            path = "../source/system/apps/" + app + "/views/" + file;
+        }
+
+        // Create promise
+        const p: Promise<string> = new Promise(
+            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                // Resolve promise
+                this.jsloth.files.exists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
+                    resolve(customPath);
+                }).catch((err: NodeJS.ErrnoException) => {
+                    console.log(path)
+                    resolve(path);
+                    throw err;
+                });
+            });
+        return p;
+    }
+
+    /**
+     * Get the new full angular path.
+     *
+     * @param file string Filename
+     * @return string
+     */
+    public getAngular(folder: string, app: string, file: string): string {
+        return "../dist/browser/" + app + "/" + file;
+    }
+
 
 }

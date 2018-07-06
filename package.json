@@ -1,6 +1,6 @@
 {
     "name": "jsloth",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "author": {
         "name": "Chriss Mejia",
         "email": "me@chrissmejia.com",
@@ -8,11 +8,11 @@
     },
     "scripts": {
         "start": "nodemon -e js,ts,scss --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
-        "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
+        "test": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register source/tests/**/*.test.ts",
         "docs": "markdown-folder-to-html docs/markdown/docs",
         "typedoc": "typedoc --out ./docs/typedoc/ ./source/",
-        "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register tests/**/*.test.ts",
-        "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register",
+        "travis": "mocha --reporter spec --report lcovonly --compilers ts:ts-node/register source/tests/**/*.test.ts",
+        "cover": "istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec source/tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register",
         "build": "ng build --prod --app angular && ng build --prod --app angular-server"
     },
     "bugs": {
@@ -37,7 +37,7 @@
         "angular2-universal": "^2.1.0-rc.1",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
-        "bootstrap": "^4.0.0-beta.3",
+        "bootstrap": "^4.1.1",
         "cli-color": "^1.2.0",
         "compression": "^1.7.1",
         "cookie-parser": "^1.4.3",
@@ -76,11 +76,6 @@
         "chai-http": "^4.0.0",
         "codelyzer": "^4.0.1",
         "coveralls": "^3.0.0",
-        "grunt": "^1.0.3",
-        "grunt-contrib-copy": "^1.0.0",
-        "grunt-contrib-watch": "^1.1.0",
-        "grunt-ts": "^6.0.0-beta.19",
-        "grunt-tslint": "^5.0.1",
         "istanbul": "^0.4.5",
         "jasmine-core": "~2.6.2",
         "jasmine-spec-reporter": "~4.1.0",
