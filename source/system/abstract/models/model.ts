@@ -274,7 +274,7 @@ export default class Model {
     public get(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
-            (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
+            (resolve: (data: any) => void, reject: (err: mysql.MysqlError) => void) => {
                 let sqlPromise = this.select(fields, where, groupBy, orderBy, 1);
                 sqlPromise.then((data) => {
                     resolve(data[0]);

@@ -105,7 +105,7 @@ export default class Sessions {
         jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
             this.userCache(decoded.user, false).then((user: any) => {
                 return next();
-            }).catch(err => {
+            }).catch((err: NodeJS.ErrnoException) => {
                 console.error(err);
                 return next();
             });
