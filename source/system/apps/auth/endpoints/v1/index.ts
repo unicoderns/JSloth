@@ -67,12 +67,13 @@ export default class IndexEndPoint extends ApiController {
         this.post("/token/renew/", "renewToken",  this.sessionsMiddleware.auth, this.renewToken);
         this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth, this.revokeToken);
 
-        this.get("/users/", "userList", this.getList);
-        this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
+        // Only for testing
+        // this.get("/users/", "userList", this.getList);
+        // this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.get("/fields/", "fields", this.sessionsMiddleware.auth, this.getFieds);
+        // this.get("/fields/", "fields", this.sessionsMiddleware.auth, this.getFieds);
 
-        this.get("/context/", "context", this.getSysContext);
+        // this.get("/context/", "context", this.getSysContext);
 
     }
 
@@ -246,6 +247,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getList = (req: Request, res: Response): void => {
         this.usersTable.getAll().then((data) => {
             res.json(data);
@@ -257,6 +259,7 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
+    */
 
     /**
      * Update user 1 password.
@@ -265,6 +268,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return bool
      */
+    /*
     private updatePassword = (req: Request, res: Response): void => {
         this.usersTable.update({ password: bcrypt.hashSync("q123queso", null, null) }, { id: 1 }).then((data) => {
             res.json(data);
@@ -276,6 +280,7 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
+    */
 
 
     /**
@@ -285,6 +290,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getFieds = (req: Request, res: Response): void => {
         let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
         let fields = this.usersTable.getFields();
@@ -295,6 +301,7 @@ export default class IndexEndPoint extends ApiController {
             passwordFieldSettings: this.usersTable.password
         });
     };
+    */
 
     /**
      * Get system context.
@@ -303,8 +310,10 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getSysContext = (req: Request, res: Response): void => {
         res.json(this.jsloth.context.export());
     };
+    */
 
 }

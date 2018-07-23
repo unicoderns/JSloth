@@ -13,7 +13,7 @@ var app = new Vue({
                     .then(function (response) {
                         console.log(response);
                         if (response.body.success) {
-                            window.location.href = "/";
+                            window.location.href = "/admin/";
                         } else {
                             $("#message").show();
                         }
