@@ -122,7 +122,7 @@ export default class Sessions {
     public context = (req: Request, res: Response, next: NextFunction) => {
         // Check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
-        let config: any = this.config;
+        let auth_config = this.config.system_apps.find((x: any) => x.name == 'auth');
         let userCache = this.userCache;
         let sessionTable = new session.SessionTrack(this.jsloth);
         // Clean user
@@ -135,7 +135,7 @@ export default class Sessions {
                 if (err) {
                     return next();
                 } else {
-                    if (config.config.session == "stateful") {
+                    if (auth_config.config.session == "stateful") {
                         sessionTable.get([], { id: decoded.session, user: decoded.user }).then((session: any) => {
                             if (typeof session == "undefined") {
                                 return next();

@@ -120,8 +120,7 @@ export default class Core {
 
     /*** Configure Express middlewares */
     protected middleware(): void {
-        let auth_config = this.config.system_apps.find((x: any) => x.name == 'auth');
-        let sessions = new Sessions(this.jsloth, auth_config);
+        let sessions = new Sessions(this.jsloth, this.config);
         // Log hits using morgan
         if (this.jsloth.config.dev) {
             this.express.use(logger("dev"));
