@@ -3,7 +3,6 @@ import JSFiles from "../../system/lib/files";
 import IConfig from '../../system/interfaces/config';
 
 import * as chai from 'chai';
-import * as mocha from 'mocha';
 
 const expect = chai.expect;
 

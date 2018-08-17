@@ -7,12 +7,12 @@
   <meta name="description" content="">
   <meta name="author" content="Chriss Mejía">
 
-  <title>JSloth App</title>
+  <title>JSloth Admin</title>
   <link rel="stylesheet" href="/auth/styles/app.css">
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
     <a class="navbar-brand font-weight-bold" href="/">JSloth
       <span class="font-weight-light h6 text-muted"> Auth</span>
     </a>
@@ -20,41 +20,15 @@
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-info" type="submit">Search</button>
-      </form>
-    </div>
   </nav>
 
 
-  <div id="app">
-    <form class="form-signin">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+  <div id="app" class="login align-middle d-flex">
+    <form class="form-signin text-center">
+        <div class="navbar-brand font-weight-bold">JSloth
+          <span class="font-weight-light text-muted"> Login</span>
+        </div>
+    </br></br>
       <div id="message" class="alert alert-danger" role="alert">
         Email and password don't match!
       </div>
@@ -68,8 +42,7 @@
 
   <footer class="footer">
     <div class="container text-center">
-      <span class="text-muted">Code with
-        <3 by Unicoderns.</span>
+      <span class="text-muted">Code with <3 by Unicoderns.</span>
     </div>
   </footer>
 

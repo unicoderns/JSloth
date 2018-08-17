@@ -42,7 +42,7 @@ class Log {
         console.log("*   ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║   *");
         console.log("*   ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║   *");
         console.log("*    ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   *");
-        console.log("*                                      by Chriss Mejía   *");
+        console.log("*                                        by Unicoderns   *");
         console.log("*                                                        *");
         console.log("**********************************************************");
         console.log("*                                                        *");

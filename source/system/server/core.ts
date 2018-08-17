@@ -54,9 +54,6 @@ export default class Core {
     /*** Default configuration filepath */
     protected configPath: string = "/../../../config.json";
 
-    /*** Configuration object */
-    protected config: SysConfig;
-
     /*** Apps object */
     protected apps: app.App[] = [];
 
@@ -80,11 +77,16 @@ export default class Core {
         this.express.use('/', express.static(__dirname + '/../../../dist/angular/browser/', { index: false, extensions: ['html', 'js', 'css'] }));
         this.express.use('/', express.static(__dirname + '/../../../dist/static/'));
 
-
         // Loading Configuration
         jslothFiles.exists(__dirname + this.configPath).then(() => {
-            this.config = require(__dirname + this.configPath);
-            this.express.set("token", this.config.token); // secret token
+            let config = require(__dirname + this.configPath);
+
+            // Loading JSloth Global Library
+            this.jsloth = new JSloth(config, __dirname);
+            this.express.set("jsloth", this.jsloth);
+            Log.module("Core library loaded");
+
+            this.express.set("token", this.jsloth.config.token); // secret token
             Log.module("Configuration loaded");
             this.install();
         }).catch(err => {
@@ -102,16 +104,12 @@ export default class Core {
      */
     protected install(): void {
         let appsModule: Apps;
-        // Loading JSloth Global Library
-        this.jsloth = new JSloth(this.config, __dirname);
-        this.express.set("jsloth", this.jsloth);
-        Log.module("Core library loaded");
 
         // Installing Middlewares
         this.middleware();
 
         // Installing Apps
-        appsModule = new Apps(this.config, this.jsloth, this.express);
+        appsModule = new Apps(this.jsloth.config, this.jsloth, this.express);
         appsModule.install((apps: app.App[]) => {
             this.apps = apps;
             this.start();
@@ -120,7 +118,7 @@ export default class Core {
 
     /*** Configure Express middlewares */
     protected middleware(): void {
-        let sessions = new Sessions(this.jsloth, this.config);
+        let sessions = new Sessions(this.jsloth);
         // Log hits using morgan
         if (this.jsloth.config.dev) {
             this.express.use(logger("dev"));
@@ -130,8 +128,8 @@ export default class Core {
         // Use body parser so we can get info from POST and/or URL parameters
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
-        this.express.use(cookieParser(this.config.token));
-        this.express.use(sessions.context);        
+        this.express.use(cookieParser(this.jsloth.config.token));
+        this.express.use(sessions.context);
         Log.module("Middlewares loaded");
     }
 

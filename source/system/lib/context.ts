@@ -22,27 +22,36 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSFiles from "./files";
-import Config from "../interfaces/config";
+import JSloth from "../lib/core";
+
 import { Promise } from "es6-promise";
+
+import * as user from "../apps/auth/models/db/usersModel";
 
 /**
 * JSloth Context
 * System context storage.
 */
 export default class JSContext {
+    /*** Basic */
+    protected jsloth: JSloth;
 
     /*** System Urls */
     public baseURL: string = "";
     public sourceURL: string = "";
 
+    /*** Users Cache */
+    protected userCache: any;
+
     /*** System Urls */
     private urls: any = {};
 
     /*** Configuration methods */
-    constructor(baseURL:string) {
+    constructor(jsloth: JSloth, baseURL: string) {
+        this.jsloth = jsloth;
         this.sourceURL = baseURL + "/../../";
         this.baseURL = this.sourceURL + "../";
+        this.userCache = {};
     }
 
     /**
@@ -66,6 +75,48 @@ export default class JSContext {
             urls: this.urls
         }
     }
-    
+
+    /**
+     * User cache factory
+     * 
+     * @param id {number} The user id.
+     * @return Promise.
+     */
+    public userCacheFactory = (id: number, cached: boolean = true): Promise<any> => {
+        let userTable = new user.Users(this.jsloth);
+        let that = this;
+        function fromSQL() {
+            // Create promise
+            const p: Promise<any> = new Promise(
+                (resolve: (data: any) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                    userTable.get([], { id: id }).then((user: any) => {
+                        let userTemp = JSON.parse(JSON.stringify(user));
+                        that.userCache[id] = userTemp;
+                        resolve(userTemp);
+                    }).catch(err => {
+                        reject(err);
+                        throw err;
+                    });
+                }
+            );
+            return p;
+        }
+
+        if (cached) {
+            let userTemp = that.userCache[id];
+            if (typeof userTemp == "undefined") {
+                return fromSQL();
+            } else {
+                const p: Promise<any> = new Promise(
+                    (resolve: (data: any) => void, reject: (err: NodeJS.ErrnoException) => void) => {
+                        resolve(userTemp);
+                    }
+                );
+                return p;
+            }
+        } else {
+            return fromSQL();
+        }
+    }
 
 }

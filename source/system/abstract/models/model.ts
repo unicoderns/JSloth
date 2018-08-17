@@ -176,16 +176,18 @@ export default class Model {
         let keys: string[] = [];
         let filteredKeys: string[] = [];
         let modelFields = this.getFields();
+        console.log(this.jsloth.config);
+        let config = this.jsloth.config;
 
         for (let key in where) {
             keys.push(key);
         }
 
         // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
-        if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
+        if ((config.mysql.validations.fields) && (!config.dev)) {
             filteredKeys = this.filterArrayInArray(keys, modelFields);
         } else {
-            if (this.jsloth.config.dev) {
+            if (config.dev) {
                 this.logArrayInArray(keys, modelFields);
             }
             filteredKeys = keys;

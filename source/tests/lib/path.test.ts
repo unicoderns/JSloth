@@ -1,7 +1,6 @@
 import JSFiles from "../../system/lib/files";
 import JSPath from "../../system/lib/path";
 
-import * as mocha from "mocha";
 import * as chai from "chai";
 
 const expect = chai.expect;
