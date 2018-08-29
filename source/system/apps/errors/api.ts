@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Auth App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,37 +24,17 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** App interface. */
-export interface App {
-  config: Config;
-  done: boolean;
-  complete: Status;
-  success: Status;
-  errors: Errors;
-}
+import Routes from "../../abstract/controllers/routes";
 
-/*** App configuration interface. */
-export interface Config {
-  name: string;
-  engine?: string;
-  basepath?: string;
-  folder?: string;
-}
+/**
+ * Centralized Controller Endpoint Loader
+ * 
+ * @return express.Router
+ */
+export class Urls extends Routes {
 
-/*** App status interface. */
-export interface Status {
-  api: boolean;
-  public: boolean;
-  routes: boolean;
-  scss: boolean;
-  ts: boolean;
-}
+    /*** Configure endpoints */
+    protected init(): void {
+    }
 
-/*** App errors interface. */
-export interface Errors {
-  api: string;
-  public: string;
-  routes: string;
-  scss: string;
-  ts: string;
 }

@@ -25,6 +25,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import HtmlController from "../../../system/abstract/controllers/html";
+import JSloth from "../../../system/lib/core";
+import Sessions from "../../../system/apps/auth/middlewares/sessions";
+
 import { Request, Response } from "express";
 
 /**
@@ -33,10 +36,17 @@ import { Request, Response } from "express";
  * @basepath /health/
  */
 export default class IndexController extends HtmlController {
+    private sessionsMiddleware: Sessions;
+
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
+        this.sessionsMiddleware = new Sessions(jsloth)
+    }
 
     /*** Define routes */
     protected routes(): void {
         this.app.get("/", this.index);
+        this.app.get("/private/", this.sessionsMiddleware.auth(), this.private);
         this.router.use("/", this.app);
     }
 
@@ -51,4 +61,14 @@ export default class IndexController extends HtmlController {
         this.render(req, res, "index");
     };
 
+    /**
+     * Private view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private private = (req: Request, res: Response): void => {
+        res.send("Private page");
+    };
 }

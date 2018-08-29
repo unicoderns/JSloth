@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Health App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,37 +24,34 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** App interface. */
-export interface App {
-  config: Config;
-  done: boolean;
-  complete: Status;
-  success: Status;
-  errors: Errors;
-}
+import ApiController from "../../../../abstract/controllers/api";
+import { Request, Response } from "express";
 
-/*** App configuration interface. */
-export interface Config {
-  name: string;
-  engine?: string;
-  basepath?: string;
-  folder?: string;
-}
+/**
+ * Index Endpoint 
+ * 
+ * @basepath /
+ * @return express.Router
+ */
+export default class IndexEndPoint extends ApiController {
 
-/*** App status interface. */
-export interface Status {
-  api: boolean;
-  public: boolean;
-  routes: boolean;
-  scss: boolean;
-  ts: boolean;
-}
+    /*** Define routes */
+    protected routes(): void {
+        this.router.get("/", this.index);
+    }
 
-/*** App errors interface. */
-export interface Errors {
-  api: string;
-  public: string;
-  routes: string;
-  scss: string;
-  ts: string;
+    /**
+     * Dummy endpoint.
+     * Render a json object with a true response.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return json
+     */
+    private index = (req: Request, res: Response): void => {
+        res.json({
+            response: true
+        });
+    };
+
 }

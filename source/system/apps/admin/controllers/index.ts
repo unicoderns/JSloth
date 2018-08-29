@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Sample App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,37 +24,40 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/*** App interface. */
-export interface App {
-  config: Config;
-  done: boolean;
-  complete: Status;
-  success: Status;
-  errors: Errors;
-}
+import HtmlController from "../../../abstract/controllers/html";
+import JSloth from "../../../lib/core";
+import Sessions from "../../auth/middlewares/sessions";
 
-/*** App configuration interface. */
-export interface Config {
-  name: string;
-  engine?: string;
-  basepath?: string;
-  folder?: string;
-}
+import { Request, Response } from "express";
 
-/*** App status interface. */
-export interface Status {
-  api: boolean;
-  public: boolean;
-  routes: boolean;
-  scss: boolean;
-  ts: boolean;
-}
+/**
+ * Index Controller
+ * 
+ * @basepath /admin/
+ */
+export default class IndexController extends HtmlController {
+    private sessionsMiddleware: Sessions;
 
-/*** App errors interface. */
-export interface Errors {
-  api: string;
-  public: string;
-  routes: string;
-  scss: string;
-  ts: string;
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
+        this.sessionsMiddleware = new Sessions(jsloth)
+    }
+
+    /*** Define routes */
+    protected routes(): void {
+        this.app.get("/", this.sessionsMiddleware.auth(), this.index);
+        this.router.use("/", this.app);
+    }
+
+    /**
+     * Index view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private index = (req: Request, res: Response): void => {
+        this.render(req, res, "index");
+    };
+
 }

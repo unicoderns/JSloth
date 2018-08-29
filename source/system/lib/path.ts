@@ -49,7 +49,6 @@ export default class JSPath {
      */
     public get(type: string, app: string, file: string): Promise<string> {
         let customPath: string = "../source/views/" + app + "/" + file;
-        console.log(customPath);
         let path: string = "../source/apps/" + app + "/views/" + file;
         if (type == "system") {
             path = "../source/system/apps/" + app + "/views/" + file;

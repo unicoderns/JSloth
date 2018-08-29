@@ -32,7 +32,7 @@ import * as mysql from "mysql";
  * Database components.
  */
 export default class JSDB {
-    private connections: mysql.IPool;
+    private connections: mysql.Pool;
     private config: Config;
 
     /**
@@ -64,15 +64,15 @@ export default class JSDB {
     public query(sql: string, params: any[]): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
-            (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
+            (resolve: (data: any) => void, reject: (err: mysql.MysqlError) => void) => {
                 // Get connection
-                this.connections.getConnection((err: mysql.IError, connection) => {
+                this.connections.getConnection((err: mysql.MysqlError, connection) => {
                     if (err) { // Improve error log
                         reject(err);
                         throw err;
                     }
                     // Query Mysql
-                    let query = connection.query(sql, params, (err: mysql.IError, rows: any) => {
+                    let query = connection.query(sql, params, (err: mysql.MysqlError, rows: any) => {
                         connection.release();
                         if (this.config.dev) {
                             console.log("SQL Query: " + query.sql);

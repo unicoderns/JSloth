@@ -56,7 +56,7 @@ export default class IndexEndPoint extends ApiController {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
         this.sessionTable = new session.SessionTrack(jsloth);
-        this.sessionsMiddleware = new Sessions(jsloth, config)
+        this.sessionsMiddleware = new Sessions(jsloth)
     }
 
     /*** Define routes */
@@ -64,15 +64,16 @@ export default class IndexEndPoint extends ApiController {
         this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
-        this.post("/token/renew/", "renewToken",  this.sessionsMiddleware.auth, this.renewToken);
-        this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth, this.revokeToken);
+        this.post("/token/renew/", "renewToken", this.sessionsMiddleware.auth("json"), this.renewToken);
+        this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth("json"), this.revokeToken);
 
-        this.get("/users/", "userList", this.getList);
-        this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
+        // Only for testing
+        // this.get("/users/", "userList", this.getList);
+        // this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
 
-        this.get("/fields/", "fields", this.sessionsMiddleware.auth, this.getFieds);
+        // this.get("/fields/", "fields", this.sessionsMiddleware.auth, this.getFieds);
 
-        this.get("/context/", "context", this.getSysContext);
+        // this.get("/context/", "context", this.getSysContext);
 
     }
 
@@ -84,7 +85,6 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllUsers = (req: Request, res: Response): void => {
-        console.log(this.config);
         this.usersTable.delete({ id: 3 }).then((done) => {
             this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
                 res.json(data);
@@ -214,15 +214,27 @@ export default class IndexEndPoint extends ApiController {
     * @return json
     */
     private revokeToken = (req: Request, res: Response): void => {
-        if (this.config.config.session == "stateful") {
-            this.sessionTable.delete({ user: req.user.id }).then((done) => {
-                // Expire cookie
-                if (this.config.config.cookie) {
-                    res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
-                }
-                res.json({
-                    success: true,
-                    message: "Session revoked!"
+        let userCacheFactory = this.jsloth.context.userCacheFactory;
+        let config = this.config.config;
+        let user = req.user.id;
+        if (config.session == "stateful") {
+            this.sessionTable.delete({ user: user }).then((done) => {
+                // Remove cached user
+                userCacheFactory(user, false).then((user: any) => {
+                    // Expire cookie
+                    if (config.cookie) {
+                        res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
+                    }
+                    res.json({
+                        success: true,
+                        message: "Session revoked!"
+                    });
+                }).catch((err: NodeJS.ErrnoException) => {
+                    console.error(err);
+                    return res.status(500).send({
+                        success: false,
+                        message: "Something went wrong."
+                    });
                 });
             }).catch(err => {
                 console.error(err);
@@ -246,6 +258,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getList = (req: Request, res: Response): void => {
         this.usersTable.getAll().then((data) => {
             res.json(data);
@@ -257,6 +270,7 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
+    */
 
     /**
      * Update user 1 password.
@@ -265,6 +279,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return bool
      */
+    /*
     private updatePassword = (req: Request, res: Response): void => {
         this.usersTable.update({ password: bcrypt.hashSync("q123queso", null, null) }, { id: 1 }).then((data) => {
             res.json(data);
@@ -276,6 +291,7 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
+    */
 
 
     /**
@@ -285,6 +301,7 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getFieds = (req: Request, res: Response): void => {
         let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
         let fields = this.usersTable.getFields();
@@ -295,6 +312,7 @@ export default class IndexEndPoint extends ApiController {
             passwordFieldSettings: this.usersTable.password
         });
     };
+    */
 
     /**
      * Get system context.
@@ -303,8 +321,10 @@ export default class IndexEndPoint extends ApiController {
      * @param res { Response } The response object.
      * @return array
      */
+    /*
     private getSysContext = (req: Request, res: Response): void => {
         res.json(this.jsloth.context.export());
     };
+    */
 
 }

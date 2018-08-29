@@ -176,16 +176,17 @@ export default class Model {
         let keys: string[] = [];
         let filteredKeys: string[] = [];
         let modelFields = this.getFields();
+        let config = this.jsloth.config;
 
         for (let key in where) {
             keys.push(key);
         }
 
         // Check if the validations of fields is on and then filter (Always disallowed in dev mode)
-        if ((this.jsloth.config.mysql.validations.fields) && (!this.jsloth.config.dev)) {
+        if ((config.mysql.validations.fields) && (!config.dev)) {
             filteredKeys = this.filterArrayInArray(keys, modelFields);
         } else {
-            if (this.jsloth.config.dev) {
+            if (config.dev) {
                 this.logArrayInArray(keys, modelFields);
             }
             filteredKeys = keys;
@@ -248,14 +249,14 @@ export default class Model {
         let fieldsSQL = this.getSelectFieldsSQL(fields);
         let whereData = this.generateWhereData(where);
         let extra = "";
-        if (groupBy) {
-            extra = " GROUP BY " + groupBy;
+        if ((typeof groupBy !== "undefined") && (groupBy !== null)) {
+            extra += " GROUP BY " + groupBy;
         }
-        if (orderBy) {
-            extra = " ORDER BY " + orderBy;
+        if ((typeof orderBy !== "undefined") && (orderBy !== null)) {
+            extra += " ORDER BY " + orderBy;
         }
-        if (limit) {
-            extra = " LIMIT " + limit;
+        if ((typeof limit !== "undefined") && (limit !== null)) {
+            extra += " LIMIT " + limit;
         }
         let query = "SELECT " + fieldsSQL + " FROM `" + this.tableName + "`" + whereData.sql + extra + ";";
         return this.jsloth.db.query(query, whereData.values);
@@ -274,7 +275,7 @@ export default class Model {
     public get(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
-            (resolve: (data: any) => void, reject: (err: mysql.IError) => void) => {
+            (resolve: (data: any) => void, reject: (err: mysql.MysqlError) => void) => {
                 let sqlPromise = this.select(fields, where, groupBy, orderBy, 1);
                 sqlPromise.then((data) => {
                     resolve(data[0]);

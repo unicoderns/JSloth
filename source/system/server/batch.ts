@@ -55,7 +55,7 @@ export default class Batch {
                         resolve(true);
                     } else {
                         console.error(stderr);
-                        resolve(false);
+                        reject(stderr);
                     }
                 });
             }
@@ -74,9 +74,9 @@ export default class Batch {
         const p: Promise<boolean> = new Promise(
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 try {
-                    this.exec("tsc --outDir " + to + "/app/ " + from + "/client/app.ts", function (err: any, stdout: any, stderr: any) {
+                    this.exec("tsc --target es5 --outDir " + to + "app/ " + from + "/client/app.ts", function (err: any, stdout: any, stderr: any) {
                         if ((stdout.substr(stdout.length - 11)) != "not found.\n") {
-                            reject(stdout);
+                            resolve(stdout);
                         } else {
                             reject(null);
                         }
