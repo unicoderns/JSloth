@@ -136,6 +136,8 @@ export default class Sessions {
             } else {
                 if (format == "html") {
                     return res.redirect("/errors/404/");
+                } else if (format == "redirect") {
+                    return res.redirect("/auth/");
                 } else {
                     return res.status(401).send({
                         success: false,
