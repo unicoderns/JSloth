@@ -1,7 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
+// JSloth Sample App                                                                      //
+//                                                                                        //
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2017  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -22,62 +24,40 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSFiles from "./files";
-import Config from "../interfaces/config";
-import { Promise } from "es6-promise";
-import JSloth from "./core";
+import HtmlController from "../../../abstract/controllers/html";
+import JSloth from "../../../lib/core";
+import Sessions from "../../auth/middlewares/sessions";
+
+import { Request, Response } from "express";
 
 /**
-* JSloth Path
-* Check the right path, search /core/ first and /app/ if is not found it.
-*/
-export default class JSPath {
+ * Index Controller
+ * 
+ * @basepath /admin/
+ */
+export default class IndexController extends HtmlController {
+    private sessionsMiddleware: Sessions;
 
-    /*** JSloth library */
-    protected jsloth: JSloth;
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
+        this.sessionsMiddleware = new Sessions(jsloth)
+    }
 
-    /*** Configuration methods */
-    constructor(jsloth: JSloth) {
-        this.jsloth = jsloth;
+    /*** Define routes */
+    protected routes(): void {
+        this.app.get("/", this.sessionsMiddleware.auth(), this.index);
+        this.router.use("/", this.app);
     }
 
     /**
-     * Get the new full path.
+     * Index view.
      *
-     * @param file string Filename
-     * @return void
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
      */
-    public get(type: string, app: string, file: string): Promise<string> {
-        let customPath: string = "../source/views/" + app + "/" + file;
-        let path: string = "../source/apps/" + app + "/views/" + file;
-        if (type == "system") {
-            path = "../source/system/apps/" + app + "/views/" + file;
-        }
-
-        // Create promise
-        const p: Promise<string> = new Promise(
-            (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                // Resolve promise
-                this.jsloth.files.exists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
-                    resolve(customPath);
-                }).catch((err: NodeJS.ErrnoException) => {
-                    console.log(path)
-                    resolve(path);
-                    throw err;
-                });
-            });
-        return p;
-    }
-
-    /**
-     * Get the new full angular path.
-     *
-     * @param file string Filename
-     * @return string
-     */
-    public getAngular(folder: string, app: string, file: string): string {
-        return "../dist/browser/" + app + "/" + file;
-    }
-
+    private index = (req: Request, res: Response): void => {
+        this.render(req, res, "index");
+    };
 
 }

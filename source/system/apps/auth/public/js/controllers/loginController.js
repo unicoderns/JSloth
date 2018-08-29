@@ -11,7 +11,6 @@ var app = new Vue({
             {
                 this.$http.post('/api/auth/v1/token/', JSON.stringify(this.$data.user))
                     .then(function (response) {
-                        console.log(response);
                         if (response.body.success) {
                             window.location.href = "/admin/";
                         } else {

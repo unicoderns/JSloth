@@ -176,7 +176,6 @@ export default class Model {
         let keys: string[] = [];
         let filteredKeys: string[] = [];
         let modelFields = this.getFields();
-        console.log(this.jsloth.config);
         let config = this.jsloth.config;
 
         for (let key in where) {
