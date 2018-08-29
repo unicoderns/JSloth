@@ -25,8 +25,8 @@
 import * as app from "../interfaces/app";
 import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as cookieParser from "cookie-parser";
-import * as express from "express";
 import * as logger from "morgan";  // Log requests
+import * as express from "express";
 
 import Apps from "./apps";
 import Sessions from "../apps/auth/middlewares/sessions";
@@ -35,6 +35,8 @@ import JSFiles from "../lib/files";
 import JSloth from "../lib/core";
 import Log from "./log";
 
+import { Application, Request, Response, NextFunction } from "express"
+
 /**
  * Creates and configure an ExpressJS web server.
  *
@@ -42,7 +44,7 @@ import Log from "./log";
  */
 export default class Core {
     /*** Express instance */
-    public express: express.Application;
+    public express: Application;
 
     /**
      * Stores the app port
@@ -142,6 +144,15 @@ export default class Core {
             // Everything is installed?
             if (done) {
                 try {
+
+                    // Errors and 404  
+                    this.express.get("/*", function (req: Request, res: Response, next: NextFunction): any {
+                        return res.redirect("/errors/404/");
+                    });
+                    this.express.use(function (err: any, req: Request, res: Response, next: NextFunction): any {
+                        return res.redirect("/errors/" + err.status + "/");
+                    });
+                    // run
                     this.express.listen(this.port);
                     Log.run(this.port);
                 } catch (e) {
