@@ -27,18 +27,18 @@ import { field, secret } from "../../../../abstract/models/decorators/db";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
-import * as timezones from "../static/timezoneModel";
 
 export interface Row {
-    id: number;
-    created: number;
-    name: string;
+    id?: number;
+    created?: number;
+    resource: number;
+    user: number;
 }
 
 /**
  * User Model
  */
-export class Resource extends Model {
+export class Resource_Permissions extends Model {
 
     @field()
     public id: fields.DataType = new datatypes.Datatypes().ID();
@@ -50,8 +50,14 @@ export class Resource extends Model {
     });
 
     @field()
-    public name: fields.DataType = new datatypes.Datatypes().VARCHAR({
-        size: 45
+    public resource: fields.DataType = new datatypes.Datatypes().INT({
+        size: 45,
+        unique: true
+    });
+
+    @field()
+    public user: fields.DataType = new datatypes.Datatypes().INT({
+        notNull: true
     });
 
 }

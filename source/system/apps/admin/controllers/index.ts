@@ -45,7 +45,7 @@ export default class IndexController extends HtmlController {
 
     /*** Define routes */
     protected routes(): void {
-        this.app.get("/", this.sessionsMiddleware.auth(), this.index);
+        this.app.get("/", this.sessionsMiddleware.isAdmin("html"), this.index);
         this.router.use("/", this.app);
     }
 
