@@ -28,7 +28,7 @@
 
 import * as jwt from "jsonwebtoken";
 import * as users from "../../models/db/usersModel";
-import * as session from "../../models/db/sessionTrackModel";
+import * as sessions from "../../models/db/sessionTrackModel";
 
 import { Request, Response } from "express";
 
@@ -48,14 +48,14 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionTable: session.SessionTrack;
+    private sessionsTable: sessions.SessionTrack;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
-        this.sessionTable = new session.SessionTrack(jsloth);
+        this.sessionsTable = new sessions.SessionTrack(jsloth);
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 
@@ -142,7 +142,7 @@ export default class IndexEndPoint extends ApiController {
         let email: string = req.body.email;
         let token: string = "";
         let config: any = this.config;
-        let sessionTable = this.sessionTable;
+        let sessionTable = this.sessionsTable;
         let signAndReply = this.signAndReply;
         let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
 
@@ -159,7 +159,7 @@ export default class IndexEndPoint extends ApiController {
                             // if user is found and password is right
                             // create a token
                             if (config.config.session == "stateful") {
-                                let temp: session.Row = {
+                                let temp: sessions.Row = {
                                     ip: ip.address(),
                                     user: user.id
                                 };
@@ -218,7 +218,7 @@ export default class IndexEndPoint extends ApiController {
         let config = this.config.config;
         let user = req.user.id;
         if (config.session == "stateful") {
-            this.sessionTable.delete({ user: user }).then((done) => {
+            this.sessionsTable.delete({ user: user }).then((done) => {
                 // Remove cached user
                 userCacheFactory(user, false).then((user: any) => {
                     // Expire cookie
