@@ -125,6 +125,23 @@ export default class Sessions {
     /**
      * Session token verification
      * 
+     * @param res {Response} The response object.
+     * @param format {string} Kind of reply.
+     * @param json Custom json to reply.
+     */
+    private reply = (res: Response, format: string = "html", json: any) => {
+        if (format == "html") {
+            return res.redirect("/errors/404/");
+        } else if (format == "redirect") {
+            return res.redirect("/auth/");
+        } else {
+            return res.status(401).send(json);
+        }
+    }
+
+    /**
+     * Session token verification
+     * 
      * @param req {Request} The request object.
      * @param res {Response} The response object.
      * @param next Callback.
@@ -134,16 +151,10 @@ export default class Sessions {
             if (req.user) {
                 return next();
             } else {
-                if (format == "html") {
-                    return res.redirect("/errors/404/");
-                } else if (format == "redirect") {
-                    return res.redirect("/auth/");
-                } else {
-                    return res.status(401).send({
-                        success: false,
-                        message: "User is not logged."
-                    });
-                }
+                this.reply(res, format, {
+                    success: false,
+                    message: "User is not logged."
+                });
             }
         }
     }
@@ -153,14 +164,23 @@ export default class Sessions {
             if (req.user.verified) {
                 return next();
             } else {
-                if (format == "html") {
-                    return res.redirect("/errors/404/");
-                } else {
-                    return res.status(401).send({
-                        success: false,
-                        message: "User is not verified."
-                    });
-                }
+                this.reply(res, format, {
+                    success: false,
+                    message: "User is not verified."
+                });
+            }
+        }
+    }
+
+    public isAdmin = (format: string = "html"): RequestHandler => {
+        return (req: Request, res: Response, next: NextFunction) => {
+            if (req.user.admin) {
+                return next();
+            } else {
+                this.reply(res, format, {
+                    success: false,
+                    message: "User is not admin."
+                });
             }
         }
     }
