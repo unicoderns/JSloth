@@ -28,7 +28,7 @@
 
 import * as jwt from "jsonwebtoken";
 import * as users from "../../models/db/usersModel";
-import * as sessions from "../../models/db/sessionTrackModel";
+import * as sessions from "../../models/db/sessionsModel";
 
 import { Request, Response } from "express";
 
@@ -48,14 +48,14 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionsTable: sessions.SessionTrack;
+    private sessionsTable: sessions.Sessions;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
-        this.sessionsTable = new sessions.SessionTrack(jsloth);
+        this.sessionsTable = new sessions.Sessions(jsloth);
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 

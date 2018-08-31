@@ -29,7 +29,7 @@ import JSloth from "../../../lib/core";
 import { Router, Request, Response, NextFunction, RequestHandler } from "express";
 
 import * as jwt from "jsonwebtoken";
-import * as session from "../models/db/sessionTrackModel";
+import * as session from "../models/db/sessionsModel";
 import * as user from "../models/db/usersModel";
 
 /**
@@ -81,7 +81,7 @@ export default class Sessions {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
         let authConfig = this.config.system_apps.find((x: any) => x.name == 'auth');
         let userCacheFactory = this.jsloth.context.userCacheFactory;
-        let sessionTable = new session.SessionTrack(this.jsloth);
+        let sessionTable = new session.Sessions(this.jsloth);
         // Clean user
         req.user = undefined;
         // Decode token

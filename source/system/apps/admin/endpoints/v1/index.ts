@@ -24,7 +24,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as sessions from "../../../auth/models/db/sessionTrackModel";
+import * as sessions from "../../../auth/models/db/sessionsModel";
 import * as users from "../../../auth/models/db/usersModel";
 
 import ApiController from "../../../../abstract/controllers/api";
@@ -41,13 +41,13 @@ import { Request, Response } from "express";
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionsTable: sessions.SessionTrack;
+    private sessionsTable: sessions.Sessions;
     private sessionsMiddleware: Sessions;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth);
-        this.sessionsTable = new sessions.SessionTrack(jsloth);
+        this.sessionsTable = new sessions.Sessions(jsloth);
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 
