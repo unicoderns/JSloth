@@ -56,6 +56,12 @@ export default class IndexEndPoint extends ApiController {
         this.router.get("/sessions/", this.sessionsMiddleware.isAdmin("json"), this.getAllSessions);
         this.router.delete("/sessions/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeSession);
         this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.getAllUsers);
+        this.router.post("/users/activate/:id/", this.sessionsMiddleware.isAdmin("json"), this.activateUser);
+        this.router.post("/users/deactivate/:id/", this.sessionsMiddleware.isAdmin("json"), this.deactivateUser);
+        this.router.post("/users/admin/grant/:id/", this.sessionsMiddleware.isAdmin("json"), this.grantAdmin);
+        this.router.post("/users/admin/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeAdmin);
+        this.router.post("/users/verify/:id/", this.sessionsMiddleware.isAdmin("json"), this.verifyUser);
+        this.router.post("/users/unverify/:id/", this.sessionsMiddleware.isAdmin("json"), this.unverifyUser);
     }
 
     /**
@@ -118,5 +124,136 @@ export default class IndexEndPoint extends ApiController {
         });
     };
 
+    /**
+     * Activate a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private activateUser = (req: Request, res: Response): void => {
+        this.usersTable.update({ active: 1 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User activated."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
+    /**
+     * Deactivate a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private deactivateUser = (req: Request, res: Response): void => {
+        this.usersTable.update({ active: 0 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User deactivated."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };    
+
+    /**
+     * Grant admin permission to a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private grantAdmin = (req: Request, res: Response): void => {
+        this.usersTable.update({ admin: 1 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User admin permission granted."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
+    /**
+     * Verify a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private revokeAdmin = (req: Request, res: Response): void => {
+        this.usersTable.update({ admin: 0 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User admin permission revoked."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };    
+
+    /**
+     * Unverify a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private verifyUser = (req: Request, res: Response): void => {
+        this.usersTable.update({ verified: 1 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User verified."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
+    /**
+     * Revoke admin permission to a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private unverifyUser = (req: Request, res: Response): void => {
+        this.usersTable.update({ verified: 0 }, { id: req.params.id }).then((data) => {
+            return res.json({
+                success: true,
+                message: "User unverified."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };    
 
 }
