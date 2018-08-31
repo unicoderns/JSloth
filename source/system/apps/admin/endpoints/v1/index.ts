@@ -54,6 +54,7 @@ export default class IndexEndPoint extends ApiController {
     /*** Define routes */
     protected routes(): void {
         this.router.get("/sessions/", this.sessionsMiddleware.isAdmin("json"), this.getAllSessions);
+        this.router.delete("/sessions/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeSession);
     }
 
     /**
@@ -74,5 +75,28 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
+
+    /**
+     * Revoke session.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private revokeSession = (req: Request, res: Response): void => {
+        this.sessionsTable.delete({ id: req.params.id }).then((done) => {
+            return res.json({
+                success: true,
+                message: "Session revoked."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
 
 }
