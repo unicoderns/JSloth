@@ -39,7 +39,7 @@ export interface Row {
 /**
  * User Model
  */
-export class SessionTrack extends Model {
+export class Sessions extends Model {
 
     @field()
     public id: fields.DataType = new datatypes.Datatypes().ID();    
