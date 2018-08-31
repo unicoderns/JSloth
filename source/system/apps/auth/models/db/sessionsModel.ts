@@ -32,17 +32,17 @@ import * as timezones from "../static/timezoneModel";
 export interface Row {
     id?: number;
     created?: number;
-    resource: number;
+    ip: string;
     user: number;
 }
 
 /**
  * User Model
  */
-export class Resource_Permissions extends Model {
+export class Sessions extends Model {
 
     @field()
-    public id: fields.DataType = new datatypes.Datatypes().ID();
+    public id: fields.DataType = new datatypes.Datatypes().ID();    
 
     @field()
     public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
@@ -51,14 +51,17 @@ export class Resource_Permissions extends Model {
     });
 
     @field()
-    public resource: fields.DataType = new datatypes.Datatypes().INT({
-        size: 45,
-        unique: true
+    public ip: fields.DataType = new datatypes.Datatypes().VARCHAR({
+        size: 39,
+        notNull : true
     });
 
     @field()
     public user: fields.DataType = new datatypes.Datatypes().INT({
-        notNull: true
+        notNull: true,
+        unique: true
     });
+
+
 
 }

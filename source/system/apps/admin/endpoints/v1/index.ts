@@ -24,7 +24,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as sessions from "../../../auth/models/db/sessionsModel";
+import * as users from "../../../auth/models/db/usersModel";
+
 import ApiController from "../../../../abstract/controllers/api";
+import JSloth from "../../../../lib/core";
+import Sessions from "../../../auth/middlewares/sessions";
+
 import { Request, Response } from "express";
 
 /**
@@ -34,24 +40,83 @@ import { Request, Response } from "express";
  * @return express.Router
  */
 export default class IndexEndPoint extends ApiController {
+    private usersTable: users.Users;
+    private sessionsTable: sessions.Sessions;
+    private sessionsMiddleware: Sessions;
+
+    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
+        super(jsloth, config, url, namespaces);
+        this.usersTable = new users.Users(jsloth);
+        this.sessionsTable = new sessions.Sessions(jsloth);
+        this.sessionsMiddleware = new Sessions(jsloth)
+    }
 
     /*** Define routes */
     protected routes(): void {
-        this.router.get("/", this.index);
+        this.router.get("/sessions/", this.sessionsMiddleware.isAdmin("json"), this.getAllSessions);
+        this.router.delete("/sessions/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeSession);
+        this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.getAllUsers);
     }
 
     /**
-     * Dummy endpoint.
-     * Render a json object with a true response.
+     * Get all sessions.
      *
      * @param req { Request } The request object.
      * @param res { Response } The response object.
-     * @return json
+     * @return array
      */
-    private index = (req: Request, res: Response): void => {
-        res.json({
-            response: true
+    private getAllSessions = (req: Request, res: Response): void => {
+        this.sessionsTable.getAll().then((data) => {
+            res.json(data);
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
         });
     };
+
+    /**
+     * Revoke session.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private revokeSession = (req: Request, res: Response): void => {
+        this.sessionsTable.delete({ id: req.params.id }).then((done) => {
+            return res.json({
+                success: true,
+                message: "Session revoked."
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
+    /**
+     * Get all sessions.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return array
+     */
+    private getAllUsers = (req: Request, res: Response): void => {
+        this.usersTable.getAll().then((data) => {
+            res.json(data);
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
 
 }

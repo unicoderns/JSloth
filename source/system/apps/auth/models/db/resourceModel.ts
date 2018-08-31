@@ -27,22 +27,20 @@ import { field, secret } from "../../../../abstract/models/decorators/db";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
-import * as timezones from "../static/timezoneModel";
 
 export interface Row {
-    id?: number;
-    created?: number;
-    ip: string;
-    user: number;
+    id: number;
+    created: number;
+    name: string;
 }
 
 /**
  * User Model
  */
-export class SessionTrack extends Model {
+export class Resource extends Model {
 
     @field()
-    public id: fields.DataType = new datatypes.Datatypes().ID();    
+    public id: fields.DataType = new datatypes.Datatypes().ID();
 
     @field()
     public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
@@ -51,17 +49,8 @@ export class SessionTrack extends Model {
     });
 
     @field()
-    public ip: fields.DataType = new datatypes.Datatypes().VARCHAR({
-        size: 39,
-        notNull : true
+    public name: fields.DataType = new datatypes.Datatypes().VARCHAR({
+        size: 45
     });
-
-    @field()
-    public user: fields.DataType = new datatypes.Datatypes().INT({
-        notNull: true,
-        unique: true
-    });
-
-
 
 }
