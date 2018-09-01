@@ -168,7 +168,7 @@ export default class Model {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Generate 'and' chained where sql code
+    // Generate "AND" chained where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
     private generateWhereDataChain(where?: any): { sql: string, values: string[] } {
@@ -267,7 +267,7 @@ export default class Model {
      *
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @var orderBy String with column_name and direction E.g.: "id, name ASC"
      * @var groupBy String with column_name E.g.: "id, name"
      * @var limit Number of rows to retrieve
@@ -301,7 +301,7 @@ export default class Model {
      *
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @var orderBy String with column_name and direction E.g.: "id, name ASC"
      * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
@@ -326,7 +326,7 @@ export default class Model {
      *
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @var orderBy String with column_name and direction E.g.: "id, name ASC"
      * @var groupBy String with column_name E.g.: "id, name"
      * @var limit Number of rows to retrieve
@@ -341,7 +341,7 @@ export default class Model {
      *
      * @var fields If is NOT set "*" will be used, if there's a string then it will be used as is, a plain query will be 
      * executed, if in the other hand an array is provided (Recommended), then it will filter the keys and run the query.
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @var orderBy String with column_name and direction E.g.: "id, name ASC"
      * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
@@ -372,7 +372,7 @@ export default class Model {
      * Update query
      * 
      * @var data object data to be update in the table
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @return Promise with query result
      */
     public update(data: any, where?: any): Promise<any> {
@@ -396,7 +396,7 @@ export default class Model {
     /**
      * Delete query
      * 
-     * @var where Key/Value array used to filter the query
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @return Promise with query result
      */
     public delete(where?: any): Promise<any> {
