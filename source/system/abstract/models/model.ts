@@ -168,10 +168,10 @@ export default class Model {
     }
 
     /////////////////////////////////////////////////////////////////////
-    // Generate where sql code
+    // Generate 'and' chained where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generateWhereData(where?: any): { sql: string, values: string[] } {
+    private generateWhereDataChain(where?: any): { sql: string, values: string[] } {
         let values: string[] = [];
         let keys: string[] = [];
         let filteredKeys: string[] = [];
@@ -193,7 +193,7 @@ export default class Model {
         }
 
         if (typeof where !== "undefined") {
-            let sql: string = " WHERE `";
+            let sql: string = "`";
             sql = sql + filteredKeys.join("` = ? AND `");
             sql = sql + "` = ?";
             // getting values
@@ -204,6 +204,40 @@ export default class Model {
                 sql: sql,
                 values: values
             };
+        } else {
+            return {
+                sql: "",
+                values: []
+            };
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    // Generate where sql code
+    // @return string
+    /////////////////////////////////////////////////////////////////////
+    private generateWhereData(where?: any): { sql: string, values: string[] } {
+        let generated: { sql: string, values: string[] } = {
+            sql: "",
+            values: []
+        };
+        if (Array.isArray(where)) {
+            let values: string[] = [];
+            let SQLChains: string[] = [];
+            where.forEach(function (chain: any) {
+                let localChain = this.generateWhereDataChain(chain);
+                values = values.concat(localChain.values);
+                SQLChains.push(localChain.sql);
+            }.bind(this));
+            generated.sql = "(" + SQLChains.join(") OR (") + ")";
+            generated.values = values;
+        } else {
+            generated = this.generateWhereDataChain(where);
+        }
+
+        if (generated.sql) {
+            generated.sql = " WHERE " + generated.sql;
+            return generated;
         } else {
             return {
                 sql: "",

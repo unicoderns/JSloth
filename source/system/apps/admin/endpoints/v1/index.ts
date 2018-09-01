@@ -33,6 +33,8 @@ import Sessions from "../../../auth/middlewares/sessions";
 
 import { Request, Response } from "express";
 
+let bcrypt = require("bcrypt-nodejs");
+
 /**
  * Index Endpoint 
  * 
@@ -43,6 +45,7 @@ export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
     private sessionsTable: sessions.Sessions;
     private sessionsMiddleware: Sessions;
+    private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
@@ -55,13 +58,14 @@ export default class IndexEndPoint extends ApiController {
     protected routes(): void {
         this.router.get("/sessions/", this.sessionsMiddleware.isAdmin("json"), this.getAllSessions);
         this.router.delete("/sessions/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeSession);
-        this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.getAllUsers);
-        this.router.post("/users/activate/:id/", this.sessionsMiddleware.isAdmin("json"), this.activateUser);
-        this.router.post("/users/deactivate/:id/", this.sessionsMiddleware.isAdmin("json"), this.deactivateUser);
-        this.router.post("/users/admin/grant/:id/", this.sessionsMiddleware.isAdmin("json"), this.grantAdmin);
-        this.router.post("/users/admin/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeAdmin);
-        this.router.post("/users/verify/:id/", this.sessionsMiddleware.isAdmin("json"), this.verifyUser);
-        this.router.post("/users/unverify/:id/", this.sessionsMiddleware.isAdmin("json"), this.unverifyUser);
+        this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.createUser);
+        this.router.post("/users/create/", this.sessionsMiddleware.isAdmin("json"), this.createUser);
+        this.router.put("/users/activate/:id/", this.sessionsMiddleware.isAdmin("json"), this.activateUser);
+        this.router.put("/users/deactivate/:id/", this.sessionsMiddleware.isAdmin("json"), this.deactivateUser);
+        this.router.put("/users/admin/grant/:id/", this.sessionsMiddleware.isAdmin("json"), this.grantAdmin);
+        this.router.put("/users/admin/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeAdmin);
+        this.router.put("/users/verify/:id/", this.sessionsMiddleware.isAdmin("json"), this.verifyUser);
+        this.router.put("/users/unverify/:id/", this.sessionsMiddleware.isAdmin("json"), this.unverifyUser);
     }
 
     /**
@@ -125,6 +129,53 @@ export default class IndexEndPoint extends ApiController {
     };
 
     /**
+     * Create a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private createUser = (req: Request, res: Response): void => {
+        let username = req.body.username;
+        let email = req.body.email;
+
+        this.usersTable.get([], [{ username: username }, { email: email }]).then((user) => {
+            if (typeof user === "undefined") {
+                if (!this.emailRegex.test(email)) {
+                    res.json({ success: false, message: "Invalid email address." });
+                } else {
+                    let temp: users.Row = {
+                        username: req.body.username,
+                        email: email,
+                        password: bcrypt.hashSync(req.body.password, null, null),
+                        salt: "",
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        active: req.body.active,
+                        admin: req.body.admin,
+                        verified: req.body.verified
+                    };
+                    this.usersTable.insert(temp).then((data: any) => {
+                        res.json({
+                            success: true,
+                            message: "User created!"
+                        });
+                    }).catch(err => {
+                        console.error(err);
+                        return res.status(500).send({
+                            success: false,
+                            message: "Something went wrong."
+                        });
+                    });
+                }
+            } else {
+                res.json({ success: false, message: "Username or email already exists." });
+            }
+        });
+
+    };
+
+    /**
      * Activate a user.
      *
      * @param req { Request } The request object.
@@ -166,7 +217,7 @@ export default class IndexEndPoint extends ApiController {
                 message: "Something went wrong."
             });
         });
-    };    
+    };
 
     /**
      * Grant admin permission to a user.
@@ -210,7 +261,7 @@ export default class IndexEndPoint extends ApiController {
                 message: "Something went wrong."
             });
         });
-    };    
+    };
 
     /**
      * Unverify a user.
@@ -254,6 +305,6 @@ export default class IndexEndPoint extends ApiController {
                 message: "Something went wrong."
             });
         });
-    };    
+    };
 
 }
