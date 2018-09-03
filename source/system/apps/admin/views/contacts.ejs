@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>JSloth Admin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css">
+</head>
+
+  <body>
+
+    <%- include ./partials/menu %>
+
+    <div id="app" class="container-fluid align-middle">
+
+        <!-- Modal -->
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">Add Contact</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="nameInput">Name</label>
+                    <input v-model="contact.name" id="nameInput" type="text" class="form-control" placeholder="John" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="nameInput">Last Name</label>
+                      <input v-model="contact.lastName" id="lastNInput" type="text" class="form-control" placeholder="Smith" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="markdownInput">Email</label>
+                    <input v-model="contact.email" id="markdownInput" type="email" class="form-control" placeholder="John@gmail.com" required>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button v-on:click="add" type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-5">
+          <div class="row">
+            <div class="col-6">
+              <h1 class="text-left">Signups</h1>
+            </div>
+            <div class="col-6 text-right">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <table class="table text-center">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Added</th>
+              <th scope="col">Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">E-Mail</th>
+              <th scope="col">Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="contact in contacts" style="line-height: 2.4rem;">
+              <th scope="row">{{contact.id}}</th>
+              <td>{{contact.created | fromNow }}</td>
+              <td>{{contact.name}}</td>
+              <td>{{contact.lastName}}</td>
+              <td>{{contact.email}}</td>
+              <td>{{}contact.comments}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <footer class="footer">
+          <div class="container text-center">
+            <span class="text-muted">Code with <3 by Unicoderns.</span>
+          </div>
+        </footer>
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+      <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+      <!-- Bootstrap core JavaScript
+    ================================================== -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+      <!-- development version, includes helpful console warnings -->
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+      
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+      <script src="/admin/public/js/controllers/menuController.js"></script>
+      <script src="/admin/public/js/controllers/signupController.js"></script>
+    </body>
+
+  </html>

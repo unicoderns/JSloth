@@ -24,7 +24,7 @@
 
 
   <div id="app" class="login align-middle d-flex">
-    <form class="form-signin text-center">
+    <form class="form-signin text-center" v-on:submit.prevent="login" >
         <div class="navbar-brand font-weight-bold">JSloth
           <span class="font-weight-light text-muted"> Login</span>
         </div>
@@ -36,7 +36,8 @@
       <input v-model="user.email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
       <label for="inputPassword" class="sr-only">Password</label>
       <input v-model="user.password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-      <button v-on:click="login" class="btn btn-lg btn-primary btn-block" type="button">Sign in</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      
     </form>
   </div>
 
