@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand font-weight-bold" href="#">JSloth
+        <span class="font-weight-light h6 text-muted"> Admin</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link<% if (page == 'index') { %> active <% } %>" href="/admin/">Signups</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link<% if (page == 'sessions') { %> active <% } %>" href="/admin/sessions">Sessions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link<% if (page == 'Users') { %> active <% } %>" href="/admin/users">Users</a>
+            </li>
+        </ul>
+        <ul id="menu" class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a v-on:click="logout" class="nav-link">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>

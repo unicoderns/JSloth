@@ -47,6 +47,9 @@ export default class IndexController extends HtmlController {
     protected routes(): void {
         this.app.get("/", this.sessionsMiddleware.isAdmin("html"), this.index);
         this.router.use("/", this.app);
+        this.app.get("/users/", this.sessionsMiddleware.isAdmin("html"), this.users);
+        this.app.get("/sessions/", this.sessionsMiddleware.isAdmin("html"), this.sessions);
+        this.app.get("/contacts/", this.sessionsMiddleware.isAdmin("html"), this.contacts);
     }
 
     /**
@@ -57,7 +60,52 @@ export default class IndexController extends HtmlController {
      * @return html
      */
     private index = (req: Request, res: Response): void => {
-        this.render(req, res, "index");
+        this.render(req, res, "index", {
+            title: "Home",
+            page: "index"
+        });
     };
+     /**
+     * Users view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private users = (req: Request, res: Response): void => {
+        this.render(req, res, "users", {
+            title: "Users",
+            page: "users"
+        });
+    };
+
+    /**
+     * Sessions view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private sessions = (req: Request, res: Response): void => {
+        this.render(req, res, "sessions", {
+            title: "Sessions",
+            page: "sessions"
+        });
+    };
+
+    /**
+     * Users view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private contacts = (req: Request, res: Response): void => {
+        this.render(req, res, "contacts", {
+            title: "Contacts",
+            page: "contacts"
+        });
+    };
+    
 
 }
