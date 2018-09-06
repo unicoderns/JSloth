@@ -58,7 +58,7 @@ export default class IndexEndPoint extends ApiController {
     protected routes(): void {
         this.router.get("/sessions/", this.sessionsMiddleware.isAdmin("json"), this.getAllSessions);
         this.router.delete("/sessions/revoke/:id/", this.sessionsMiddleware.isAdmin("json"), this.revokeSession);
-        this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.createUser);
+        this.router.get("/users/", this.sessionsMiddleware.isAdmin("json"), this.getAllUsers);
         this.router.post("/users/create/", this.sessionsMiddleware.isAdmin("json"), this.createUser);
         this.router.put("/users/activate/:id/", this.sessionsMiddleware.isAdmin("json"), this.activateUser);
         this.router.put("/users/deactivate/:id/", this.sessionsMiddleware.isAdmin("json"), this.deactivateUser);
@@ -76,7 +76,11 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllSessions = (req: Request, res: Response): void => {
-        this.sessionsTable.getAll().then((data) => {
+        this.sessionsTable.join({
+            keyField: this.sessionsTable.user,
+            fields: ["username", "email", "firstName", "lastName"],
+            kind: "LEFT"
+        }).getAll().then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err);

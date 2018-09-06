@@ -25,6 +25,8 @@
 import * as fields from "../../interfaces/db/fields";
 import * as settings from "../../interfaces/db/settings";
 
+import Model from "../../abstract/models/model";
+
 /**
  * JSloth DB Datatypes
  */
@@ -105,6 +107,25 @@ export class Datatypes {
             unique: true,
             unsigned: true,
             autoincrement: true
+        };
+        return this.mergeTypes(commonType, customType);
+    }
+
+    /**
+     * Define a foreign key
+     * 
+     * @param name Name of the db field.
+     * @param model Db Model to link.
+     * @param settings Field settings.
+     */
+    public FOREIGNKEY(localField: string, linkedField: string, model: Model, settings: settings.General = {}): fields.ForeignKey {
+        let commonType = this.fillDefault(settings);
+        let customType: fields.ForeignKey = {
+            type: "INT",
+            size: settings.size || 0,
+            model: model,
+            localField: localField,
+            linkedField: linkedField
         };
         return this.mergeTypes(commonType, customType);
     }
@@ -192,7 +213,7 @@ export class Datatypes {
         };
         return this.mergeTypes(commonType, customType);
     }
-    
+
     /////////////////////////////////////////////////////////////////////
     // Binary
     /////////////////////////////////////////////////////////////////////
