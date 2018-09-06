@@ -111,6 +111,7 @@ export function getList(target: string): Map<string, Map<string, string>> {
  */
 export function field(alias?: string) {
     return function (target: any, key: string) {
+        console.log(target[key]);
         register((target.constructor.name).charAt(0).toLowerCase() + (target.constructor.name).slice(1), "public", key, alias || key);
     }
 }

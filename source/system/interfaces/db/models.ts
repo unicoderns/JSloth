@@ -22,66 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as defaults from "./defaults";
-import Model from "../../abstract/models/model";
+import * as fields from "../../interfaces/db/fields";
 
-// export enum Privacy {"PUBLIC", "PRIVATE", "PROTECTED"};
-
-// JSloth internal flags
-export interface SystemTypes {
-    type?: string;
-    alias?: string;
-    protected?: boolean;
-    private?: boolean;
-}
-
-export interface CommonTypes extends SystemTypes {
-    primaryKey?: boolean;
-    notNull?: boolean;
-    unique?: boolean;
-    // binary?: boolean;
-    unsigned?: boolean;
-    zeroFill?: boolean;
-    autoincrement?: boolean;
-    generated?: boolean;
-}
-
-/*** Datatype interface. */
-export interface DataType extends CommonTypes {
-    size?: number;
-}
-
-export interface VarCharType extends CommonTypes {
-    size: number;
-}
-
-export interface FloatType extends CommonTypes {
-    size?: number;
-    precision?: number;
-}
-
-export interface BoolType extends CommonTypes {
-    default: defaults.Binary;
-}
-
-export interface DataTimestampType extends CommonTypes {
-    default: defaults.Timestamp;
-}
-
-/**
- * Foreign key to model
- */
-
-export interface ForeignKey extends DataType {
-    localField: string;
-    linkedField: string;
-    model: Model;
-}
-
-/**
- * Foreign key to static enum model
- */
-
-export interface StaticKey extends DataType {
-    keys: any;
+// Model information
+export interface Join {
+    keyField: fields.ForeignKey;
+    fields: string[];
+    kind: string;
 }

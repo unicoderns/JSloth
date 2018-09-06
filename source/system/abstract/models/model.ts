@@ -26,17 +26,18 @@ import JSloth from "../../lib/core";
 import { Promise } from "es6-promise";
 import { getList } from "../models/decorators/db";
 
+import * as models from "../../interfaces/db/models";
 import * as mysql from "mysql";
-import * as datatypes from "../../lib/db/datatypes";
 
 /**
  * Model Abstract
  */
 export default class Model {
-    private jsloth: JSloth;
+    protected jsloth: JSloth;
     protected tableName: string = ((<any>this).constructor.name).charAt(0).toLowerCase() + ((<any>this).constructor.name).slice(1); // Get the table name from the model name in camelcase.
     public unsafe: boolean = false;
     public fields: Map<string, string>;
+    public joins: models.Join[] = [];
 
     /**
      * Create a table object.
@@ -136,9 +137,8 @@ export default class Model {
      * @var fields String array with field names.
      * @return Object cointaining the SQL and a field report
      */
-    private getSelectFieldsSQL(fields: string[]): string {
+    private getSelectFieldsSQL(fields: string[], prefix?: boolean): string {
         let fieldsSQL = "";
-        let filteredFields: string[] = [];
         let selectableFields: string[] = [];
         let modelFields = this.getFields();
 
@@ -161,17 +161,69 @@ export default class Model {
             selectableFields = this.mapInArray(modelFields);
         }
 
-        fieldsSQL = fieldsSQL + "`";
-        fieldsSQL = fieldsSQL + selectableFields.join("`, `") + "`";
+        if (typeof prefix == "undefined") {
+            fieldsSQL = "`" + this.tableName + "`.`";
+            fieldsSQL = fieldsSQL + selectableFields.join("`, `" + this.tableName + "`.`") + "`";
+        } else {
+            selectableFields.forEach(function (field: string) {
+                fieldsSQL = fieldsSQL + "`" + this.tableName + "`.`" + field + "` AS `" + this.tableName + "__" + field + "`";
+            }.bind(this));
+        }
 
         return fieldsSQL;
+    }
+
+    /**
+     * Generates a select string from the Join configuration
+     * 
+     * @var fields String array with field names.
+     * @return Object cointaining the SQL and a field report
+     */
+    private getJoinSelectFieldsSQL(): string {
+        let joins = this.joins;
+        let joinsStringArray: string[] = [];
+        let joinsSQL = "";
+        if (joins.length) {
+            joins.forEach(function (join: models.Join) {
+                joinsStringArray.push(join.keyField.model.getSelectFieldsSQL(join.fields, true));
+            });
+            joinsSQL = joinsStringArray.join(", ")
+            joinsSQL = ", " + joinsSQL;
+        }
+        return joinsSQL;
+    }
+
+    /**
+     * Generate join sql code
+     * 
+     * @return String with the where sql code 
+     */
+    private generateJoinCode(): string {
+        let joins = this.joins;
+        let joinsStringArray: string[] = [];
+        let joinsSQL = "";
+        if (joins.length) {
+            joins.forEach(function (join: models.Join) {
+                let linkedTableName = join.keyField.model.tableName;
+                joinsStringArray.push(
+                    join.kind.toUpperCase() + " JOIN " +
+                    "`" + linkedTableName + "`" +
+                    " ON `" + this.tableName + "`.`" + join.keyField.localField + "` = " +
+                    "`" + linkedTableName + "`.`" + join.keyField.linkedField + "`"
+                );
+            }.bind(this));
+            joinsSQL = joinsStringArray.join(" ");
+        }
+        return joinsSQL;
+
+        //RIGHT JOIN `movies` AS B ON B.`id` = A.`movie_id`
     }
 
     /////////////////////////////////////////////////////////////////////
     // Generate "AND" chained where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generateWhereDataChain(where?: any): { sql: string, values: string[] } {
+    private generateWhereCodeChain(where?: any): { sql: string, values: string[] } {
         let values: string[] = [];
         let keys: string[] = [];
         let filteredKeys: string[] = [];
@@ -193,8 +245,8 @@ export default class Model {
         }
 
         if (typeof where !== "undefined") {
-            let sql: string = "`";
-            sql = sql + filteredKeys.join("` = ? AND `");
+            let sql: string = "`" + this.tableName + "`.`";
+            sql = sql + filteredKeys.join("` = ? AND `" + this.tableName + "`.`");
             sql = sql + "` = ?";
             // getting values
             filteredKeys.forEach((item: string) => {
@@ -212,11 +264,13 @@ export default class Model {
         }
     }
 
-    /////////////////////////////////////////////////////////////////////
-    // Generate where sql code
-    // @return string
-    /////////////////////////////////////////////////////////////////////
-    private generateWhereData(where?: any): { sql: string, values: string[] } {
+    /**
+     * Generate where sql code
+     * 
+     * @var where Array of key/value objects with the conditions
+     * @return String with the where sql code 
+     */
+    private generateWhereCode(where?: any): { sql: string, values: string[] } {
         let generated: { sql: string, values: string[] } = {
             sql: "",
             values: []
@@ -225,14 +279,14 @@ export default class Model {
             let values: string[] = [];
             let SQLChains: string[] = [];
             where.forEach(function (chain: any) {
-                let localChain = this.generateWhereDataChain(chain);
+                let localChain = this.generateWhereCodeChain(chain);
                 values = values.concat(localChain.values);
                 SQLChains.push(localChain.sql);
             }.bind(this));
             generated.sql = "(" + SQLChains.join(") OR (") + ")";
             generated.values = values;
         } else {
-            generated = this.generateWhereDataChain(where);
+            generated = this.generateWhereCodeChain(where);
         }
 
         if (generated.sql) {
@@ -281,7 +335,9 @@ export default class Model {
      */
     private select(fields?: string[], where?: any, groupBy?: string, orderBy?: string, limit?: number): Promise<any> {
         let fieldsSQL = this.getSelectFieldsSQL(fields);
-        let whereData = this.generateWhereData(where);
+        let joinFieldsSQL = this.getJoinSelectFieldsSQL();
+        let joinCode = this.generateJoinCode();
+        let whereCode = this.generateWhereCode(where);
         let extra = "";
         if ((typeof groupBy !== "undefined") && (groupBy !== null)) {
             extra += " GROUP BY " + groupBy;
@@ -292,8 +348,9 @@ export default class Model {
         if ((typeof limit !== "undefined") && (limit !== null)) {
             extra += " LIMIT " + limit;
         }
-        let query = "SELECT " + fieldsSQL + " FROM `" + this.tableName + "`" + whereData.sql + extra + ";";
-        return this.jsloth.db.query(query, whereData.values);
+        let query = "SELECT " + fieldsSQL + joinFieldsSQL + " FROM `" + this.tableName + "`" + joinCode + whereCode.sql + extra + ";";
+        this.joins = [];
+        return this.jsloth.db.query(query, whereCode.values);
     }
 
     /**
@@ -349,6 +406,28 @@ export default class Model {
     public getAll(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
         return this.select(fields, where, groupBy, orderBy);
     }
+
+    /**
+     * Join a table
+     *
+     * Specify a field that needs to be joined
+     * 
+     * Warning: It works only with select requests
+     * 
+     * @var keyField Model foreign key
+     * @var fields String array with names of fields to join
+     * @var kind Kind of Join to apply E.g.: INNER, LEFT
+     * @return Model
+     */
+    public join(join: models.Join): Model {
+        this.joins.push({
+            keyField: join.keyField,
+            fields: join.fields,
+            kind: join.kind
+        })
+        return this;
+    }
+
     /**
      * Insert query
      * 
@@ -387,9 +466,9 @@ export default class Model {
                 values.push(data[key]);
             }
         }
-        let whereData = this.generateWhereData(where);
-        let query = "UPDATE `" + this.tableName + "` SET " + fields.join(", ") + whereData.sql + ";";
-        unifiedValues = values.concat(whereData.values);
+        let whereCode = this.generateWhereCode(where);
+        let query = "UPDATE `" + this.tableName + "` SET " + fields.join(", ") + whereCode.sql + ";";
+        unifiedValues = values.concat(whereCode.values);
         return this.jsloth.db.query(query, unifiedValues);
     }
 
@@ -400,9 +479,9 @@ export default class Model {
      * @return Promise with query result
      */
     public delete(where?: any): Promise<any> {
-        let whereData = this.generateWhereData(where);
-        let query = "DELETE FROM `" + this.tableName + "`" + whereData.sql + ";";
-        return this.jsloth.db.query(query, whereData.values);
+        let whereCode = this.generateWhereCode(where);
+        let query = "DELETE FROM `" + this.tableName + "`" + whereCode.sql + ";";
+        return this.jsloth.db.query(query, whereCode.values);
     }
 
 }

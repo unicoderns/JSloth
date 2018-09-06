@@ -23,6 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 import Model from "../../../../abstract/models/model";
+import * as usersModel from "./usersModel";
 import { field, secret } from "../../../../abstract/models/decorators/db";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
@@ -56,8 +57,9 @@ export class Sessions extends Model {
         notNull : true
     });
 
+    // ToDo: Specify the localField looks redundant
     @field()
-    public user: fields.DataType = new datatypes.Datatypes().INT({
+    public user: fields.ForeignKey = new datatypes.Datatypes().FOREIGNKEY("user", "id", new usersModel.Users(this.jsloth), {
         notNull: true,
         unique: true
     });
