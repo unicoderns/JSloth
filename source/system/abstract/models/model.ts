@@ -165,9 +165,11 @@ export default class Model {
             fieldsSQL = "`" + this.tableName + "`.`";
             fieldsSQL = fieldsSQL + selectableFields.join("`, `" + this.tableName + "`.`") + "`";
         } else {
+            let formatedFields: string[] = [];
             selectableFields.forEach(function (field: string) {
-                fieldsSQL = fieldsSQL + "`" + this.tableName + "`.`" + field + "` AS `" + this.tableName + "__" + field + "`";
+                formatedFields.push("`" + this.tableName + "`.`" + field + "` AS `" + this.tableName + "__" + field + "`");
             }.bind(this));
+            fieldsSQL = formatedFields.join(", ")
         }
 
         return fieldsSQL;
@@ -206,7 +208,7 @@ export default class Model {
             joins.forEach(function (join: models.Join) {
                 let linkedTableName = join.keyField.model.tableName;
                 joinsStringArray.push(
-                    join.kind.toUpperCase() + " JOIN " +
+                    " " + join.kind.toUpperCase() + " JOIN " +
                     "`" + linkedTableName + "`" +
                     " ON `" + this.tableName + "`.`" + join.keyField.localField + "` = " +
                     "`" + linkedTableName + "`.`" + join.keyField.linkedField + "`"

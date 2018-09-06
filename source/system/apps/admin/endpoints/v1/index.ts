@@ -78,7 +78,7 @@ export default class IndexEndPoint extends ApiController {
     private getAllSessions = (req: Request, res: Response): void => {
         this.sessionsTable.join({
             keyField: this.sessionsTable.user,
-            fields: ["username"],
+            fields: ["username", "email", "firstName", "lastName"],
             kind: "LEFT"
         }).getAll().then((data) => {
             res.json(data);
