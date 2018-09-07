@@ -177,10 +177,20 @@ export default class Sessions {
             if (req.user.admin) {
                 return next();
             } else {
-                this.reply(res, format, {
-                    success: false,
-                    message: "User is not admin."
-                });
+                if (format == "html") {
+                    return res.redirect("/errors/404/");
+                } else if (format == "redirect") {
+                    if (req.user) {
+                        return res.redirect("/dashboard/");
+                    } else {
+                        return res.redirect("/auth/");
+                    }
+                } else {
+                    return res.status(401).send({
+                        success: false,
+                        message: "User is not admin."
+                    });
+                }
             }
         }
     }
