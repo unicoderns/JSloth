@@ -310,12 +310,12 @@ export default class Model {
      * Warnings:
      * - Field privacity or data integrity will not apply to a direct query, you are responsable for the data security.
      * 
-     * @var query MySQL query
-     * @var params Parameters to replace in the query
+     * @var sql MySQL query
+     * @var values Values to replace in the query
      * @return Promise with query result
      */
-    public query(query: string, params: string[]): Promise<any> {
-        return this.jsloth.db.query(query, params);
+    public query(query: models.Query): Promise<any> {
+        return this.jsloth.db.query(query);
     }
 
     /**
@@ -335,11 +335,14 @@ export default class Model {
      * Join at least 2 tables is important
      * Group this using functions like select("").orderBy() is just easier to understand
      */
-    private select(fields?: string[], where?: any, groupBy?: string, orderBy?: string, limit?: number): Promise<any> {
-        let fieldsSQL = this.getSelectFieldsSQL(fields);
+    private select(select: models.SelectLimit): Promise<any> {
+        let fieldsSQL = this.getSelectFieldsSQL(select.fields);
         let joinFieldsSQL = this.getJoinSelectFieldsSQL();
         let joinCode = this.generateJoinCode();
-        let whereCode = this.generateWhereCode(where);
+        let whereCode = this.generateWhereCode(select.where);
+        let groupBy = select.groupBy;
+        let orderBy = select.orderBy;
+        let limit = select.limit;
         let extra = "";
         if ((typeof groupBy !== "undefined") && (groupBy !== null)) {
             extra += " GROUP BY " + groupBy;
@@ -350,9 +353,9 @@ export default class Model {
         if ((typeof limit !== "undefined") && (limit !== null)) {
             extra += " LIMIT " + limit;
         }
-        let query = "SELECT " + fieldsSQL + joinFieldsSQL + " FROM `" + this.tableName + "`" + joinCode + whereCode.sql + extra + ";";
+        let sql = "SELECT " + fieldsSQL + joinFieldsSQL + " FROM `" + this.tableName + "`" + joinCode + whereCode.sql + extra + ";";
         this.joins = [];
-        return this.jsloth.db.query(query, whereCode.values);
+        return this.query({ sql: sql, values: whereCode.values });
     }
 
     /**
@@ -365,11 +368,17 @@ export default class Model {
      * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
      */
-    public get(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
+    public get(select: models.Select): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.MysqlError) => void) => {
-                let sqlPromise = this.select(fields, where, groupBy, orderBy, 1);
+                let sqlPromise = this.select({
+                    fields: select.fields,
+                    where: select.where,
+                    groupBy: select.groupBy,
+                    orderBy: select.orderBy,
+                    limit: 1
+                });
                 sqlPromise.then((data) => {
                     resolve(data[0]);
                 }).catch(err => {
@@ -391,8 +400,8 @@ export default class Model {
      * @var limit Number of rows to retrieve
      * @return Promise with query result
      */
-    public getSome(fields?: string[], where?: any, groupBy?: string, orderBy?: string, limit?: number): Promise<any> {
-        return this.select(fields, where, groupBy, orderBy, limit);
+    public getSome(select: models.SelectLimit): Promise<any> {
+        return this.select(select);
     }
 
     /**
@@ -405,8 +414,8 @@ export default class Model {
      * @var groupBy String with column_name E.g.: "id, name"
      * @return Promise with query result
      */
-    public getAll(fields?: string[], where?: any, groupBy?: string, orderBy?: string): Promise<any> {
-        return this.select(fields, where, groupBy, orderBy);
+    public getAll(select: models.Select): Promise<any> {
+        return this.select(select);
     }
 
     /**
@@ -418,7 +427,7 @@ export default class Model {
      * 
      * @var keyField Model foreign key
      * @var fields String array with names of fields to join
-     * @var kind Kind of Join to apply E.g.: INNER, LEFT
+     * @var kind Type of Join to apply E.g.: INNER, LEFT
      * @return Model
      */
     public join(join: models.Join): Model {
@@ -436,17 +445,17 @@ export default class Model {
      * @var data object to be inserted in the table
      * @return Promise with query result
      */
-    public insert(data: any): Promise<any> {
+    public insert(data: models.Row): Promise<any> {
         let fields = [];
         let wildcards = [];
-        let values = [];
+        let values: string[] = [];
         for (let key in data) {
             fields.push(key);
             wildcards.push("?");
             values.push(data[key]);
         }
         let query = "INSERT INTO `" + this.tableName + "` (`" + fields.join("`, `") + "`) VALUES (" + wildcards.join(", ") + ");";
-        return this.jsloth.db.query(query, values);
+        return this.query({ sql: query, values: values });
     }
 
     /**
@@ -456,10 +465,12 @@ export default class Model {
      * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @return Promise with query result
      */
-    public update(data: any, where?: any): Promise<any> {
+    public update(update: models.Update): Promise<any> {
         let fields = [];
         let values = [];
         let unifiedValues = [];
+        let data = update.data;
+        let where = update.where;
         for (let key in data) {
             if (data[key] == "now()") {
                 fields.push("`" + key + "` = now()");
@@ -471,7 +482,7 @@ export default class Model {
         let whereCode = this.generateWhereCode(where);
         let query = "UPDATE `" + this.tableName + "` SET " + fields.join(", ") + whereCode.sql + ";";
         unifiedValues = values.concat(whereCode.values);
-        return this.jsloth.db.query(query, unifiedValues);
+        return this.query({ sql: query, values: unifiedValues });
     }
 
     /**
@@ -480,10 +491,10 @@ export default class Model {
      * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
      * @return Promise with query result
      */
-    public delete(where?: any): Promise<any> {
+    public delete(where?: models.KeyValue): Promise<any> {
         let whereCode = this.generateWhereCode(where);
         let query = "DELETE FROM `" + this.tableName + "`" + whereCode.sql + ";";
-        return this.jsloth.db.query(query, whereCode.values);
+        return this.query({ sql: query, values: whereCode.values });
     }
 
 }

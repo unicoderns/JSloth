@@ -25,6 +25,7 @@
 import Config from "../interfaces/config";
 import { Promise } from "es6-promise";
 
+import * as models from "../interfaces/db/models";
 import * as mysql from "mysql";
 
 /**
@@ -61,7 +62,7 @@ export default class JSDB {
      * @var params Object (key/value) with parameters to replace in the query
      * @return Promise with query result
      */
-    public query(sql: string, params: any[]): Promise<any> {
+    public query(query: models.Query): Promise<any> {
         // Create promise
         const p: Promise<any> = new Promise(
             (resolve: (data: any) => void, reject: (err: mysql.MysqlError) => void) => {
@@ -72,10 +73,10 @@ export default class JSDB {
                         throw err;
                     }
                     // Query Mysql
-                    let query = connection.query(sql, params, (err: mysql.MysqlError, rows: any) => {
+                    let mysqlQuery = connection.query(query.sql, query.values, (err: mysql.MysqlError, rows: any) => {
                         connection.release();
                         if (this.config.dev) {
-                            console.log("SQL Query: " + query.sql);
+                            console.log("SQL Query: " + mysqlQuery.sql);
                         }
 
                         if (err) { // Improve error log

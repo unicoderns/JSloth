@@ -28,9 +28,10 @@ import { field, secret } from "../../../../abstract/models/decorators/db";
 import * as fields from "../../../../interfaces/db/fields";
 import * as defaults from "../../../../interfaces/db/defaults";
 import * as datatypes from "../../../../lib/db/datatypes";
+import * as models from "../../../../interfaces/db/models";
 import * as timezones from "../static/timezoneModel";
 
-export interface Row {
+export interface Row extends models.Row {
     id?: number;
     created?: number;
     ip: string;

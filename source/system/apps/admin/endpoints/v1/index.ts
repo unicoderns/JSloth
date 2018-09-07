@@ -80,7 +80,7 @@ export default class IndexEndPoint extends ApiController {
             keyField: this.sessionsTable.user,
             fields: ["username", "email", "firstName", "lastName"],
             kind: "LEFT"
-        }).getAll().then((data) => {
+        }).getAll({}).then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err);
@@ -121,7 +121,7 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllUsers = (req: Request, res: Response): void => {
-        this.usersTable.getAll().then((data) => {
+        this.usersTable.getAll({}).then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err);
@@ -140,10 +140,12 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private createUser = (req: Request, res: Response): void => {
-        let username = req.body.username;
-        let email = req.body.email;
+        let username: string = req.body.username;
+        let email: string = req.body.email;
 
-        this.usersTable.get([], [{ username: username }, { email: email }]).then((user) => {
+        this.usersTable.get({
+            where: [{ username: username }, { email: email }]
+        }).then((user) => {
             if (typeof user === "undefined") {
                 if (!this.emailRegex.test(email)) {
                     res.json({ success: false, message: "Invalid email address." });
@@ -159,7 +161,7 @@ export default class IndexEndPoint extends ApiController {
                         admin: req.body.admin,
                         verified: req.body.verified
                     };
-                    this.usersTable.insert(temp).then((data: any) => {
+                    this.usersTable.insert({ data: temp }).then((data: any) => {
                         res.json({
                             success: true,
                             message: "User created!"
@@ -187,7 +189,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private activateUser = (req: Request, res: Response): void => {
-        this.usersTable.update({ active: 1 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { active: 1 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User activated."
@@ -209,7 +214,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private deactivateUser = (req: Request, res: Response): void => {
-        this.usersTable.update({ active: 0 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { active: 0 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User deactivated."
@@ -231,7 +239,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private grantAdmin = (req: Request, res: Response): void => {
-        this.usersTable.update({ admin: 1 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { admin: 1 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User admin permission granted."
@@ -253,7 +264,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private revokeAdmin = (req: Request, res: Response): void => {
-        this.usersTable.update({ admin: 0 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { admin: 0 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User admin permission revoked."
@@ -275,7 +289,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private verifyUser = (req: Request, res: Response): void => {
-        this.usersTable.update({ verified: 1 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { verified: 1 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User verified."
@@ -297,7 +314,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private unverifyUser = (req: Request, res: Response): void => {
-        this.usersTable.update({ verified: 0 }, { id: req.params.id }).then((data) => {
+        this.usersTable.update({
+            data: { verified: 0 },
+            where: { id: req.params.id }
+        }).then((data) => {
             return res.json({
                 success: true,
                 message: "User unverified."
