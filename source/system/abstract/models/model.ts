@@ -225,7 +225,7 @@ export default class Model {
     // Generate "AND" chained where sql code
     // @return string
     /////////////////////////////////////////////////////////////////////
-    private generateWhereCodeChain(where?: any): { sql: string, values: string[] } {
+    private generateWhereCodeChain(where: any): { sql: string, values: string[] } {
         let values: string[] = [];
         let keys: string[] = [];
         let filteredKeys: string[] = [];
@@ -273,32 +273,36 @@ export default class Model {
      * @return String with the where sql code 
      */
     private generateWhereCode(where?: any): { sql: string, values: string[] } {
-        let generated: { sql: string, values: string[] } = {
-            sql: "",
-            values: []
-        };
-        if (Array.isArray(where)) {
-            let values: string[] = [];
-            let SQLChains: string[] = [];
-            where.forEach(function (chain: any) {
-                let localChain = this.generateWhereCodeChain(chain);
-                values = values.concat(localChain.values);
-                SQLChains.push(localChain.sql);
-            }.bind(this));
-            generated.sql = "(" + SQLChains.join(") OR (") + ")";
-            generated.values = values;
-        } else {
-            generated = this.generateWhereCodeChain(where);
-        }
-
-        if (generated.sql) {
-            generated.sql = " WHERE " + generated.sql;
-            return generated;
-        } else {
+        if (where == "*") {
             return {
                 sql: "",
                 values: []
             };
+        } else {
+            let generated: { sql: string, values: string[] } = {
+                sql: "",
+                values: []
+            };
+            if (Array.isArray(where)) {
+                let values: string[] = [];
+                let SQLChains: string[] = [];
+                where.forEach(function (chain: any) {
+                    let localChain = this.generateWhereCodeChain(chain);
+                    values = values.concat(localChain.values);
+                    SQLChains.push(localChain.sql);
+                }.bind(this));
+                generated.sql = "(" + SQLChains.join(") OR (") + ")";
+                generated.values = values;
+            } else {
+                generated = this.generateWhereCodeChain(where);
+            }
+
+            if (generated.sql) {
+                generated.sql = " WHERE " + generated.sql;
+                return generated;
+            } else {
+                return generated;
+            }
         }
     }
 
@@ -488,10 +492,10 @@ export default class Model {
     /**
      * Delete query
      * 
-     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
+     * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR", a "*" string wildcard is required for security reasons if you want to match all rows.
      * @return Promise with query result
      */
-    public delete(where?: models.KeyValue): Promise<any> {
+    public delete(where: string | models.KeyValue  | models.KeyValue[]): Promise<any> {
         let whereCode = this.generateWhereCode(where);
         let query = "DELETE FROM `" + this.tableName + "`" + whereCode.sql + ";";
         return this.query({ sql: query, values: whereCode.values });

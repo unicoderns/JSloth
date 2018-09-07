@@ -95,9 +95,9 @@ export interface SelectLimit extends Select {
  * Update declaration
  * 
  * @var data object data to be update in the table
- * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR".
+ * @var where Key/Value object used to filter the query, an array of Key/Value objects will generate a multiple filter separated by an "OR", a "*" string wildcard is required for security reasons if you want to match all rows.
  */
 export interface Update {
     data: Row;
-    where?: KeyValue | KeyValue[];
+    where: string | KeyValue | KeyValue[];
 }
