@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand font-weight-bold" href="#">JSloth
+    <a class="navbar-brand font-weight-bold" href="/admin/">JSloth
         <span class="font-weight-light h6 text-muted"> Admin</span>
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link<% if (page == 'index') { %> active <% } %>" href="/admin/">Signups</a>
+                <a class="nav-link<% if (page == 'index') { %> active <% } %>" href="/admin/">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link<% if (page == 'sessions') { %> active <% } %>" href="/admin/sessions">Sessions</a>
@@ -21,7 +21,7 @@
         </ul>
         <ul id="menu" class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a v-on:click="logout" class="nav-link">Logout</a>
+                <a v-on:click="logout" style="cursor: pointer;" class="nav-link">Logout</a>
             </li>
         </ul>
     </div>
