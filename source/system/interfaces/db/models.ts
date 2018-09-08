@@ -35,7 +35,7 @@ export interface Row {
  * Key/Value object
  */
 export interface KeyValue {
-    [key: string]: string;
+    [key: string]: string | number;
 }
 
 /**

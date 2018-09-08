@@ -94,7 +94,12 @@ export default class Sessions {
                     return next();
                 } else {
                     if (authConfig.config.session == "stateful") {
-                        sessionTable.get([], { id: decoded.session, user: decoded.user }).then((session: any) => {
+                        sessionTable.get({
+                            where: {
+                                id: decoded.session,
+                                user: decoded.user
+                            }
+                        }).then((session: any) => {
                             if (typeof session == "undefined") {
                                 return next();
                             } else {
