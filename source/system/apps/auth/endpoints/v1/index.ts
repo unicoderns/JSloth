@@ -61,7 +61,7 @@ export default class IndexEndPoint extends ApiController {
 
     /*** Define routes */
     protected routes(): void {
-        this.get("/", "allUsers", this.getAllUsers);
+        // this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
         this.post("/token/renew/", "renewToken", this.sessionsMiddleware.auth("json"), this.renewToken);
@@ -86,7 +86,9 @@ export default class IndexEndPoint extends ApiController {
      */
     private getAllUsers = (req: Request, res: Response): void => {
         this.usersTable.delete({ id: 3 }).then((done) => {
-            this.usersTable.getAll(["id", "first_name", "last_name"]).then((data) => {
+            this.usersTable.getAll({ 
+                fields: ["id", "first_name", "last_name"]
+            }).then((data) => {
                 res.json(data);
             }).catch(err => {
                 console.error(err);
@@ -150,7 +152,9 @@ export default class IndexEndPoint extends ApiController {
             res.json({ success: false, message: "Invalid email address." });
         } else {
             // find the user
-            unsafeUsersTable.get([], { email: email, active: 1 }).then((user) => {
+            unsafeUsersTable.get({
+                where: { email: email, active: 1 }
+            }).then((user) => {
                 if (typeof user === "undefined") {
                     res.json({ success: false, message: "Authentication failed. User and password don't match." });
                 } else {
