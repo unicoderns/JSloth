@@ -150,7 +150,12 @@ export default class Core {
                         return res.redirect("/errors/404/");
                     });
                     this.express.use(function (err: any, req: Request, res: Response, next: NextFunction): any {
-                        return res.redirect("/errors/" + err.status + "/");
+                        console.error(err);
+                        if (!err.status) {
+                            return res.redirect("/errors/500/");
+                        } else {
+                            return res.redirect("/errors/" + err.status + "/");
+                        }
                     });
                     // run
                     this.express.listen(this.port);
