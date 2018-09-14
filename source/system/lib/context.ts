@@ -89,7 +89,9 @@ export default class JSContext {
             // Create promise
             const p: Promise<any> = new Promise(
                 (resolve: (data: any) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                    userTable.get([], { id: id }).then((user: any) => {
+                    userTable.get({
+                        where: { id: id }
+                    }).then((user: any) => {
                         let userTemp = JSON.parse(JSON.stringify(user));
                         that.userCache[id] = userTemp;
                         resolve(userTemp);
