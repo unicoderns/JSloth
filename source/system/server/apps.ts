@@ -91,6 +91,7 @@ export default class Apps {
             complete: {
                 api: false,
                 routes: false,
+                dash: false,
                 public: false,
                 scss: false,
                 ts: false
@@ -98,6 +99,7 @@ export default class Apps {
             success: {
                 api: false,
                 routes: false,
+                dash: false,
                 public: false,
                 scss: false,
                 ts: false
@@ -105,6 +107,7 @@ export default class Apps {
             errors: {
                 api: "",
                 routes: "",
+                dash: "",
                 public: "",
                 scss: "",
                 ts: ""
@@ -159,16 +162,16 @@ export default class Apps {
             };
 
             let compileTS = () => {
-                this.batch.compileTS(appUrl + app.config.name,  this.jsloth.context.baseURL + "dist/static/" + app.config.name + "/client/").then(() => {	
-                    app.complete.ts = true;	
-                    app.success.ts = true;	
-                    this.installed(app, next);	
-                }).catch(err => {	
-                    app.complete.ts = true;	
-                    app.success.ts = false;	
-                    app.errors.ts = err;	
-                    this.installed(app, next);	
-                });	
+                this.batch.compileTS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name + "/client/").then(() => {
+                    app.complete.ts = true;
+                    app.success.ts = true;
+                    this.installed(app, next);
+                }).catch(err => {
+                    app.complete.ts = true;
+                    app.success.ts = false;
+                    app.errors.ts = err;
+                    this.installed(app, next);
+                });
             };
 
             this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
@@ -193,6 +196,13 @@ export default class Apps {
 
         // Installing regular routes
         this.loadRoutes(app, type, "routes", "", next);
+        // Installing dash routes
+        if ((app.config.dash) && (app.config.dash.activate)) {
+            this.loadRoutes(app, type, "dash", "/dashboard", next);
+        } else {
+            app.complete.dash = true;
+            app.success.dash = false;
+        }
         // Installing api routes
         this.loadRoutes(app, type, "api", "/api", next);
     }
@@ -202,7 +212,7 @@ export default class Apps {
      * 
      * @param app App configuration.
      * @param appType App family (system|apps)
-     * @param routeType Route family (routes|api)
+     * @param routeType Route family (routes|dash|api)
      * @param basepath Url prefix
      * @param next
      */
@@ -212,7 +222,8 @@ export default class Apps {
             appUrl = this.jsloth.context.sourceURL + "system/apps/"
         }
         let appFileUrl = appUrl + app.config.name + "/" + routeType;
-        this.jsloth.files.exists(appFileUrl + ".ts").then(() => {
+        this.jsloth.files.exists(appFileUrl + ".ts").then((exists: boolean) => {
+            console.log(exists);
             let url: string = basepath + (app.config.basepath || "/");
             let appRoute = require(appFileUrl);
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
@@ -221,6 +232,9 @@ export default class Apps {
             if (routeType == "routes") {
                 app.complete.routes = true;
                 app.success.routes = true;
+            } else if (routeType == "dash") {
+                app.complete.dash = true;
+                app.success.dash = true;
             } else {
                 app.complete.api = true;
                 app.success.api = true;
@@ -230,11 +244,13 @@ export default class Apps {
             if (routeType == "routes") {
                 app.complete.routes = true;
                 app.success.routes = false;
+            } else if (routeType == "dash") {
+                app.complete.dash = true;
+                app.success.dash = false;
             } else {
                 app.complete.api = true;
                 app.success.api = false;
             }
-            console.error(err);
             this.installed(app, next);
         });
     }
@@ -246,36 +262,34 @@ export default class Apps {
      * @param next
      */
     private installed(app: App, next: NextFunction): void {
-        let err: string;
-        if ((app.complete.routes) && (app.complete.api) && (app.complete.public) && (app.complete.scss) && (app.complete.ts)) {
+        function printError(err: string) {
+            if ((err) && (err.length)) {
+                Log.moduleWarning(err);
+            }
+        }
+
+        if ((app.complete.routes) && (app.complete.dash) && (app.complete.api) && (app.complete.public) && (app.complete.scss) && (app.complete.ts)) {
             Log.app(app.config.name);
             Log.appModule("Routes installed", "Routes not found", app.success.routes);
-            err = app.errors.routes;
-            if ((err) && (err.length)) {
-                Log.moduleWarning(err);
-            }
+            printError(app.errors.routes);
+
+            Log.appModule("Dash installed", "Dash not found or deactivated", app.success.dash);
+            printError(app.errors.dash);
+
             Log.appModule("Endpoints installed", "Endpoints not found", app.success.api);
-            err = app.errors.api;
-            if ((err) && (err.length)) {
-                Log.moduleWarning(err);
-            }
+            printError(app.errors.api);
+
             if (app.config.engine != "angular") {
                 Log.appModule("Public folder published", "Public folder publication failed", app.success.public);
-                err = app.errors.public;
-                if ((err) && (err.length)) {
-                    Log.moduleWarning(err);
-                }
+                printError(app.errors.public);
+
                 Log.appModule("Styles generated", "No styles to compile", app.success.scss);
-                err = app.errors.scss;
-                if ((err) && (err.length)) {
-                    Log.moduleWarning(err);
-                }
+                printError(app.errors.scss);
+
                 Log.appModule("Client generated", "No client to compile", app.success.ts);
-                err = app.errors.ts;
-                if ((err) && (err.length)) {
-                    Log.moduleWarning(err);
-                }
+                printError(app.errors.ts);
             }
+
             app.done = true;
             next(this.apps);
         }
