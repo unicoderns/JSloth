@@ -1,10 +1,10 @@
 # JSloth
 Modular TDD express app using Typescript
 
-[![Travis](https://travis-ci.org/chrissmejia/JSloth.svg?branch=master)](https://travis-ci.org/chrissmejia/JSloth)
-[![Coverage Status](https://coveralls.io/repos/github/chrissmejia/JSloth/badge.svg)](https://coveralls.io/github/chrissmejia/JSloth)
-![Dependencies](https://david-dm.org/chrissmejia/JSloth.svg)
-![Dev Dependencies](https://david-dm.org/chrissmejia/JSloth/dev-status.svg)
+[![Travis](https://travis-ci.org/unicoderns/JSloth.svg?branch=master)](https://travis-ci.org/unicoderns/JSloth)
+[![Coverage Status](https://coveralls.io/repos/github/unicoderns/JSloth/badge.svg)](https://coveralls.io/github/unicoderns/JSloth)
+![Dependencies](https://david-dm.org/unicoderns/JSloth.svg)
+![Dev Dependencies](https://david-dm.org/unicoderns/JSloth/dev-status.svg)
 
 ## First steps
 
