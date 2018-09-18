@@ -1,10 +1,10 @@
 {
     "name": "jsloth",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "author": {
-        "name": "Chriss Mejia",
-        "email": "me@chrissmejia.com",
-        "url": "https://chrissmejia.com/"
+        "name": "Unicoderns",
+        "email": "info@unicoderns.com",
+        "url": "https://unicoderns.com/"
     },
     "scripts": {
         "start": "nodemon -e js,ts,scss --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
@@ -16,8 +16,8 @@
         "build": "ng build --prod --app angular && ng build --prod --app angular-server"
     },
     "bugs": {
-        "url": "https://github.com/chrissmejia/JSloth/issues",
-        "email": "me@chrissmejia.com"
+        "url": "https://github.com/unicoderns/JSloth/issues",
+        "email": "info@unicoderns.com"
     },
     "license": "(MIT OR Apache-2.0)",
     "dependencies": {
@@ -34,6 +34,7 @@
         "@types/cookie-parser": "^1.4.1",
         "@types/jsonwebtoken": "^7.2.5",
         "@types/mysql": "2.15.2",
+        "@unicoderns/orm": "file:../ORM",
         "angular2-universal": "^2.1.0-rc.1",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
@@ -51,7 +52,7 @@
         "markdown-folder-to-html": "^1.6.0",
         "mocha": "^5.2.0",
         "morgan": "^1.9.0",
-        "mysql": "^2.15.0",
+        "mysql": "^2.16.0",
         "node-sass": "^4.9.2",
         "preboot": "^6.0.0-beta.1",
         "rxjs": "^5.5.6",

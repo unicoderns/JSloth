@@ -1,10 +1,10 @@
 {
     "dev": true,
     "token": "magicisallaroundus",
-    "mysql": {
+    "dbconnection": {
         "user": "apiUser",
         "password": "password",
-        "db": "apiDB",
+        "database": "apiDB",
         "port": 3306,
         "host": "localhost",
         "connectionLimit": 10,

@@ -22,16 +22,12 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Model from "../../../../abstract/models/model";
 import * as usersModel from "./usersModel";
-import { field, secret } from "../../../../abstract/models/decorators/db";
-import * as fields from "../../../../interfaces/db/fields";
-import * as defaults from "../../../../interfaces/db/defaults";
-import * as datatypes from "../../../../lib/db/datatypes";
-import * as models from "../../../../interfaces/db/models";
+import { field, secret, Fields, Defaults, Datatypes, Models, Model } from "@unicoderns/orm"
+
 import * as timezones from "../static/timezoneModel";
 
-export interface Row extends models.Row {
+export interface Row extends Models.Row {
     id?: number;
     created?: number;
     ip: string;
@@ -44,23 +40,23 @@ export interface Row extends models.Row {
 export class Sessions extends Model {
 
     @field()
-    public id: fields.DataType = new datatypes.Datatypes().ID();    
+    public id: Fields.DataType = new Datatypes().ID();
 
     @field()
-    public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
+    public created: Fields.DataTimestampType = new Datatypes().TIMESTAMP({
         notNull: true,
-        default: defaults.Timestamp.CURRENT_TIMESTAMP
+        default: Defaults.Timestamp.CURRENT_TIMESTAMP
     });
 
     @field()
-    public ip: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public ip: Fields.DataType = new Datatypes().VARCHAR({
         size: 39,
-        notNull : true
+        notNull: true
     });
 
     // ToDo: Specify the localField looks redundant
     @field()
-    public user: fields.ForeignKey = new datatypes.Datatypes().FOREIGNKEY("user", "id", new usersModel.Users(this.jsloth), {
+    public user: Fields.ForeignKey = new Datatypes().FOREIGNKEY("user", "id", new usersModel.Users(this.DB), {
         notNull: true,
         unique: true
     });
