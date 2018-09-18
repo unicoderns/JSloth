@@ -61,7 +61,6 @@ export default class JSPath {
                 this.jsloth.files.exists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
                     resolve(customPath);
                 }).catch((err: NodeJS.ErrnoException) => {
-                    console.log(path)
                     resolve(path);
                     throw err;
                 });

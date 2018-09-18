@@ -223,7 +223,6 @@ export default class Apps {
         }
         let appFileUrl = appUrl + app.config.name + "/" + routeType;
         this.jsloth.files.exists(appFileUrl + ".ts").then((exists: boolean) => {
-            console.log(exists);
             let url: string = basepath + (app.config.basepath || "/");
             let appRoute = require(appFileUrl);
             let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);

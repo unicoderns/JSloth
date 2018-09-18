@@ -83,7 +83,7 @@ export default class JSContext {
      * @return Promise.
      */
     public userCacheFactory = (id: number, cached: boolean = true): Promise<any> => {
-        let userTable = new user.Users(this.jsloth);
+        let userTable = new user.Users(this.jsloth.db);
         let that = this;
         function fromSQL() {
             // Create promise

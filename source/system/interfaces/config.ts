@@ -22,13 +22,13 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as MySQL from "./db/connections";
+import { Connection } from "@unicoderns/orm"
 import * as App from "./app";
 
 /*** Configuration interface */
 interface SysConfig {
   dev: boolean;
-  mysql: MySQL.Settings;
+  dbconnection: Connection;
   system_apps: App.Config[];
   custom_apps: App.Config[];
   token: string;

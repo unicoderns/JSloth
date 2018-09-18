@@ -22,11 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Model from "../../../../abstract/models/model";
-import { field, secret } from "../../../../abstract/models/decorators/db";
-import * as fields from "../../../../interfaces/db/fields";
-import * as defaults from "../../../../interfaces/db/defaults";
-import * as datatypes from "../../../../lib/db/datatypes";
+import { field, secret, Fields, Defaults, Datatypes, Models, Model } from "@unicoderns/orm"
+
 import * as timezones from "../static/timezoneModel";
 
 export interface Row {
@@ -50,59 +47,59 @@ export interface Row {
 export class Users extends Model {
 
     @field()
-    public id: fields.DataType = new datatypes.Datatypes().ID();
+    public id: Fields.DataType = new Datatypes().ID();
 
     @field()
-    public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
+    public created: Fields.DataTimestampType = new Datatypes().TIMESTAMP({
         notNull: true,
-        default: defaults.Timestamp.CURRENT_TIMESTAMP
+        default: Defaults.Timestamp.CURRENT_TIMESTAMP
     });
 
     @field()
-    public username: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public username: Fields.DataType = new Datatypes().VARCHAR({
         size: 45,
         unique: true
     });
 
     @field()
-    public email: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public email: Fields.DataType = new Datatypes().VARCHAR({
         notNull: true,
         size: 45,
         unique: true
     });
 
     @secret()
-    public password: fields.DataType = new datatypes.Datatypes().CHAR({
+    public password: Fields.DataType = new Datatypes().CHAR({
         notNull: true,
         size: 60
     });
 
     @secret()
-    public salt: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public salt: Fields.DataType = new Datatypes().VARCHAR({
         notNull: true,
         size: 20
     });
 
     @field()
-    public firstName: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public firstName: Fields.DataType = new Datatypes().VARCHAR({
         size: 45
     });
 
     @field()
-    public lastName: fields.DataType = new datatypes.Datatypes().VARCHAR({
+    public lastName: Fields.DataType = new Datatypes().VARCHAR({
         size: 45
     });
 
     @field()
-    public timezone: fields.DataType = new datatypes.Datatypes().STATICKEY(timezones);
+    public timezone: Fields.DataType = new Datatypes().STATICKEY(timezones);
 
     @field()
-    public admin: fields.BoolType = new datatypes.Datatypes().BOOL();
+    public admin: Fields.BoolType = new Datatypes().BOOL();
 
     @field()
-    public verified: fields.BoolType = new datatypes.Datatypes().BOOL();
+    public verified: Fields.BoolType = new Datatypes().BOOL();
 
     @field()
-    public active: fields.BoolType = new datatypes.Datatypes().BOOL();
+    public active: Fields.BoolType = new Datatypes().BOOL();
 
 }

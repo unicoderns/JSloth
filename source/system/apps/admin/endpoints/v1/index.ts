@@ -49,8 +49,8 @@ export default class IndexEndPoint extends ApiController {
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
-        this.usersTable = new users.Users(jsloth);
-        this.sessionsTable = new sessions.Sessions(jsloth);
+        this.usersTable = new users.Users(jsloth.db);
+        this.sessionsTable = new sessions.Sessions(jsloth.db);
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 

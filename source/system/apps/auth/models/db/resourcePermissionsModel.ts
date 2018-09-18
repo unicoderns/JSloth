@@ -22,11 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Model from "../../../../abstract/models/model";
-import { field, secret } from "../../../../abstract/models/decorators/db";
-import * as fields from "../../../../interfaces/db/fields";
-import * as defaults from "../../../../interfaces/db/defaults";
-import * as datatypes from "../../../../lib/db/datatypes";
+import { field, secret, Fields, Defaults, Datatypes, Models, Model } from "@unicoderns/orm"
 
 export interface Row {
     id?: number;
@@ -41,22 +37,22 @@ export interface Row {
 export class Resource_Permissions extends Model {
 
     @field()
-    public id: fields.DataType = new datatypes.Datatypes().ID();
+    public id: Fields.DataType = new Datatypes().ID();
 
     @field()
-    public created: fields.DataTimestampType = new datatypes.Datatypes().TIMESTAMP({
+    public created: Fields.DataTimestampType = new Datatypes().TIMESTAMP({
         notNull: true,
-        default: defaults.Timestamp.CURRENT_TIMESTAMP
+        default: Defaults.Timestamp.CURRENT_TIMESTAMP
     });
 
     @field()
-    public resource: fields.DataType = new datatypes.Datatypes().INT({
+    public resource: Fields.DataType = new Datatypes().INT({
         size: 45,
         unique: true
     });
 
     @field()
-    public user: fields.DataType = new datatypes.Datatypes().INT({
+    public user: Fields.DataType = new Datatypes().INT({
         notNull: true
     });
 
