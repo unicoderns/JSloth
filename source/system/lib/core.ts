@@ -29,8 +29,6 @@ import Config from "../interfaces/config";
 import JSContext from "./context";
 import JSFiles from "./files";
 import JSPath from "./path";
-// import JSDB from "./db";
-// import Model from "../abstract/models/model";
 
 /**
  * JSloth Library Loader

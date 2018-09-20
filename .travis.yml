@@ -1,6 +1,6 @@
 language: node_js
 node_js:
- - "6.9.2"
+ - "8.11.3"
 script: 
  - "npm run travis"
 after_script: NODE_ENV=test istanbul cover --no-default-excludes --hook-run-in-context ./node_modules/mocha/bin/_mocha -- -R spec tests/core/**/*.test.ts --report lcovonly --compilers ts:ts-node/register && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

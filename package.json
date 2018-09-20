@@ -34,7 +34,7 @@
         "@types/cookie-parser": "^1.4.1",
         "@types/jsonwebtoken": "^7.2.5",
         "@types/mysql": "2.15.2",
-        "@unicoderns/orm": "file:../ORM",
+        "@unicoderns/orm": "0.0.6",
         "angular2-universal": "^2.1.0-rc.1",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
