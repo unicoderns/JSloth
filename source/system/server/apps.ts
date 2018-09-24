@@ -146,53 +146,46 @@ export default class Apps {
         if (type == "system") {
             appUrl = this.jsloth.context.sourceURL + "system/apps/"
         }
-        if (app.config.engine != "angular") {
-            let compileSCSS = () => {
-                this.batch.compileSCSS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
-                    app.complete.scss = true;
-                    app.success.scss = success;
-                    this.installed(app, next);
-                }).catch(err => {
-                    app.complete.scss = true;
-                    app.success.scss = false;
-                    app.errors.scss = err;
-                    console.error(err);
-                    this.installed(app, next);
-                });
-            };
-
-            let compileTS = () => {
-                this.batch.compileTS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name + "/client/").then(() => {
-                    app.complete.ts = true;
-                    app.success.ts = true;
-                    this.installed(app, next);
-                }).catch(err => {
-                    app.complete.ts = true;
-                    app.success.ts = false;
-                    app.errors.ts = err;
-                    this.installed(app, next);
-                });
-            };
-
-            this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
-                app.complete.public = true;
-                app.success.public = success;
-                compileSCSS(); // Wait the structure to compile
-                compileTS(); // Wait the structure to compile
+        let compileSCSS = () => {
+            this.batch.compileSCSS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
+                app.complete.scss = true;
+                app.success.scss = success;
+                this.installed(app, next);
             }).catch(err => {
-                app.complete.public = true;
-                app.success.public = false;
-                app.errors.public = err;
+                app.complete.scss = true;
+                app.success.scss = false;
+                app.errors.scss = err;
                 console.error(err);
-                compileSCSS(); // Wait the structure to compile
-                compileTS(); // Wait the structure to compile
+                this.installed(app, next);
             });
-        } else {
+        };
+
+        let compileTS = () => {
+            this.batch.compileTS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name + "/client/").then(() => {
+                app.complete.ts = true;
+                app.success.ts = true;
+                this.installed(app, next);
+            }).catch(err => {
+                app.complete.ts = true;
+                app.success.ts = false;
+                app.errors.ts = err;
+                this.installed(app, next);
+            });
+        };
+
+        this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
+            app.complete.public = true;
+            app.success.public = success;
+            compileSCSS(); // Wait the structure to compile
+            compileTS(); // Wait the structure to compile
+        }).catch(err => {
             app.complete.public = true;
             app.success.public = false;
-            app.complete.scss = true;
-            app.success.scss = false;
-        }
+            app.errors.public = err;
+            console.error(err);
+            compileSCSS(); // Wait the structure to compile
+            compileTS(); // Wait the structure to compile
+        });
 
         // Installing regular routes
         this.loadRoutes(app, type, "routes", "", next);

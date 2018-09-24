@@ -76,7 +76,6 @@ export default class Core {
 
         // Mount static files
         Log.module("Static files published");
-        this.express.use('/', express.static(__dirname + '/../../../dist/angular/browser/', { index: false, extensions: ['html', 'js', 'css'] }));
         this.express.use('/', express.static(__dirname + '/../../../dist/static/'));
 
         // Loading Configuration
