@@ -33,25 +33,29 @@ class Log {
      * JSloth welcome message
      */
     public hello = (): void => {
-        console.log("");
-        console.log("**********************************************************");
-        console.log("*                                                        *");
-        console.log("*        ██╗███████╗██╗      ██████╗ ████████╗██╗  ██╗   *");
-        console.log("*        ██║██╔════╝██║     ██╔═══██╗╚══██╔══╝██║  ██║   *");
-        console.log("*        ██║███████╗██║     ██║   ██║   ██║   ███████║   *");
-        console.log("*   ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║   *");
-        console.log("*   ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║   *");
-        console.log("*    ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   *");
-        console.log("*                                        by Unicoderns   *");
-        console.log("*                                                        *");
-        console.log("**********************************************************");
-        console.log("*                                                        *");
-        console.log("*                        Welcome                         *");
-        console.log("*                                                        *");
-        console.log("**********************************************************");
-        console.log("");
-        console.log(chalk.bgBlackBright("                          Core                            "));
-        console.log("");
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+
+            console.log("");
+            console.log("**********************************************************");
+            console.log("*                                                        *");
+            console.log("*        ██╗███████╗██╗      ██████╗ ████████╗██╗  ██╗   *");
+            console.log("*        ██║██╔════╝██║     ██╔═══██╗╚══██╔══╝██║  ██║   *");
+            console.log("*        ██║███████╗██║     ██║   ██║   ██║   ███████║   *");
+            console.log("*   ██   ██║╚════██║██║     ██║   ██║   ██║   ██╔══██║   *");
+            console.log("*   ╚█████╔╝███████║███████╗╚██████╔╝   ██║   ██║  ██║   *");
+            console.log("*    ╚════╝ ╚══════╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝   *");
+            console.log("*                                        by Unicoderns   *");
+            console.log("*                                                        *");
+            console.log("**********************************************************");
+            console.log("*                                                        *");
+            console.log("*                        Welcome                         *");
+            console.log("*                                                        *");
+            console.log("**********************************************************");
+            console.log("");
+            console.log(chalk.bgBlackBright("                          Core                            "));
+            console.log("");
+        }
     }
 
     /**
@@ -72,24 +76,29 @@ class Log {
      * Log a module
      */
     public module = (text: string, fail?: string, number?: number): void => {
-        let log: string = "  ✔ ";
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+            let log: string = "  ✔ ";
 
-        if (number) {
-            log = log + text + " (" + number + ")";
-        } else if (number === 0) {
-            log = log + fail;
-        } else {
-            log = log + text;
+            if (number) {
+                log = log + text + " (" + number + ")";
+            } else if (number === 0) {
+                log = log + fail;
+            } else {
+                log = log + text;
+            }
+            console.log(chalk.green(log));
         }
-        console.log(chalk.green(log));
     }
-
     /**
      * Log apps section
      */
     public appTitle = (): void => {
-        console.log("");
-        console.log(chalk.bgBlackBright("                          Apps                            "));
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+            console.log("");
+            console.log(chalk.bgBlackBright("                          Apps                            "));
+        }
     }
 
 
@@ -97,9 +106,12 @@ class Log {
      * Log an app
      */
     public app = (text: string): void => {
-        console.log("");
-        console.log(chalk.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
-        console.log("");
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+            console.log("");
+            console.log(chalk.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
+            console.log("");
+        }
     }
 
     /**
@@ -108,12 +120,15 @@ class Log {
     public appModule = (text: string, fail: string, success: boolean): void => {
         let log: string = "";
 
-        if (success) {
-            log = "    ✔ " + text;
-            console.log(chalk.green(log));
-        } else {
-            log = "    ✘ " + fail;
-            console.error(chalk.gray(log));
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+            if (success) {
+                log = "    ✔ " + text;
+                console.log(chalk.green(log));
+            } else {
+                log = "    ✘ " + fail;
+                console.error(chalk.gray(log));
+            }
         }
     }
 
@@ -121,11 +136,14 @@ class Log {
      * Log system run
      */
     public run = (port: number): void => {
-        console.log("");
-        console.log(chalk.bgBlackBright("                          Run                             "));
-        console.log("");
-        console.log(" The magic happens on port " + port + " ☆ﾟ.*･｡ﾟ");
-        console.log("");
+        // No log for tests
+        if (process.env.NODE_ENV != "test") {
+            console.log("");
+            console.log(chalk.bgBlackBright("                          Run                             "));
+            console.log("");
+            console.log(" The magic happens on port " + port + " ☆ﾟ.*･｡ﾟ");
+            console.log("");
+        }
     }
 
 }

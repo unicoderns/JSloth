@@ -173,19 +173,29 @@ export default class Apps {
             });
         };
 
-        this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
-            app.complete.public = true;
-            app.success.public = success;
-            compileSCSS(); // Wait the structure to compile
-            compileTS(); // Wait the structure to compile
-        }).catch(err => {
+        // No compilations for tests
+        if (process.env.NODE_ENV == "test") {
             app.complete.public = true;
             app.success.public = false;
-            app.errors.public = err;
-            console.error(err);
-            compileSCSS(); // Wait the structure to compile
-            compileTS(); // Wait the structure to compile
-        });
+            app.complete.scss = true;
+            app.success.scss = false;
+            app.complete.ts = true;
+            app.success.ts = false;
+        } else {
+            this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
+                app.complete.public = true;
+                app.success.public = success;
+                compileSCSS(); // Wait the structure to compile
+                compileTS(); // Wait the structure to compile
+            }).catch(err => {
+                app.complete.public = true;
+                app.success.public = false;
+                app.errors.public = err;
+                console.error(err);
+                compileSCSS(); // Wait the structure to compile
+                compileTS(); // Wait the structure to compile
+            });
+        }
 
         // Installing regular routes
         this.loadRoutes(app, type, "routes", "", next);
