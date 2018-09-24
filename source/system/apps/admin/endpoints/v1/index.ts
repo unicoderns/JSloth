@@ -76,11 +76,11 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllSessions = (req: Request, res: Response): void => {
-        this.sessionsTable.join({
+        this.sessionsTable.join([{
             keyField: this.sessionsTable.user,
             fields: ["username", "email", "firstName", "lastName"],
             kind: "LEFT"
-        }).getAll({}).then((data) => {
+        }]).getAll({}).then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err);

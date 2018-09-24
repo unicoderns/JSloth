@@ -34,25 +34,25 @@ function tests() {
 
         describe('MySQL', () => {
             it('Config exists', () => {
-                expect(config.mysql).to.exist;
+                expect(config.dbconnection).to.exist;
             });
             it('User is set', () => {
-                expect(config.mysql.user).to.exist;
+                expect(config.dbconnection.user).to.exist;
             });
             it('User is a string', () => {
-                expect(config.mysql.user).to.be.string;
+                expect(config.dbconnection.user).to.be.string;
             });
             it('Password is set', () => {
-                expect(config.mysql.password).to.exist;
+                expect(config.dbconnection.password).to.exist;
             });
             it('Password is a string', () => {
-                expect(config.mysql.password).to.be.string;
+                expect(config.dbconnection.password).to.be.string;
             });
             it('DB name is set', () => {
-                expect(config.mysql.db).to.exist;
+                expect(config.dbconnection.database).to.exist;
             });
             it('DB name is a string', () => {
-                expect(config.mysql.db).to.be.string;
+                expect(config.dbconnection.database).to.be.string;
             });
         });
     });
