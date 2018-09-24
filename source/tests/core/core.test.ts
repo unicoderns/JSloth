@@ -1,11 +1,10 @@
 import * as chai from 'chai';
 
 import app from '../../server';
+import chalk from "chalk";
 import chaiHttp = require('chai-http');
 import JSFiles from "../../system/lib/files";
 import IConfig from '../../system/interfaces/config';
-
-import chalk from "chalk";
 
 chai.use(chaiHttp);
 
