@@ -1,8 +1,4 @@
-import * as chai from 'chai';
-
 import JSFiles from "../../system/lib/files";
-
-const expect = chai.expect;
 
 // ---------------------------------------------------------------------------------------------------------------
 // JSloth Library.
@@ -14,7 +10,7 @@ describe('Lib Tests - Files', () => {
     // Async test
     it('File exists', done => {
         files.exists(__dirname + "/files.test.ts").then((exist) => {
-            expect(exist).to.be.true;
+            expect(exist).toBeTruthy;
             done();
         });
     });
@@ -22,7 +18,7 @@ describe('Lib Tests - Files', () => {
     // Async test
     it('Fake file not exists', done => {
         files.exists(__dirname + "/files.test0.ts").catch((err) => {
-            expect(err).to.exist;
+            expect(err).not.toBeUndefined;
             done();
         });
     });
