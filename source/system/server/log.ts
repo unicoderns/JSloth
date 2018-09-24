@@ -22,7 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as clc from "cli-color";
+import chalk from "chalk";
 
 /**
  * Log in the terminal.
@@ -50,7 +50,7 @@ class Log {
         console.log("*                                                        *");
         console.log("**********************************************************");
         console.log("");
-        console.log(clc.bgBlackBright("                          Core                            "));
+        console.log(chalk.bgBlackBright("                          Core                            "));
         console.log("");
     }
 
@@ -58,14 +58,14 @@ class Log {
      * Log an error
      */
     public error = (text: string): void => {
-        console.error(clc.red(text));
+        console.error(chalk.red(text));
     }
 
     /**
      * Log a warning
      */
     public moduleWarning = (text: string): void => {
-        console.error(clc.yellow(text));
+        console.error(chalk.yellow(text));
     }
 
     /**
@@ -81,7 +81,7 @@ class Log {
         } else {
             log = log + text;
         }
-        console.log(clc.green(log));
+        console.log(chalk.green(log));
     }
 
     /**
@@ -89,7 +89,7 @@ class Log {
      */
     public appTitle = (): void => {
         console.log("");
-        console.log(clc.bgBlackBright("                          Apps                            "));
+        console.log(chalk.bgBlackBright("                          Apps                            "));
     }
 
 
@@ -98,7 +98,7 @@ class Log {
      */
     public app = (text: string): void => {
         console.log("");
-        console.log(clc.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
+        console.log(chalk.yellow(" ⚝  ") + text.toUpperCase().charAt(0) + text.substring(1) + " app...");
         console.log("");
     }
 
@@ -110,10 +110,10 @@ class Log {
 
         if (success) {
             log = "    ✔ " + text;
-            console.log(clc.green(log));
+            console.log(chalk.green(log));
         } else {
             log = "    ✘ " + fail;
-            console.error(clc.blackBright(log));
+            console.error(chalk.gray(log));
         }
     }
 
@@ -122,7 +122,7 @@ class Log {
      */
     public run = (port: number): void => {
         console.log("");
-        console.log(clc.bgBlackBright("                          Run                             "));
+        console.log(chalk.bgBlackBright("                          Run                             "));
         console.log("");
         console.log(" The magic happens on port " + port + " ☆ﾟ.*･｡ﾟ");
         console.log("");
