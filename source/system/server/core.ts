@@ -29,6 +29,7 @@ import * as logger from "morgan";  // Log requests
 import * as express from "express";
 
 import Apps from "./apps";
+import chalk from "chalk";
 import Sessions from "../apps/auth/middlewares/sessions";
 import SysConfig from "../interfaces/config";
 import JSFiles from "../lib/files";
@@ -55,6 +56,7 @@ export default class Core {
 
     /*** Default configuration filepath */
     protected configPath: string = "/../../../config.json";
+    protected defaultConfigPath: string = "/../../../sample_config.json";
 
     /*** Apps object */
     protected apps: app.App[] = [];
@@ -78,26 +80,38 @@ export default class Core {
         Log.module("Static files published");
         this.express.use('/', express.static(__dirname + '/../../../dist/static/'));
 
-        // Loading Configuration
-        jslothFiles.exists(__dirname + this.configPath).then(() => {
-            let config = require(__dirname + this.configPath);
-
+        let start = ((config: SysConfig) => {
             // Loading JSloth Global Library
-            this.jsloth = new JSloth(config, __dirname);
+            try {
+                this.jsloth = new JSloth(config, __dirname);
+            }
+            catch (err) {
+                console.error(err);
+            }
             this.express.set("jsloth", this.jsloth);
             Log.module("Core library loaded");
 
             this.express.set("token", this.jsloth.config.token); // secret token
             Log.module("Configuration loaded");
             this.install();
+        });
+
+        // Loading Configuration
+        jslothFiles.exists(__dirname + this.configPath).then(() => {
+            let config = require(__dirname + this.configPath);
+            start(config);
         }).catch(err => {
             if (err.code === "ENOENT") {
                 Log.error("Configuration file not found");
+                let config = require(__dirname + this.defaultConfigPath);
+                console.log(chalk.yellow("Sample config is used instead"));
+                start(config);
             } else {
                 Log.error("Something went wrong");
             }
             Log.error(err);
         });
+
     }
 
     /**

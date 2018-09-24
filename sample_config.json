@@ -26,16 +26,16 @@
         "engine": "ejs",
         "basepath": "/health/",
         "config": {}
+    }, {
+        "name": "errors",
+        "engine": "ejs",
+        "basepath": "/errors/",
+        "config": {}
     }],
     "custom_apps": [{
         "name": "sample",
         "engine": "ejs",
         "basepath": "/",
-        "config": {}
-    }, {
-        "name": "angular",
-        "engine": "angular",
-        "basepath": "/angular/",
         "config": {}
     }]
 }

@@ -1,27 +1,11 @@
 
-import JSFiles from "../../system/lib/files";
 import JSPath from "../../system/lib/path";
 
 let path: JSPath;
 
 /*** Default configuration filepath */
-let configPath: string = "/../../config.json";
 let appName: string = "sample";
 
-// ---------------------------------------------------------------------------------------------------------------
-// JSloth Library.
-// ---------------------------------------------------------------------------------------------------------------
-// Loading JSloth Files directly to load the config file.
-let jslothFiles = new JSFiles();
-
-jslothFiles.exists(__dirname + configPath).then(() => {
-    var config = require(__dirname + configPath);
-    path = new JSPath(config);
-    tests();
-}).catch(err => {
-    console.error("Configuration file not found");
-    throw err;
-});
 
 function tests() {
 

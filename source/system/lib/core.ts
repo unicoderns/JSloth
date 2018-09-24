@@ -44,7 +44,6 @@ export default class JSloth {
     /*** Configuration methods */
     constructor(config: Config, baseURL: string) {
         this.config = config;
-
         this.context = new JSContext(this, baseURL);
         this.path = new JSPath(this);
 
