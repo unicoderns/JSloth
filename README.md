@@ -21,20 +21,8 @@ npm install
 npm test
 ```
 
-* Compile the code:
-
-```bash
-grunt
-```
-
 * Run the server:
 
 ```bash
 npm start
-```
-
-### Watch for changes
-
-```bash
-grunt watch
 ```

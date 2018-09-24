@@ -1,13 +1,13 @@
 import * as chai from 'chai';
-import chaiHttp = require('chai-http');
 
 import app from '../../server';
+import chaiHttp = require('chai-http');
 import JSFiles from "../../system/lib/files";
 import IConfig from '../../system/interfaces/config';
 
-chai.use(chaiHttp);
-const expect = chai.expect;
+import chalk from "chalk";
 
+chai.use(chaiHttp);
 
 // ---------------------------------------------------------------------------------------------------------------
 // JSloth Library.
@@ -17,30 +17,30 @@ let files = new JSFiles();
 // ---------------------------------------------------------------------------------------------------------------
 // Loading configuration.
 // ---------------------------------------------------------------------------------------------------------------
-const configPath: string = "/../../config.json";
+const configPath: string = "/../../../config.json";
+const defaultConfigPath: string = "/../../../sample_config.json";
 var config: IConfig;
 
-files.exists(__dirname + configPath).then(() => {
-    config = require(__dirname + configPath);
-    tests();
+beforeAll(done => {
+    files.exists(__dirname + configPath).then(() => {
+        config = require(__dirname + configPath);
+    });
+    if (typeof config == "undefined") {
+        config = require(__dirname + defaultConfigPath);
+        chalk.yellow("Sample config is used");
+    }
+    done();
 });
 
-// ---------------------------------------------------------------------------------------------------------------
-// Tests.
-// ---------------------------------------------------------------------------------------------------------------
+describe('Core Tests', () => {
 
-function tests() {
-
-    describe('Core Tests', () => {
-
-        it('health should be json with a true response', () => {
-            chai.request(app).get('/api/health')
-                .then(res => {
-                    expect(res.type).to.eql('application/json');
-                    expect(res.body.response).to.eql(true);
-                });
-        });
-
+    it('health should be json with a true response', (done) => {
+        chai.request(app).get('/api/health/v1/')
+            .then(res => {
+                expect(res.type).toBe('application/json');
+                expect(res.body.response).toBe(true);
+                done();
+            });
     });
 
-}
+});
