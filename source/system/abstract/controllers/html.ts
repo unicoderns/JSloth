@@ -46,42 +46,7 @@ export default class HtmlController extends Controller {
         let app = express();
         const compression = require("compression");
 
-        if (this.config.engine == "angular") {
-            try {
-                const path = require("path");
-                const fs = require("fs");
-                const ngExpressEngine = require("@nguniversal/express-engine").ngExpressEngine;
-
-                require("zone.js/dist/zone-node");
-                require("rxjs/add/operator/filter");
-                require("rxjs/add/operator/map");
-                require("rxjs/add/operator/mergeMap");
-
-                let hash;
-                fs.readdirSync(__dirname + "/../../../dist/server" + this.config.basepath).forEach(function (file: any) {
-                    if (file.startsWith("main")) {
-                        hash = file.split(".")[1];
-                    }
-                });
-
-                const AppServerModuleNgFactory = require(path.join(__dirname, "/../../../dist/server" + this.config.basepath + "main." + hash + ".bundle")).AppServerModuleNgFactory;
-
-                const port = Number(process.env.PORT || 8080);
-
-                app.engine('html', ngExpressEngine({
-                    baseUrl: 'http://localhost:' + port,
-                    bootstrap: AppServerModuleNgFactory
-                }));
-
-                app.set('view engine', 'html');
-
-            } catch (e) {
-                Log.error(e);
-            }
-        } else {
-            app.set('view engine', 'ejs');
-        }
-
+        app.set('view engine', 'ejs');
         app.use(compression());
         return app;
     }
@@ -95,15 +60,9 @@ export default class HtmlController extends Controller {
      * @param params object
      */
     protected render(req: Request, res: Response, file: string, params: any = {}): void {
-        if (this.config.engine == "angular") {
-            let path = this.jsloth.path.getAngular(this.config.folder, this.config.basepath, file);
-            params.req = req;
+        this.jsloth.path.get(this.config.folder, this.config.name, file).then((path: string) => {
             res.render(path, params);
-        } else {
-            this.jsloth.path.get(this.config.folder, this.config.name, file).then((path: string) => {
-                res.render(path, params);
-            });
-        }
+        });
     }
 
 }
