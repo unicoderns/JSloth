@@ -53,7 +53,6 @@ export interface Status {
   routes: boolean;
   dash: boolean;
   scss: boolean;
-  ts: boolean;
 }
 
 /*** App errors interface. */
@@ -63,5 +62,4 @@ export interface Errors {
   routes: string;
   dash: string;
   scss: string;
-  ts: string;
 }
