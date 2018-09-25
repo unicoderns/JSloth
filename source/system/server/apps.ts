@@ -93,16 +93,14 @@ export default class Apps {
                 routes: false,
                 dash: false,
                 public: false,
-                scss: false,
-                ts: false
+                scss: false
             },
             success: {
                 api: false,
                 routes: false,
                 dash: false,
                 public: false,
-                scss: false,
-                ts: false
+                scss: false
             },
             errors: {
                 api: "",
@@ -110,7 +108,6 @@ export default class Apps {
                 dash: "",
                 public: "",
                 scss: "",
-                ts: ""
             }
         };
 
@@ -160,40 +157,23 @@ export default class Apps {
             });
         };
 
-        let compileTS = () => {
-            this.batch.compileTS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name + "/client/").then(() => {
-                app.complete.ts = true;
-                app.success.ts = true;
-                this.installed(app, next);
-            }).catch(err => {
-                app.complete.ts = true;
-                app.success.ts = false;
-                app.errors.ts = err;
-                this.installed(app, next);
-            });
-        };
-
         // No compilations for tests
         if (process.env.NODE_ENV == "test") {
             app.complete.public = true;
             app.success.public = false;
             app.complete.scss = true;
             app.success.scss = false;
-            app.complete.ts = true;
-            app.success.ts = false;
         } else {
             this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
                 app.complete.public = true;
                 app.success.public = success;
                 compileSCSS(); // Wait the structure to compile
-                compileTS(); // Wait the structure to compile
             }).catch(err => {
                 app.complete.public = true;
                 app.success.public = false;
                 app.errors.public = err;
                 console.error(err);
                 compileSCSS(); // Wait the structure to compile
-                compileTS(); // Wait the structure to compile
             });
         }
 
@@ -270,7 +250,7 @@ export default class Apps {
             }
         }
 
-        if ((app.complete.routes) && (app.complete.dash) && (app.complete.api) && (app.complete.public) && (app.complete.scss) && (app.complete.ts)) {
+        if ((app.complete.routes) && (app.complete.dash) && (app.complete.api) && (app.complete.public) && (app.complete.scss)) {
             Log.app(app.config.name);
             Log.appModule("Routes installed", "Routes not found", app.success.routes);
             printError(app.errors.routes);
@@ -287,9 +267,6 @@ export default class Apps {
 
                 Log.appModule("Styles generated", "No styles to compile", app.success.scss);
                 printError(app.errors.scss);
-
-                Log.appModule("Client generated", "No client to compile", app.success.ts);
-                printError(app.errors.ts);
             }
 
             app.done = true;
