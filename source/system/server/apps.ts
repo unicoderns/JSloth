@@ -242,6 +242,9 @@ export default class Apps {
             } else if (routeType == "dash") {
                 app.complete.dash = true;
                 app.success.dash = false;
+            } else if (routeType == "admin") {
+                app.complete.admin = true;
+                app.success.admin = false;
             } else {
                 app.complete.api = true;
                 app.success.api = false;
