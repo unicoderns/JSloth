@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 // The MIT License (MIT)                                                                  //
 //                                                                                        //
-// Copyright (C) 2016  Chriss Mejía - me@chrissmejia.com - chrissmejia.com                //
+// Copyright (C) 2016  Unicoderns SA - info@unicoderns.com - unicoderns.com               //
 //                                                                                        //
 // Permission is hereby granted, free of charge, to any person obtaining a copy           //
 // of this software and associated documentation files (the "Software"), to deal          //
@@ -21,6 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE          //
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
+
+import * as fse from "fs-extra"
 
 import JSloth from "../lib/core";
 
@@ -90,70 +92,6 @@ export default class Batch {
     }
 
     /**
-     * Remove recursive folders
-     * 
-     * @param to Path to remove
-     * @param next
-     */
-    private rm = (to: string): Promise<any> => {
-        const p: Promise<boolean> = new Promise(
-            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                this.exec("rm -r " + to, function (err: any, stdout: any, stderr: any) {
-                    if ((err !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            }
-        );
-        return p;
-    }
-
-    /**
-     * Make directory and basepath
-     * 
-     * @param to Path to create
-     * @param next
-     */
-    private mkdir = (to: string): Promise<any> => {
-        const p: Promise<boolean> = new Promise(
-            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                this.exec("mkdir -p " + to, function (err: any, stdout: any, stderr: any) {
-                    if (err !== null) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                }); // Unix only
-            }
-        );
-        return p;
-    }
-
-    /**
-     * Copy recursive folders
-     * 
-     * @param from Source path
-     * @param to Path to place the copy
-     * @param next
-     */
-    private cp = (from: string, to: string): Promise<any> => {
-        const p: Promise<boolean> = new Promise(
-            (resolve: () => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                this.exec("cp -r " + from + " " + to, function (err: any, stdout: any, stderr: any) {
-                    if ((err !== null) && (stderr.substr(stderr.length - 26)) != "No such file or directory\n") {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            }
-        );
-        return p;
-    }
-
-    /**
      * Clean and copy public folder
      * 
      * @param from Source path
@@ -163,23 +101,19 @@ export default class Batch {
     public copyPublic = (from: string, to: string): Promise<any> => {
         const p: Promise<boolean> = new Promise(
             (resolve: (success: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                try {
-                    this.rm(to).then(() => {
-                        this.mkdir(to).then(() => {
-                            this.cp(from, to).then(() => {
-                                resolve(true);
-                            }).catch(err => {
-                                reject(err);
-                            });
+                fse.remove(to).then(() => {
+                    fse.ensureDir(to).then(() => {
+                        fse.copy(from, to).then(() => {
+                            resolve(true);
                         }).catch(err => {
                             reject(err);
-                        });
+                        })
                     }).catch(err => {
                         reject(err);
                     });
-                } catch (err) {
+                }).catch(err => {
                     reject(err);
-                }
+                });
             }
         );
         return p;

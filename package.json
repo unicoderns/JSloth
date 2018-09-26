@@ -30,6 +30,7 @@
         "ejs": "^2.5.7",
         "es6-promise": "^4.2.2",
         "express": "^4.16.2",
+        "fs-extra": "^7.0.0",
         "ip": "^1.1.5",
         "jquery": "^3.3.1",
         "jsonwebtoken": "^8.1.0",
