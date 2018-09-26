@@ -10,8 +10,7 @@
         "start": "nodemon -e js,ts,scss --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
         "test": "cross-env NODE_ENV=test ts-node node_modules/jasmine/bin/jasmine source/tests/**/*.test.ts",
         "docs": "markdown-folder-to-html docs/markdown/docs",
-        "typedoc": "typedoc --out ./docs/typedoc/ ./source/",
-        "build": "ng build --prod --app angular && ng build --prod --app angular-server"
+        "typedoc": "typedoc --out ./docs/typedoc/ ./source/"
     },
     "bugs": {
         "url": "https://github.com/unicoderns/JSloth/issues",
