@@ -102,8 +102,8 @@ export default class Batch {
         const p: Promise<boolean> = new Promise(
             (resolve: (success: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 fse.remove(to).then(() => {
-                    fse.ensureDir(to).then(() => {
-                        fse.copy(from, to).then(() => {
+                    fse.ensureDir(to + "/public/").then(() => {
+                        fse.copy(from, to + "/public/").then(() => {
                             resolve(true);
                         }).catch(err => {
                             reject(err);
