@@ -92,6 +92,7 @@ export default class Apps {
                 api: false,
                 routes: false,
                 dash: false,
+                admin: false,
                 public: false,
                 scss: false
             },
@@ -99,6 +100,7 @@ export default class Apps {
                 api: false,
                 routes: false,
                 dash: false,
+                admin: false,
                 public: false,
                 scss: false
             },
@@ -106,6 +108,7 @@ export default class Apps {
                 api: "",
                 routes: "",
                 dash: "",
+                admin: "",
                 public: "",
                 scss: "",
             }
@@ -186,6 +189,13 @@ export default class Apps {
             app.complete.dash = true;
             app.success.dash = false;
         }
+        // Installing admin routes
+        if ((app.config.admin) && (app.config.admin.activate)) {
+            this.loadRoutes(app, type, "admin", "/admin", next);
+        } else {
+            app.complete.dash = true;
+            app.success.dash = false;
+        }
         // Installing api routes
         this.loadRoutes(app, type, "api", "/api", next);
     }
@@ -217,6 +227,9 @@ export default class Apps {
             } else if (routeType == "dash") {
                 app.complete.dash = true;
                 app.success.dash = true;
+            } else if (routeType == "admin") {
+                app.complete.admin = true;
+                app.success.admin = true;
             } else {
                 app.complete.api = true;
                 app.success.api = true;
@@ -255,8 +268,11 @@ export default class Apps {
             Log.appModule("Routes installed", "Routes not found", app.success.routes);
             printError(app.errors.routes);
 
-            Log.appModule("Dash installed", "Dash not found or deactivated", app.success.dash);
+            Log.appModule("Dash routes installed", "Dash routes not found or deactivated", app.success.dash);
             printError(app.errors.dash);
+
+            Log.appModule("Admin routes installed", "Admin routes not found or deactivated", app.success.admin);
+            printError(app.errors.admin);
 
             Log.appModule("Endpoints installed", "Endpoints not found", app.success.api);
             printError(app.errors.api);

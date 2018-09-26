@@ -34,13 +34,18 @@ export interface App {
 /*** Dash config interface. */
 export interface Dash {
   activate: boolean;
-  path: string;
+}
+
+/*** Admin config interface. */
+export interface Admin {
+  activate: boolean;
 }
 
 /*** App configuration interface. */
 export interface Config {
   name: string;
   dash?: Dash;
+  admin?: Admin;
   engine?: string;
   basepath?: string;
   folder?: string;
@@ -52,6 +57,7 @@ export interface Status {
   public: boolean;
   routes: boolean;
   dash: boolean;
+  admin: boolean;
   scss: boolean;
 }
 
@@ -61,5 +67,6 @@ export interface Errors {
   public: string;
   routes: string;
   dash: string;
+  admin: string;
   scss: string;
 }
