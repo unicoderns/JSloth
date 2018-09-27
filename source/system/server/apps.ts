@@ -22,6 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+import * as fse from "fs-extra"
+
 import { App, Config } from "../interfaces/app";
 import { Application, NextFunction } from "express";
 
@@ -215,41 +217,45 @@ export default class Apps {
             appUrl = this.jsloth.context.sourceURL + "system/apps/"
         }
         let appFileUrl = appUrl + app.config.name + "/" + routeType;
-        this.jsloth.files.exists(appFileUrl + ".ts").then((exists: boolean) => {
-            let url: string = basepath + (app.config.basepath || "/");
-            let appRoute = require(appFileUrl);
-            let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
-            this.express.use(url, route.router);
+        fse.pathExists(appFileUrl + ".ts").then((exists: boolean) => {
+            if (exists) {
+                let url: string = basepath + (app.config.basepath || "/");
+                let appRoute = require(appFileUrl);
+                let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
+                this.express.use(url, route.router);
 
-            if (routeType == "routes") {
-                app.complete.routes = true;
-                app.success.routes = true;
-            } else if (routeType == "dash") {
-                app.complete.dash = true;
-                app.success.dash = true;
-            } else if (routeType == "admin") {
-                app.complete.admin = true;
-                app.success.admin = true;
+                if (routeType == "routes") {
+                    app.complete.routes = true;
+                    app.success.routes = true;
+                } else if (routeType == "dash") {
+                    app.complete.dash = true;
+                    app.success.dash = true;
+                } else if (routeType == "admin") {
+                    app.complete.admin = true;
+                    app.success.admin = true;
+                } else {
+                    app.complete.api = true;
+                    app.success.api = true;
+                }
+                this.installed(app, next);
             } else {
-                app.complete.api = true;
-                app.success.api = true;
+                if (routeType == "routes") {
+                    app.complete.routes = true;
+                    app.success.routes = false;
+                } else if (routeType == "dash") {
+                    app.complete.dash = true;
+                    app.success.dash = false;
+                } else if (routeType == "admin") {
+                    app.complete.admin = true;
+                    app.success.admin = false;
+                } else {
+                    app.complete.api = true;
+                    app.success.api = false;
+                }
+                this.installed(app, next);
             }
-            this.installed(app, next);
         }).catch(err => {
-            if (routeType == "routes") {
-                app.complete.routes = true;
-                app.success.routes = false;
-            } else if (routeType == "dash") {
-                app.complete.dash = true;
-                app.success.dash = false;
-            } else if (routeType == "admin") {
-                app.complete.admin = true;
-                app.success.admin = false;
-            } else {
-                app.complete.api = true;
-                app.success.api = false;
-            }
-            this.installed(app, next);
+            console.error(err);
         });
     }
 

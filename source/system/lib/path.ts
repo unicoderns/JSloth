@@ -22,8 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSFiles from "./files";
-import Config from "../interfaces/config";
+import * as fse from "fs-extra"
+
 import { Promise } from "es6-promise";
 import JSloth from "./core";
 
@@ -58,8 +58,12 @@ export default class JSPath {
         const p: Promise<string> = new Promise(
             (resolve: (exists: string) => void, reject: (err: NodeJS.ErrnoException) => void) => {
                 // Resolve promise
-                this.jsloth.files.exists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
-                    resolve(customPath);
+                fse.pathExists(this.jsloth.context.sourceURL + customPath + ".ejs").then((exist) => {
+                    if (exist) {
+                        resolve(customPath);
+                    } else {
+                        resolve(path);
+                    }
                 }).catch((err: NodeJS.ErrnoException) => {
                     resolve(path);
                     throw err;

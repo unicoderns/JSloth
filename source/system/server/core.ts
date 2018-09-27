@@ -27,12 +27,12 @@ import * as bodyParser from "body-parser"; // Parse incoming request bodies
 import * as cookieParser from "cookie-parser";
 import * as logger from "morgan";  // Log requests
 import * as express from "express";
+import * as fse from "fs-extra"
 
 import Apps from "./apps";
 import chalk from "chalk";
 import Sessions from "../apps/auth/middlewares/sessions";
 import SysConfig from "../interfaces/config";
-import JSFiles from "../lib/files";
 import JSloth from "../lib/core";
 import Log from "./log";
 
@@ -49,7 +49,7 @@ export default class Core {
 
     /**
      * Stores the app port
-     * @default port System environment port or 3000
+     * @default port System environment port or 8080
      * Please note: the unary + cast to number
      */
     protected port: number = +process.env.PORT || 8080;
@@ -68,9 +68,6 @@ export default class Core {
      * Load configuration settings, set up JSloth Global Library and start installation.
      */
     constructor() {
-        // Loading JSloth Files directly to load the config file.
-        let jslothFiles = new JSFiles();
-
         // Creating App
         this.express = express();
 
@@ -97,18 +94,18 @@ export default class Core {
         });
 
         // Loading Configuration
-        jslothFiles.exists(__dirname + this.configPath).then(() => {
-            let config = require(__dirname + this.configPath);
-            start(config);
-        }).catch(err => {
-            if (err.code === "ENOENT") {
+        fse.pathExists(__dirname + this.configPath).then((exists) => {
+            if (exists) {
+                let config = require(__dirname + this.configPath);
+                start(config);
+            } else {
                 Log.error("Configuration file not found");
                 let config = require(__dirname + this.defaultConfigPath);
                 console.log(chalk.yellow("Sample config is used instead"));
                 start(config);
-            } else {
-                Log.error("Something went wrong");
             }
+        }).catch(err => {
+            Log.error("Something went wrong");
             Log.error(err);
         });
 

@@ -27,7 +27,6 @@ import { DB } from "@unicoderns/orm/connection"
 import Config from "../interfaces/config";
 
 import JSContext from "./context";
-import JSFiles from "./files";
 import JSPath from "./path";
 
 /**
@@ -37,7 +36,6 @@ export default class JSloth {
     public config: Config;
 
     public context: JSContext;
-    public files: JSFiles;
     public path: JSPath;
     public db: DB;
 
@@ -47,7 +45,6 @@ export default class JSloth {
         this.context = new JSContext(this, baseURL);
         this.path = new JSPath(this);
 
-        this.files = new JSFiles(config);
         this.db = new DB({ dev: config.dev, connection: config.dbconnection });
     }
 
