@@ -6,33 +6,39 @@
     <div id="app" class="container-fluid align-middle">
 
       <!-- Modal -->
-
-      <div class="pt-5">
-        <div class="row">
-          <div class="col-6">
-            <h1 class="text-left">Sessions</h1>
+      <div class="container">
+          <div class="row">
+              <div class="pt-5">
+                  <div class="row">
+                    <div class="col-6">
+                      <h1 class="text-left">Sessions</h1>
+                    </div>
+                  </div>
+                </div>
+          
+                <table class="table text-center">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Added</th>
+                      <th scope="col">IP</th>
+                      <th scope="col">User</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="session in sessions">
+                      <th scope="row">{{session.id}}</th>
+                      <td>{{session.created | fromNow }}</td>
+                      <td>{{session.ip}}</td>
+                      <td>{{session.users__username}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+    
           </div>
-        </div>
+
       </div>
 
-      <table class="table text-center">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Added</th>
-            <th scope="col">IP</th>
-            <th scope="col">User</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="contact in contacts" style="line-height: 2.4rem;">
-            <th scope="row">{{session.id}}</th>
-            <td>{{session.created | fromNow }}</td>
-            <td>{{session.ip}}</td>
-            <td>{{session.user}}</td>
-          </tr>
-        </tbody>
-      </table>
 
     </div>
 
@@ -60,7 +66,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
     <script src="/admin/public/js/controllers/menuController.js"></script>
-    <script src="/admin/public/js/controllers/signupController.js"></script>
+    <script src="/admin/public/js/controllers/sessionController.js"></script>
   </body>
 
 </html>
