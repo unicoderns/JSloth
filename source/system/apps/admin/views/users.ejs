@@ -19,17 +19,25 @@
             </div>
             <div class="modal-body">
               <form>
+                  <div class="form-group">
+                      <label for="userNameInput">Username</label>
+                      <input v-model="user.username" id="userNameInput" type="text" class="form-control" placeholder="John7087" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passInput">Password</label>
+                        <input v-model="user.password" id="passInput" type="password" class="form-control" required>
+                      </div>
                 <div class="form-group">
                   <label for="nameInput">Name</label>
-                  <input v-model="contact.name" id="nameInput" type="text" class="form-control" placeholder="John" required>
+                  <input v-model="user.firstName" id="nameInput" type="text" class="form-control" placeholder="John" required>
                 </div>
                 <div class="form-group">
                   <label for="nameInput">Last Name</label>
-                  <input v-model="contact.lastName" id="lastNInput" type="text" class="form-control" placeholder="Smith" required>
+                  <input v-model="user.lastName" id="lastNInput" type="text" class="form-control" placeholder="Smith" required>
                 </div>
                 <div class="form-group">
                   <label for="markdownInput">Email</label>
-                  <input v-model="contact.email" id="markdownInput" type="email" class="form-control" placeholder="John@gmail.com" required>
+                  <input v-model="user.email" id="markdownInput" type="email" class="form-control" placeholder="John@gmail.com" required>
                 </div>
               </form>
             </div>
@@ -39,51 +47,47 @@
           </div>
         </div>
       </div>
+      <div class="container">
 
       <div class="pt-5">
-        <div class="row">
-          <div class="col-6">
-            <h1 class="text-left">Users</h1>
-          </div>
-          <div class="col-6 text-right">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-              Add
-            </button>
+          <div class="row justify-content-between">
+            <div class="col-6">
+              <h1 class="text-left">Users</h1>
+            </div>
+            <div class="col-6 text-right">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+                Add
+              </button>
+            </div>
           </div>
         </div>
+  
+        <table id="usersTab" class="table text-center">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Added</th>
+              <th scope="col">User Name</th>
+              <th scope="col">E-Mail</th>
+              <th scope="col">Admin</th>
+              <th scope="col">Verified</th>
+              <th scope="col">Active</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in users">
+              <th scope="row" id="">{{user.id}}</th>
+              <td>{{user.created | fromNow }}</td>
+              <td>{{user.username}}</td>
+              <td>{{user.email}}</td>
+              <td> <input type="checkbox" @click="confirmAdminUpdate(user)" v-model="user.admin" > </td>
+              <td> <input type="checkbox" @click="confirmVerifedUpdate(user)" v-model="user.verified"></td>
+              <td> <input type="checkbox" @click="confirmActiveUpdate(user)" v-model="user.active"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <table class="table text-center">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Added</th>
-            <th scope="col">User Name</th>
-            <th scope="col">E-Mail</th>
-            <th scope="col">Salt</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Time Zone</th>
-            <th scope="col">Admin</th>
-            <th scope="col">Verified</th>
-            <th scope="col">Active</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="User in Users" style="line-height: 2.4rem;">
-            <th scope="row">{{User.id}}</th>
-            <td>{{User.created | fromNow }}</td>
-            <td>{{User.username}}</td>
-            <td>{{User.email}}</td>
-            <td>{{User.firstName}}</td>
-            <td>{{User.lastName}}</td>
-            <td>{{User.timezone}}</td>
-            <td>{{User.admin}}</td>
-            <td>{{User.verified}}</td>
-            <td>{{User.active}}</td>
-          </tr>
-        </tbody>
-      </table>
 
     </div>
 
@@ -111,7 +115,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
     <script src="/admin/public/js/controllers/menuController.js"></script>
-    <script src="/admin/public/js/controllers/signupController.js"></script>
+    <script src="/admin/public/js/controllers/userController.js"></script>
+    <script src="/admin/public/js/usersTab.js"></script>
 </body>
 
 </html>
