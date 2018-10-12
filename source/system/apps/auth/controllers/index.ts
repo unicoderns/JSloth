@@ -35,6 +35,8 @@ export default class IndexController extends HtmlController {
     protected routes(): void {
         this.app.get("/", this.index);
         this.router.use("/", this.app);
+        this.app.get("/signup/", this.signup);
+        this.app.get("/verify/", this.verify);
     }
 
     /**
@@ -46,5 +48,25 @@ export default class IndexController extends HtmlController {
      */
     private index = (req: Request, res: Response): void => {
         this.render(req, res, "index");
+    };
+       /**
+     * SignUp view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private signup = (req: Request, res: Response): void => {
+        this.render(req, res, "signup");
+    };
+      /**
+     * SignUp view.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return html
+     */
+    private verify = (req: Request, res: Response): void => {
+        this.render(req, res, "verify");
     };
 }

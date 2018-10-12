@@ -62,7 +62,7 @@
           </div>
         </div>
   
-        <table class="table text-center">
+        <table id="usersTab" class="table text-center">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -76,17 +76,16 @@
           </thead>
           <tbody>
             <tr v-for="user in users">
-              <th scope="row">{{user.id}}</th>
+              <th scope="row" id="">{{user.id}}</th>
               <td>{{user.created | fromNow }}</td>
               <td>{{user.username}}</td>
               <td>{{user.email}}</td>
-              <td> <input type="checkbox" v-model="user.admin" ></td>
-              <td> <input type="checkbox" v-model="user.verified"></td>
-              <td><input type="checkbox" v-model="user.active"></td>
+              <td> <input type="checkbox" @click="confirmAdminUpdate(user)" v-model="user.admin" > </td>
+              <td> <input type="checkbox" @click="confirmVerifedUpdate(user)" v-model="user.verified"></td>
+              <td> <input type="checkbox" @click="confirmActiveUpdate(user)" v-model="user.active"></td>
             </tr>
           </tbody>
         </table>
-
       </div>
 
 
@@ -117,6 +116,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
     <script src="/admin/public/js/controllers/menuController.js"></script>
     <script src="/admin/public/js/controllers/userController.js"></script>
+    <script src="/admin/public/js/usersTab.js"></script>
 </body>
 
 </html>

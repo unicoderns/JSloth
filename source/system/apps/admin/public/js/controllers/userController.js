@@ -28,7 +28,9 @@ var app = new Vue({
             verified: '',
             active: '',
 
-        }
+        },
+        confirmModal: false,
+		selectedUser: null
     },
     created: function () {
         if (!$('body').hasClass("public")) {
@@ -67,6 +69,29 @@ var app = new Vue({
                     this.users = response.body;
                 });
             }
-        }
+        },
+        confirmAdminUpdate(user){
+            this.selectedUser = user;
+			this.confirmModal = true;
+        },
+        confirmVerifedUpdate(user){
+            this.selectedUser = user;
+			this.confirmModal = true;
+        },
+        confirmActiveUpdate(user){
+            this.selectedUser = user;
+			this.confirmModal = true;
+        },
+        cancelUpdate() {
+			this.confirmModal = false;
+			this.selectedUser = null;
+		},
+		updateUser() {
+            this.confirmModal = false;
+            //update user
+			this.selectedUser = null;
+		}
+
     }
+    
 })

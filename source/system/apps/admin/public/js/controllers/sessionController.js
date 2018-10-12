@@ -30,6 +30,12 @@ var app = new Vue({
                     this.sessions = response.body;
                 });
             }
+        },
+        confirmDelete(session){
+
+        },
+        sessionDelete(){
+
         }
     }
 })

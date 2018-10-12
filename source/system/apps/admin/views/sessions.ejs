@@ -26,16 +26,31 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="session in sessions">
+                    <tr v-for="session in sessions" :key='session.id'>
                       <th scope="row">{{session.id}}</th>
                       <td>{{session.created | fromNow }}</td>
                       <td>{{session.ip}}</td>
                       <td>{{session.users__username}}</td>
+                      <td @onclick="confirmDelete(session)" style="cursor: pointer;" ><span class="btn oi oi-trash"></span></td>
                     </tr>
                   </tbody>
                 </table>
     
           </div>
+<!--           <transition name="appear">
+            <confirmation-modal :user="selectedUser" v-if='confirmModal' @confirm='sessionDelete' @cancel="cancelDelete"></confirmation-modal>
+           </transition>
+           <template id="modal">
+            <div class="modal">
+             <div class="modal-window">
+               <p>Sure to delete the session <strong>{{ session.id }}</strong> ?</p>
+               <div class="actions">
+                <button class="cancel" @click="onCancel">Cancel</button>
+                <button class="confirm" @click="onConfirm">Delete</button>
+               </div>
+             </div>
+            </div>
+           </template> -->
 
       </div>
 
