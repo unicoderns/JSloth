@@ -3,3 +3,23 @@
 h1 {
     color: #000;
 }
+.appear-enter {
+    opacity: 0;
+   }
+   
+   .appear-enter .modal-window {
+    transform: translate(-75%, -50%);
+   }
+   
+   .appear-enter-active {
+    transition: .5s;
+   }
+   
+   .appear-leave-active .modal-window {
+    transform: translate(0, -50%);
+   }
+   
+   .appear-leave-active {
+    opacity: 0;
+    transition: .5s;
+   }
