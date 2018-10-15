@@ -27,6 +27,7 @@
 import * as jwt from "jsonwebtoken";
 import * as users from "../../models/db/usersModel";
 import * as sessions from "../../models/db/sessionsModel";
+import * as verifications from "../../models/db/verificationsModel";
 
 import { Request, Response } from "express";
 
@@ -47,24 +48,35 @@ let bcrypt = require("bcrypt-nodejs");
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
     private sessionsTable: sessions.Sessions;
+    private verificationsTable: verifications.Verifications;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
+
         this.usersTable = new users.Users(jsloth.db);
         this.sessionsTable = new sessions.Sessions(jsloth.db);
+        this.verificationsTable = new verifications.Verifications(jsloth.db);
+
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 
     /*** Define routes */
     protected routes(): void {
+        let config: any = this.config;
         // this.get("/", "allUsers", this.getAllUsers);
 
         this.post("/token/", "getToken", this.getToken);
         this.post("/token/renew/", "renewToken", this.sessionsMiddleware.auth("json"), this.renewToken);
         this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth("json"), this.revokeToken);
 
+        // this.post("/verification/active/:id/", "verify", this.verify);
+        this.post("/verification/generate/:id/", "verificationGeneration", this.verificationGenerator);
+
+        if (config.config.signup) {
+            this.post("/signup/", "signup", this.signup);
+        }
         // Only for testing
         // this.get("/users/", "userList", this.getList);
         // this.get("/users/1/password/", "user1PasswordChange", this.updatePassword);
@@ -76,6 +88,75 @@ export default class IndexEndPoint extends ApiController {
     }
 
     /**
+     * Create a user.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private signup = (req: Request, res: Response): void => {
+        let username: string = req.body.username;
+        let email: string = req.body.email;
+
+        this.usersTable.get({
+            where: [{ username: username }, { email: email }]
+        }).then((user) => {
+            if (typeof user === "undefined") {
+                if (!this.emailRegex.test(email)) {
+                    res.json({ success: false, message: "Invalid email address." });
+                } else {
+                    let temp: users.Row = {
+                        username: req.body.username,
+                        email: email,
+                        password: bcrypt.hashSync(req.body.password, null, null),
+                        salt: "",
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName
+                    };
+                    this.usersTable.insert({ data: temp }).then((data: any) => {
+                        res.json({
+                            success: true,
+                            message: "User created!"
+                        });
+                    }).catch(err => {
+                        console.error(err);
+                        return res.status(500).send({
+                            success: false,
+                            message: "Something went wrong."
+                        });
+                    });
+                }
+            } else {
+                res.json({ success: false, message: "Username or email already exists." });
+            }
+        });
+
+    };
+
+    /**
+     * Create a verification token.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private verificationGenerator = (req: Request, res: Response): void => {
+        this.verificationsTable.getToken(req.params.id).then((token: string) => {
+            res.json({
+                // token: token,
+                success: true,
+                message: "Enjoy your token!"
+            });
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
+        });
+    };
+
+    /**
      * Get selected fields from all users.
      *
      * @param req { Request } The request object.
@@ -84,7 +165,7 @@ export default class IndexEndPoint extends ApiController {
      */
     private getAllUsers = (req: Request, res: Response): void => {
         this.usersTable.delete({ id: 3 }).then((done) => {
-            this.usersTable.getAll({ 
+            this.usersTable.getAll({
                 fields: ["id", "first_name", "last_name"]
             }).then((data) => {
                 res.json(data);

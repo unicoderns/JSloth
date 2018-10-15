@@ -66,32 +66,6 @@ export default class Batch {
     }
 
     /**
-     * Compile Typescript
-     * 
-     * @param from Source style path
-     * @param to Path for compiled styles
-     * @param next
-     */
-    public compileTS = (from: string, to: string): Promise<any> => {
-        const p: Promise<boolean> = new Promise(
-            (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                try {
-                    this.exec("tsc --target es5 --outDir " + to + "app/ " + from + "/client/app.ts", function (err: any, stdout: any, stderr: any) {
-                        if ((stdout.substr(stdout.length - 11)) != "not found.\n") {
-                            resolve(stdout);
-                        } else {
-                            reject(null);
-                        }
-                    });
-                } catch (err) {
-                    reject(err);
-                }
-            }
-        );
-        return p;
-    }
-
-    /**
      * Clean and copy public folder
      * 
      * @param from Source path
@@ -112,7 +86,7 @@ export default class Batch {
                         reject(err);
                     });
                 }).catch(err => {
-                    reject(err);
+                    console.error(err);
                 });
             }
         );

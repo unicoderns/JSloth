@@ -1,12 +1,8 @@
-import JSFiles from "../../system/lib/files";
+import * as fse from "fs-extra"
+
 import IConfig from '../../system/interfaces/config';
 
 import chalk from "chalk";
-
-// ---------------------------------------------------------------------------------------------------------------
-// JSloth Library.
-// ---------------------------------------------------------------------------------------------------------------
-let files = new JSFiles();
 
 // ---------------------------------------------------------------------------------------------------------------
 // Loading configuration.
@@ -16,13 +12,14 @@ const defaultConfigPath: string = "/../../../sample_config.json";
 var config: IConfig;
 
 beforeAll(done => {
-    files.exists(__dirname + configPath).then(() => {
-        config = require(__dirname + configPath);
+    fse.pathExists(__dirname + configPath).then((exists) => {
+        if (exists) {
+            config = require(__dirname + configPath);
+        } else {
+            config = require(__dirname + defaultConfigPath);
+            chalk.yellow("Sample config is used");    
+        }
     });
-    if (typeof config == "undefined") {
-        config = require(__dirname + defaultConfigPath);
-        chalk.yellow("Sample config is used");
-    }
     done();
 });
 

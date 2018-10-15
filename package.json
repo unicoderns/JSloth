@@ -35,7 +35,8 @@
         "jsonwebtoken": "^8.1.0",
         "morgan": "^1.9.0",
         "node-sass": "^4.9.2",
-        "popper.js": "^1.14.4"
+        "popper.js": "^1.14.4",
+        "random-token": "0.0.8"
     },
     "devDependencies": {
         "@types/body-parser": "^1.17.0",
