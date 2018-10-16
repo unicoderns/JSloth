@@ -18,7 +18,7 @@
     },
     "license": "(MIT OR Apache-2.0)",
     "dependencies": {
-        "@unicoderns/orm": "^0.1.5",
+        "@unicoderns/orm": "^0.1.6",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",
         "bootstrap": "^4.1.3",
