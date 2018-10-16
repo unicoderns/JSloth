@@ -113,7 +113,7 @@ export default class IndexEndPoint extends ApiController {
                         firstName: req.body.firstName,
                         lastName: req.body.lastName
                     };
-                    this.usersTable.insert({ data: temp }).then((data: any) => {
+                    this.usersTable.insert(temp).then((data: any) => {
                         res.json({
                             success: true,
                             message: "User created!"
@@ -129,6 +129,12 @@ export default class IndexEndPoint extends ApiController {
             } else {
                 res.json({ success: false, message: "Username or email already exists." });
             }
+        }).catch(err => {
+            console.error(err);
+            return res.status(500).send({
+                success: false,
+                message: "Something went wrong."
+            });
         });
 
     };
