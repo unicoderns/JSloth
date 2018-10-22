@@ -24,10 +24,13 @@
 
 import { DB } from "@unicoderns/orm/connection"
 
+import cerberus from "@unicoderns/cerberus";
+
 import Config from "../interfaces/config";
 
 import JSContext from "./context";
 import JSPath from "./path";
+import Cerberus from "@unicoderns/cerberus";
 
 /**
  * JSloth Library Loader
@@ -36,6 +39,7 @@ export default class JSloth {
     public config: Config;
 
     public context: JSContext;
+    public cerberus: cerberus;
     public path: JSPath;
     public db: DB;
 
@@ -45,7 +49,20 @@ export default class JSloth {
         this.context = new JSContext(this, baseURL);
         this.path = new JSPath(this);
 
-        this.db = new DB({ dev: config.dev, connection: config.dbconnection });
+        this.db = new DB({
+            dev: config.dev,
+            connection: config.dbconnection
+        });
+        let authConfig = config.system_apps.find((x: any) => x.name == 'auth');
+        this.cerberus = new Cerberus({
+            dev: config.dev,
+            token: config.token,
+            DB: this.db,
+            settings: {
+                expiration: authConfig.config.expiration,
+                session: authConfig.config.session
+            }
+        })
     }
 
 }

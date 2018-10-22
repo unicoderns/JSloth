@@ -18,6 +18,7 @@
     },
     "license": "(MIT OR Apache-2.0)",
     "dependencies": {
+        "@unicoderns/cerberus": "0.0.3",
         "@unicoderns/orm": "^0.1.6",
         "bcrypt-nodejs": "0.0.3",
         "body-parser": "^1.18.2",

@@ -22,8 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as sessions from "../../../auth/models/db/sessionsModel";
-import * as users from "../../../auth/models/db/usersModel";
+// import * as sessions from "../../../auth/models/db/sessionsModel";
+// import * as users from "../../../auth/models/db/usersModel";
+import * as users from "@unicoderns/cerberus/db/usersModel";
+import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
 
 import ApiController from "../../../../abstract/controllers/api";
 import JSloth from "../../../../lib/core";
