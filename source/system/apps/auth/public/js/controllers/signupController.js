@@ -7,11 +7,7 @@ var app = new Vue({
             password:'',
             salt: '',
             firstName: '',
-            lastName: '',
-            timezone: '',
-            admin: '',
-            verified: '',
-            active: ''
+            lastName: ''
 
         }
     },
@@ -19,17 +15,16 @@ var app = new Vue({
         signUp() {
             {
                 var user = this.$data.user;
-                window.location.href = "/auth/verify";
-               /* this.$http.post('/api/admin/v1/users/create/', JSON.stringify(user))
+               
+               this.$http.post('/api/auth/v1/signup/', JSON.stringify(user))
                     .then(function (response) {
                         if (response.body.success) {
-                            window.location.href = "/verify/"+ user.username;
+                            window.location.href = "/auth/verify";
                         } else {
-                            $("#message").show();
                         }
                     }, function (response) {
                         console.error(response);
-                    }); */
+                    });
             }
         }
     }
