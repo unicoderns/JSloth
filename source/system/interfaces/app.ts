@@ -49,6 +49,7 @@ export interface Config {
   engine?: string;
   basepath?: string;
   folder?: string;
+  config: any;
 }
 
 /*** App status interface. */

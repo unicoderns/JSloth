@@ -26,7 +26,7 @@ import JSloth from "../lib/core";
 
 import { Promise } from "es6-promise";
 
-import * as user from "../apps/auth/models/db/usersModel";
+import * as users from "@unicoderns/cerberus/db/usersModel";
 
 /**
 * JSloth Context
@@ -75,15 +75,15 @@ export default class JSContext {
             urls: this.urls
         }
     }
-
     /**
      * User cache factory
      * 
      * @param id {number} The user id.
      * @return Promise.
      */
+/*
     public userCacheFactory = (id: number, cached: boolean = true): Promise<any> => {
-        let userTable = new user.Users(this.jsloth.db);
+        let userTable = new users.Users(this.jsloth.db);
         let that = this;
         function fromSQL() {
             // Create promise
@@ -120,5 +120,5 @@ export default class JSContext {
             return fromSQL();
         }
     }
-
+*/
 }

@@ -24,10 +24,9 @@
 
 /// <reference path="../../types/express.d.ts"/>
 
-import * as jwt from "jsonwebtoken";
-import * as users from "../../models/db/usersModel";
-import * as sessions from "../../models/db/sessionsModel";
-import * as verifications from "../../models/db/verificationsModel";
+import * as users from "@unicoderns/cerberus/db/usersModel";
+import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
+import * as verifications from "@unicoderns/cerberus/db/verificationsModel";
 
 import { Request, Response } from "express";
 
@@ -190,7 +189,6 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
-
     /**
      * Sign JWT token and reply.
      *
@@ -200,23 +198,25 @@ export default class IndexEndPoint extends ApiController {
      * @param data { Object } Data to sign and create token.
      * @return json
      */
-    private signAndReply = (req: Request, res: Response, config: any, data: any): void => {
-        let token = jwt.sign(data, req.app.get("token"), {
-            expiresIn: config.config.expiration // 5 years
-        });
-
-        // Set cookie
-        if (config.config.cookie) {
-            res.cookie('token', token, { signed: true, httpOnly: true, maxAge: config.config.expiration * 1000 });
+    /*
+        private signAndReply = (req: Request, res: Response, config: any, data: any): void => {
+            let token = jwt.sign(data, req.app.get("token"), {
+                expiresIn: config.config.expiration // 5 years
+            });
+    
+            // Set cookie
+            if (config.config.cookie) {
+                res.cookie('token', token, { signed: true, httpOnly: true, maxAge: config.config.expiration * 1000 });
+            }
+    
+            // return the information including token as JSON
+            res.json({
+                success: true,
+                message: "Enjoy your token!",
+                token: token
+            });
         }
-
-        // return the information including token as JSON
-        res.json({
-            success: true,
-            message: "Enjoy your token!",
-            token: token
-        });
-    }
+    */
 
     /**
      * Get auth token.
@@ -226,57 +226,30 @@ export default class IndexEndPoint extends ApiController {
      * @return json
      */
     private getToken = (req: Request, res: Response): void => {
-        let email: string = req.body.email;
-        let token: string = "";
         let config: any = this.config;
-        let sessionTable = this.sessionsTable;
-        let signAndReply = this.signAndReply;
-        let unsafeUsersTable = new users.Users(this.jsloth.db, "unsafe");
 
-        if (!this.emailRegex.test(email)) {
-            res.json({ success: false, message: "Invalid email address." });
-        } else {
-            // find the user
-            unsafeUsersTable.get({
-                where: { email: email, active: 1 }
-            }).then((user) => {
-                if (typeof user === "undefined") {
-                    res.json({ success: false, message: "Authentication failed. User and password don't match." });
-                } else {
-                    bcrypt.compare(req.body.password, user.password, function (err: NodeJS.ErrnoException, match: boolean) {
-                        if (match) {
-                            // if user is found and password is right
-                            // create a token
-                            if (config.config.session == "stateful") {
-                                let temp: sessions.Row = {
-                                    ip: ip.address(),
-                                    user: user.id
-                                };
-                                sessionTable.insert(temp).then((data: any) => {
-                                    signAndReply(req, res, config, { session: data.insertId, user: user.id });
-                                }).catch(err => {
-                                    console.error(err);
-                                    return res.status(500).send({
-                                        success: false,
-                                        message: "Something went wrong."
-                                    });
-                                });
-                            } else {
-                                signAndReply(req, res, config, JSON.parse(JSON.stringify(user)));
-                            }
-                        } else {
-                            res.json({ success: false, message: "Authentication failed. User and password don't match." });
-                        };
-                    });
-                }
-            }).catch(err => {
-                console.error(err);
-                return res.status(500).send({
-                    success: false,
-                    message: "Something went wrong."
-                });
+        this.jsloth.cerberus.tokens.getToken({
+            email: req.body.email,
+            password: req.body.password
+        }).then((reply) => {
+            // Set cookie
+            if (config.config.cookie) {
+                res.cookie('token', reply.token, { signed: true, httpOnly: true, maxAge: config.config.expiration * 1000 });
+            }
+            res.json({
+                success: reply.success,
+                message: reply.message,
+                token: reply.token
             });
-        }
+        }).catch(reply => {
+            if (typeof reply.err !== "undefined") {
+                console.error(reply.err);
+            }
+            return res.status(500).send({
+                success: reply.success,
+                message: reply.message
+            });
+        });
     };
 
     /**
@@ -287,12 +260,7 @@ export default class IndexEndPoint extends ApiController {
      * @return json
      */
     private renewToken = (req: Request, res: Response): void => {
-        // Clean data
-        let data = req.user;
-        delete data.iat;
-        delete data.exp;
-
-        this.signAndReply(req, res, this.config, data);
+        this.jsloth.cerberus.tokens.renewToken(req.user.id);
     };
 
     /**
@@ -303,41 +271,27 @@ export default class IndexEndPoint extends ApiController {
     * @return json
     */
     private revokeToken = (req: Request, res: Response): void => {
-        let userCacheFactory = this.jsloth.context.userCacheFactory;
-        let config = this.config.config;
-        let user = req.user.id;
-        if (config.session == "stateful") {
-            this.sessionsTable.delete({ user: user }).then((done) => {
-                // Remove cached user
-                userCacheFactory(user, false).then((user: any) => {
-                    // Expire cookie
-                    if (config.cookie) {
-                        res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
-                    }
-                    res.json({
-                        success: true,
-                        message: "Session revoked!"
-                    });
-                }).catch((err: NodeJS.ErrnoException) => {
-                    console.error(err);
-                    return res.status(500).send({
-                        success: false,
-                        message: "Something went wrong."
-                    });
-                });
-            }).catch(err => {
-                console.error(err);
-                return res.status(500).send({
-                    success: false,
-                    message: "Something went wrong."
-                });
-            });
-        } else {
+        let config: any = this.config;
+
+        this.jsloth.cerberus.tokens.revokeToken(req.user.id).then((reply) => {
+            // Expire cookie
+            if (config.cookie) {
+                res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
+            }
             res.json({
-                success: false,
-                message: "This kind of sessions can't be revoked!"
+                success: reply.success,
+                message: reply.message,
+                token: reply.token
             });
-        }
+        }).catch(reply => {
+            if (typeof reply.err !== "undefined") {
+                console.error(reply.err);
+            }
+            return res.status(500).send({
+                success: reply.success,
+                message: reply.message
+            });
+        });
     };
 
     /**

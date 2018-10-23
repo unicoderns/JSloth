@@ -28,7 +28,7 @@ import JSloth from "../../../lib/core";
 import { Router, Request, Response, NextFunction, RequestHandler } from "express";
 
 import * as jwt from "jsonwebtoken";
-import * as session from "../models/db/sessionsModel";
+import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
 
 /**
  * JSloth Session Middlewares
@@ -54,7 +54,7 @@ export default class Sessions {
      * @param next Callback.
      */
     public updateContext = (req: Request, res: Response, next: NextFunction) => {
-        let userCacheFactory = this.jsloth.context.userCacheFactory;
+        let userCacheFactory = this.jsloth.cerberus.vault.getUser;
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
         // Verifies secret and checks exp
         jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
@@ -78,8 +78,8 @@ export default class Sessions {
         // Check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
         let authConfig = this.config.system_apps.find((x: any) => x.name == 'auth');
-        let userCacheFactory = this.jsloth.context.userCacheFactory;
-        let sessionTable = new session.Sessions(this.jsloth.db);
+        let userCacheFactory = this.jsloth.cerberus.vault.getUser;
+        let sessionTable = new sessions.Sessions(this.jsloth.db);
         // Clean user
         req.user = undefined;
         // Decode token
