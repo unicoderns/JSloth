@@ -22,8 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-// import * as sessions from "../../../auth/models/db/sessionsModel";
-// import * as users from "../../../auth/models/db/usersModel";
+import * as bcrypt from "bcrypt";
 import * as users from "@unicoderns/cerberus/db/usersModel";
 
 import ApiController from "../../../../abstract/controllers/api";
@@ -31,8 +30,6 @@ import JSloth from "../../../../lib/core";
 import Sessions from "../../../auth/middlewares/sessions";
 
 import { Request, Response } from "express";
-
-let bcrypt = require("bcrypt-nodejs");
 
 /**
  * Index Endpoint 
@@ -137,7 +134,7 @@ export default class IndexEndPoint extends ApiController {
                     let temp: users.Row = {
                         username: req.body.username,
                         email: email,
-                        password: bcrypt.hashSync(req.body.password, null, null),
+                        password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(12)),
                         salt: "",
                         firstName: req.body.firstName,
                         lastName: req.body.lastName,
