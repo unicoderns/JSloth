@@ -174,7 +174,7 @@ export default class IndexEndPoint extends ApiController {
                 message: reply.message,
                 token: reply.token
             });
-        }).catch(reply => {
+        }).catch((reply) => {
             if (typeof reply.err !== "undefined") {
                 console.error(reply.err);
             }
