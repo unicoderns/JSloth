@@ -25,7 +25,6 @@
 // import * as sessions from "../../../auth/models/db/sessionsModel";
 // import * as users from "../../../auth/models/db/usersModel";
 import * as users from "@unicoderns/cerberus/db/usersModel";
-import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
 
 import ApiController from "../../../../abstract/controllers/api";
 import JSloth from "../../../../lib/core";
@@ -43,14 +42,12 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionsTable: sessions.Sessions;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
         super(jsloth, config, url, namespaces);
         this.usersTable = new users.Users(jsloth.db);
-        this.sessionsTable = new sessions.Sessions(jsloth.db);
         this.sessionsMiddleware = new Sessions(jsloth)
     }
 
@@ -76,18 +73,11 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllSessions = (req: Request, res: Response): void => {
-        this.sessionsTable.join([{
-            keyField: this.sessionsTable.user,
-            fields: ["username", "email", "firstName", "lastName"],
-            kind: "LEFT"
-        }]).getAll({}).then((data) => {
+        this.jsloth.cerberus.sessions.listAll().then((data) => {
             res.json(data);
         }).catch(err => {
-            console.error(err);
-            return res.status(500).send({
-                success: false,
-                message: "Something went wrong."
-            });
+            console.error(err.error);
+            return res.status(500).send(err);
         });
     };
 
@@ -99,17 +89,11 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private revokeSession = (req: Request, res: Response): void => {
-        this.sessionsTable.delete({ id: req.params.id }).then((done) => {
-            return res.json({
-                success: true,
-                message: "Session revoked."
-            });
+        this.jsloth.cerberus.sessions.revoke(req.params.id).then((data) => {
+            res.json(data);
         }).catch(err => {
-            console.error(err);
-            return res.status(500).send({
-                success: false,
-                message: "Something went wrong."
-            });
+            console.error(err.error);
+            return res.status(500).send(err);
         });
     };
 
