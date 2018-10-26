@@ -34,8 +34,6 @@ import JSloth from "../../../../lib/core";
 import Sessions from "../../middlewares/sessions";
 
 let ip = require("ip");
-let bcrypt = require("bcrypt-nodejs");
-// import * as bcrypt from "bcrypt-nodejs"; <- Doesn't work
 
 /**
  * Index Endpoint
