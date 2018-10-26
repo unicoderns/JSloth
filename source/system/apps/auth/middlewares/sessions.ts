@@ -56,8 +56,8 @@ export default class Sessions {
     public updateContext = (req: Request, res: Response, next: NextFunction) => {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
 
-        this.jsloth.cerberus.sessions.getUpdated(token, req.app.get("token")).then((user) => {
-            req.user = user;
+        this.jsloth.cerberus.sessions.getUpdated(token).then((reply) => {
+            req.user = reply.user;
             return next();
         }).catch(err => {
             console.error(err.error);
@@ -76,11 +76,11 @@ export default class Sessions {
     public context = (req: Request, res: Response, next: NextFunction) => {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
 
-        this.jsloth.cerberus.sessions.get(token, req.app.get("token")).then((user) => {
-            req.user = user;
+        this.jsloth.cerberus.sessions.get(token).then((reply) => {
+            req.user = reply.user;
             return next();
         }).catch(err => {
-            console.error(err.error);
+            console.log(err);
             req.user = undefined;
             return next();
         });
