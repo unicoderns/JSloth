@@ -20,6 +20,7 @@
     "dependencies": {
         "@unicoderns/cerberus": "0.0.9",
         "@unicoderns/orm": "^0.1.6",
+        "bcrypt": "^3.0.2",
         "body-parser": "^1.18.2",
         "bootstrap": "^4.1.3",
         "chalk": "^2.4.1",
@@ -39,6 +40,7 @@
         "random-token": "0.0.8"
     },
     "devDependencies": {
+        "@types/bcrypt": "^3.0.0",
         "@types/body-parser": "^1.17.0",
         "@types/chai": "^4.1.5",
         "@types/chai-http": "^3.0.5",
