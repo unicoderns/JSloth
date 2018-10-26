@@ -25,7 +25,6 @@
 /// <reference path="../../types/express.d.ts"/>
 
 import * as users from "@unicoderns/cerberus/db/usersModel";
-import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
 import * as verifications from "@unicoderns/cerberus/db/verificationsModel";
 
 import { Request, Response } from "express";
@@ -46,7 +45,6 @@ let bcrypt = require("bcrypt-nodejs");
  */
 export default class IndexEndPoint extends ApiController {
     private usersTable: users.Users;
-    private sessionsTable: sessions.Sessions;
     private verificationsTable: verifications.Verifications;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -55,7 +53,6 @@ export default class IndexEndPoint extends ApiController {
         super(jsloth, config, url, namespaces);
 
         this.usersTable = new users.Users(jsloth.db);
-        this.sessionsTable = new sessions.Sessions(jsloth.db);
         this.verificationsTable = new verifications.Verifications(jsloth.db);
 
         this.sessionsMiddleware = new Sessions(jsloth)
@@ -94,48 +91,12 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private signup = (req: Request, res: Response): void => {
-        let username: string = req.body.username;
-        let email: string = req.body.email;
-
-        this.usersTable.get({
-            where: [{ username: username }, { email: email }]
-        }).then((user) => {
-            if (typeof user === "undefined") {
-                if (!this.emailRegex.test(email)) {
-                    res.json({ success: false, message: "Invalid email address." });
-                } else {
-                    let temp: users.Row = {
-                        username: req.body.username,
-                        email: email,
-                        password: bcrypt.hashSync(req.body.password, null, null),
-                        salt: "",
-                        firstName: req.body.firstName,
-                        lastName: req.body.lastName
-                    };
-                    this.usersTable.insert(temp).then((data: any) => {
-                        res.json({
-                            success: true,
-                            message: "User created!"
-                        });
-                    }).catch(err => {
-                        console.error(err);
-                        return res.status(500).send({
-                            success: false,
-                            message: "Something went wrong."
-                        });
-                    });
-                }
-            } else {
-                res.json({ success: false, message: "Username or email already exists." });
-            }
+        this.jsloth.cerberus.users.signup(req.params).then((data) => {
+            res.json(data);
         }).catch(err => {
-            console.error(err);
-            return res.status(500).send({
-                success: false,
-                message: "Something went wrong."
-            });
+            console.error(err.error);
+            return res.status(500).send(err);
         });
-
     };
 
     /**
@@ -189,34 +150,6 @@ export default class IndexEndPoint extends ApiController {
             });
         });
     };
-    /**
-     * Sign JWT token and reply.
-     *
-     * @param req { Request } The request object.
-     * @param res { Response } The response object.
-     * @param config { Object } The config object.
-     * @param data { Object } Data to sign and create token.
-     * @return json
-     */
-    /*
-        private signAndReply = (req: Request, res: Response, config: any, data: any): void => {
-            let token = jwt.sign(data, req.app.get("token"), {
-                expiresIn: config.config.expiration // 5 years
-            });
-    
-            // Set cookie
-            if (config.config.cookie) {
-                res.cookie('token', token, { signed: true, httpOnly: true, maxAge: config.config.expiration * 1000 });
-            }
-    
-            // return the information including token as JSON
-            res.json({
-                success: true,
-                message: "Enjoy your token!",
-                token: token
-            });
-        }
-    */
 
     /**
      * Get auth token.
@@ -228,7 +161,7 @@ export default class IndexEndPoint extends ApiController {
     private getToken = (req: Request, res: Response): void => {
         let config: any = this.config;
 
-        this.jsloth.cerberus.tokens.getToken({
+        this.jsloth.cerberus.sessions.create({
             email: req.body.email,
             password: req.body.password
         }).then((reply) => {
@@ -260,7 +193,7 @@ export default class IndexEndPoint extends ApiController {
      * @return json
      */
     private renewToken = (req: Request, res: Response): void => {
-        this.jsloth.cerberus.tokens.renewToken(req.user.id);
+        this.jsloth.cerberus.sessions.renew(req.user.id);
     };
 
     /**
@@ -273,7 +206,7 @@ export default class IndexEndPoint extends ApiController {
     private revokeToken = (req: Request, res: Response): void => {
         let config: any = this.config;
 
-        this.jsloth.cerberus.tokens.revokeToken(req.user.id).then((reply) => {
+        this.jsloth.cerberus.sessions.revoke(req.user.id).then((reply) => {
             // Expire cookie
             if (config.cookie) {
                 res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });

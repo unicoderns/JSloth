@@ -54,16 +54,15 @@ export default class Sessions {
      * @param next Callback.
      */
     public updateContext = (req: Request, res: Response, next: NextFunction) => {
-        let userCacheFactory = this.jsloth.cerberus.vault.getUser;
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
-        // Verifies secret and checks exp
-        jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
-            userCacheFactory(decoded.user, false).then((user: any) => {
-                return next();
-            }).catch((err: NodeJS.ErrnoException) => {
-                console.error(err);
-                return next();
-            });
+
+        this.jsloth.cerberus.sessions.getUpdated(token, req.app.get("token")).then((user) => {
+            req.user = user;
+            return next();
+        }).catch(err => {
+            console.error(err.error);
+            req.user = undefined;
+            return next();
         });
     }
 
@@ -75,54 +74,16 @@ export default class Sessions {
      * @param next Callback.
      */
     public context = (req: Request, res: Response, next: NextFunction) => {
-        // Check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
-        let authConfig = this.config.system_apps.find((x: any) => x.name == 'auth');
-        let userCacheFactory = this.jsloth.cerberus.vault.getUser;
-        let sessionTable = new sessions.Sessions(this.jsloth.db);
-        // Clean user
-        req.user = undefined;
-        // Decode token
-        if (token) {
-            req.token = token;
-            // Verifies secret and checks exp
-            jwt.verify(token, req.app.get("token"), function (err: NodeJS.ErrnoException, decoded: any) {
-                if (err) {
-                    console.log(err);
-                    return next();
-                } else {
-                    if (authConfig.config.session == "stateful") {
-                        sessionTable.get({
-                            where: {
-                                id: decoded.session,
-                                user: decoded.user
-                            }
-                        }).then((session: any) => {
-                            if (typeof session == "undefined") {
-                                return next();
-                            } else {
-                                userCacheFactory(decoded.user).then((user: any) => {
-                                    req.user = user;
-                                    return next();
-                                }).catch(err => {
-                                    console.error(err);
-                                    return next();
-                                });
-                            }
-                        }).catch(err => {
-                            console.error(err);
-                            return next();
-                        });
-                    } else {
-                        // If everything is good, save to request for use in other routes
-                        req.user = decoded;
-                        return next();
-                    }
-                }
-            });
-        } else {
+
+        this.jsloth.cerberus.sessions.get(token, req.app.get("token")).then((user) => {
+            req.user = user;
             return next();
-        }
+        }).catch(err => {
+            console.error(err.error);
+            req.user = undefined;
+            return next();
+        });
     }
 
     /**
