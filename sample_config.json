@@ -12,6 +12,13 @@
             "fields": true
         }
     },
+    "aws": {
+        "ses": {
+            "accessKeyId": "",
+            "secretAccessKey": "",
+            "region": ""
+        }
+    },
     "system_apps": [{
         "name": "auth",
         "engine": "ejs",

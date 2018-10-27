@@ -65,8 +65,8 @@ export default class IndexEndPoint extends ApiController {
         this.post("/token/renew/", "renewToken", this.sessionsMiddleware.auth("json"), this.renewToken);
         this.post("/token/revoke/", "revokeToken", this.sessionsMiddleware.auth("json"), this.revokeToken);
 
-        // this.post("/verification/active/:id/", "verify", this.verify);
-        this.post("/verification/generate/:id/", "verificationGeneration", this.verificationGenerator);
+        this.put("/verification/active/:id/", "verify", this.verify);
+        this.post("/verification/generate/", "verificationGeneration", this.sessionsMiddleware.auth("json"), this.verificationGenerator);
 
         if (config.config.signup) {
             this.post("/signup/", "signup", this.signup);
@@ -90,6 +90,30 @@ export default class IndexEndPoint extends ApiController {
      */
     private signup = (req: Request, res: Response): void => {
         this.jsloth.cerberus.users.signup(req.params).then((data) => {
+            this.verificationsTable.getToken(data.user.id).then((token: string) => {
+                // send some mail
+                this.jsloth.mail.sendMail({
+                    from: this.config.aws.ses.noreply,
+                    to: req.user.email,
+                    subject: 'Your verification token',
+                    text: 'This is your verification token: ' + token
+                }, (err, info) => {
+                    res.json({
+                        // token: token,
+                        success: true,
+                        message: "Enjoy your token!",
+                        envelope: info.envelope,
+                        messageId: info.messageId
+                    });
+                });
+            }).catch(err => {
+                console.error(err);
+                return res.status(500).send({
+                    success: false,
+                    message: "Something went wrong."
+                });
+            });
+
             res.json(data);
         }).catch(err => {
             console.error(err.error);
@@ -105,12 +129,86 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private verificationGenerator = (req: Request, res: Response): void => {
-        this.verificationsTable.getToken(req.params.id).then((token: string) => {
+        if (req.user.verified) {
             res.json({
-                // token: token,
-                success: true,
-                message: "Enjoy your token!"
+                success: false,
+                message: "Your account is already autenticated"
             });
+        } else {
+            this.verificationsTable.getToken(req.user.id).then((token: string) => {
+                // send some mail
+                this.jsloth.mail.sendMail({
+                    from: this.config.aws.ses.noreply,
+                    to: req.user.email,
+                    subject: 'Your verification token',
+                    text: 'This is your verification token: ' + token
+                }, (err, info) => {
+                    res.json({
+                        // token: token,
+                        success: true,
+                        message: "Enjoy your token!",
+                        envelope: info.envelope,
+                        messageId: info.messageId
+                    });
+                });
+            }).catch(err => {
+                console.error(err);
+                return res.status(500).send({
+                    success: false,
+                    message: "Something went wrong."
+                });
+            });
+        }
+    };
+
+    /**
+     * Verify token.
+     *
+     * @param req { Request } The request object.
+     * @param res { Response } The response object.
+     * @return bool
+     */
+    private verify = (req: Request, res: Response): void => {
+        this.verificationsTable.get({
+            where: {
+                user: req.params.id,
+                token: req.body.token
+            }
+        }).then((token: any) => {
+            if (typeof token === "undefined") {
+                return res.status(404).send({
+                    success: false,
+                    message: "Invalid token."
+                });
+            } else {
+                this.verificationsTable.delete({ id: token.id }).then((done) => {
+                    this.usersTable.update({
+                        data: {
+                            verified: 1
+                        },
+                        where: {
+                            id: req.params.id
+                        }
+                    }).then((done) => {
+                        res.json({
+                            success: true,
+                            message: "User verified!"
+                        });
+                    }).catch(err => {
+                        console.error(err);
+                        return res.status(500).send({
+                            success: false,
+                            message: "Something went wrong."
+                        });
+                    });
+                }).catch(err => {
+                    console.error(err);
+                    return res.status(500).send({
+                        success: false,
+                        message: "Something went wrong."
+                    });
+                });
+            }
         }).catch(err => {
             console.error(err);
             return res.status(500).send({
