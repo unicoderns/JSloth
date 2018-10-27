@@ -22,7 +22,10 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import { DB } from "@unicoderns/orm/connection"
+import * as nodemailer from "nodemailer";
+import * as AWS from "aws-sdk";
+
+import { DB } from "@unicoderns/orm/connection";
 
 import cerberus from "@unicoderns/cerberus";
 
@@ -42,6 +45,7 @@ export default class JSloth {
     public cerberus: cerberus;
     public path: JSPath;
     public db: DB;
+    public mail: nodemailer.Transporter;
 
     /*** Configuration methods */
     constructor(config: Config, baseURL: string) {
@@ -62,7 +66,18 @@ export default class JSloth {
                 expiration: authConfig.config.expiration,
                 session: authConfig.config.session
             }
-        })
+        });
+
+        AWS.config.accessKeyId = config.aws.ses.accessKeyId;
+        AWS.config.secretAccessKey = config.aws.ses.secretAccessKey;
+        AWS.config.region = config.aws.ses.region;
+
+        this.mail = nodemailer.createTransport({
+            SES: new AWS.SES({
+                apiVersion: '2010-12-01'
+            })
+        });
+
     }
 
 }
