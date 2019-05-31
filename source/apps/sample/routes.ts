@@ -22,15 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../system/abstract/controllers/routes";
 import IndexController from "./controllers/index";
+
+import { Controllers } from "@unicoderns/stardust";
 
 /**
  * Centralized Controller Routes Loader 
  * 
  * @return RoutesController
  */
-export class Urls extends Routes {
+export class Urls extends Controllers.Routes {
 
     /*** Configure routes */
     protected init(): void {

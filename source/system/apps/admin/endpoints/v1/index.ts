@@ -25,11 +25,10 @@
 import * as bcrypt from "bcrypt";
 import * as users from "@unicoderns/cerberus/db/usersModel";
 
-import ApiController from "../../../../abstract/controllers/api";
-import JSloth from "../../../../lib/core";
 import Sessions from "../../../auth/middlewares/sessions";
 
 import { Request, Response } from "express";
+import { Controllers, Lib } from "@unicoderns/stardust";
 
 /**
  * Index Endpoint 
@@ -37,15 +36,15 @@ import { Request, Response } from "express";
  * @basepath /
  * @return express.Router
  */
-export default class IndexEndPoint extends ApiController {
+export default class IndexEndPoint extends Controllers.Api {
     private usersTable: users.Users;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-        this.usersTable = new users.Users(jsloth.db);
-        this.sessionsMiddleware = new Sessions(jsloth)
+    constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
+        super(lib, config, url, namespaces);
+        this.usersTable = new users.Users(lib.db);
+        this.sessionsMiddleware = new Sessions(lib)
     }
 
     /*** Define routes */
@@ -70,7 +69,7 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private getAllSessions = (req: Request, res: Response): void => {
-        this.jsloth.cerberus.sessions.listAll().then((data) => {
+        this.lib.cerberus.sessions.listAll().then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err.error);
@@ -86,7 +85,7 @@ export default class IndexEndPoint extends ApiController {
      * @return array
      */
     private revokeSession = (req: Request, res: Response): void => {
-        this.jsloth.cerberus.sessions.revoke(req.params.id).then((data) => {
+        this.lib.cerberus.sessions.revoke(req.params.id).then((data) => {
             res.json(data);
         }).catch(err => {
             console.error(err.error);

@@ -22,8 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import ApiController from "../../../../system/abstract/controllers/api";
 import { Request, Response } from "express";
+import { Controllers } from "@unicoderns/stardust";
 
 /**
  * Index Endpoint 
@@ -31,7 +31,7 @@ import { Request, Response } from "express";
  * @basepath /
  * @return express.Router
  */
-export default class IndexEndPoint extends ApiController {
+export default class IndexEndPoint extends Controllers.Api {
 
     /*** Define routes */
     protected routes(): void {

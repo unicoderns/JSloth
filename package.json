@@ -7,7 +7,7 @@
         "url": "https://unicoderns.com/"
     },
     "scripts": {
-        "start": "nodemon -e js,ts,scss --watch dist/server --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
+        "start": "nodemon -e js,ts,scss --watch source --ignore */*.spec.ts --exec ts-node source/server.ts",
         "test": "cross-env NODE_ENV=test ts-node node_modules/jasmine/bin/jasmine source/tests/**/*.test.ts",
         "docs": "markdown-folder-to-html docs/markdown/docs",
         "typedoc": "typedoc --out ./docs/typedoc/ ./source/"
@@ -19,7 +19,8 @@
     "license": "(MIT OR Apache-2.0)",
     "dependencies": {
         "@unicoderns/cerberus": "^0.1.0",
-        "@unicoderns/orm": "^0.1.6",
+        "@unicoderns/orm": "^0.2.1",
+        "@unicoderns/stardust": "0.0.5",
         "aws-sdk": "^2.344.0",
         "bcrypt": "^3.0.2",
         "body-parser": "^1.18.2",

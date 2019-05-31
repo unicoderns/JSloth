@@ -32,9 +32,14 @@ import * as fse from "fs-extra"
 import Apps from "./apps";
 import chalk from "chalk";
 import Sessions from "../apps/auth/middlewares/sessions";
+import errorMiddleware from './middlewares/error.middleware';
 import SysConfig from "../interfaces/config";
-import JSloth from "../lib/core";
 import Log from "./log";
+
+import { Lib } from "@unicoderns/stardust";
+
+import IndexController from "../../apps/sample/controllers/index";
+
 
 import { Application, Request, Response, NextFunction } from "express"
 
@@ -61,11 +66,11 @@ export default class Core {
     /*** Apps object */
     protected apps: app.App[] = [];
 
-    /*** JSloth library */
-    protected jsloth: JSloth;
+    /*** library */
+    protected lib: Lib;
 
     /**
-     * Load configuration settings, set up JSloth Global Library and start installation.
+     * Load configuration settings, set up Global Library and start installation.
      */
     constructor() {
         // Creating App
@@ -77,18 +82,19 @@ export default class Core {
         Log.module("Static files published");
         this.express.use('/', express.static(__dirname + '/../../../dist/static/'));
 
+
         let start = ((config: SysConfig) => {
-            // Loading JSloth Global Library
+            // Loading Global Library
             try {
-                this.jsloth = new JSloth(config, __dirname);
+                this.lib = new Lib(config, __dirname);
             }
             catch (err) {
                 console.error(err);
             }
-            this.express.set("jsloth", this.jsloth);
+            this.express.set("lib", this.lib);
             Log.module("Core library loaded");
 
-            this.express.set("token", this.jsloth.config.token); // secret token
+            this.express.set("token", this.lib.config.token); // secret token
             Log.module("Configuration loaded");
             this.install();
         });
@@ -121,7 +127,7 @@ export default class Core {
         this.middleware();
 
         // Installing Apps
-        appsModule = new Apps(this.jsloth.config, this.jsloth, this.express);
+        appsModule = new Apps(this.lib.config, this.lib, this.express);
         appsModule.install((apps: app.App[]) => {
             this.apps = apps;
             this.start();
@@ -130,17 +136,18 @@ export default class Core {
 
     /*** Configure Express middlewares */
     protected middleware(): void {
-        let sessions = new Sessions(this.jsloth);
+        let sessions = new Sessions(this.lib);
         // Log hits using morgan
-        if (this.jsloth.config.dev) {
+        if (this.lib.config.dev) {
             this.express.use(logger("dev"));
         } else {
             this.express.use(logger("combined"));
         }
+        this.express.use(errorMiddleware);
         // Use body parser so we can get info from POST and/or URL parameters
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
-        this.express.use(cookieParser(this.jsloth.config.token));
+        this.express.use(cookieParser(this.lib.config.token));
         this.express.use(sessions.context);
         Log.module("Middlewares loaded");
     }
@@ -157,9 +164,11 @@ export default class Core {
 
                     // Errors and 404  
                     this.express.get("/*", function (req: Request, res: Response, next: NextFunction): any {
-                        return res.redirect("/errors/404/");
+                        res.send("404 error");
+                        // return res.redirect("/errors/404/");
                     });
                     this.express.use(function (err: any, req: Request, res: Response, next: NextFunction): any {
+                        console.error("err");
                         console.error(err);
                         if (!err.status) {
                             return res.redirect("/errors/500/");

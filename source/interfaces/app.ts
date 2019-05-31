@@ -22,48 +22,52 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import JSloth from "../../lib/core";
-import { Router } from "express";
-import SysConfig from "../../interfaces/config";
+/*** App interface. */
+export interface App {
+  config: Config;
+  done: boolean;
+  complete: Status;
+  success: Status;
+  errors: Errors;
+}
 
-/**
- * Controller Abstract
- */
-export default class Controller {
-    protected jsloth: JSloth;
-    protected config: any;
-    protected namespaces: string[] = [];
-    protected url: string;
+/*** Dash config interface. */
+export interface Dash {
+  activate: boolean;
+}
 
-    /**
-     * Express Router instance
-     *
-     * @return Router
-     */
-    public router: Router = Router();
+/*** Admin config interface. */
+export interface Admin {
+  activate: boolean;
+}
 
-    /**
-     * Load library, app configuration and install routes 
-     */
-    constructor(jsloth: JSloth, config: SysConfig, url: string, namespaces: string[]) {
-        this.jsloth = jsloth;
-        this.config = config;
-        this.namespaces = namespaces;
-        this.url = url;
-        this.init();
-    }
+/*** App configuration interface. */
+export interface Config {
+  name: string;
+  dash?: Dash;
+  admin?: Admin;
+  engine?: string;
+  basepath?: string;
+  folder?: string;
+  config: any;
+}
 
-    /*** Init Controller */
-    protected init(): void {
-    }
+/*** App status interface. */
+export interface Status {
+  api: boolean;
+  public: boolean;
+  routes: boolean;
+  dash: boolean;
+  admin: boolean;
+  scss: boolean;
+}
 
-    /*** Setup Controller */
-    public setup(): void {
-        this.routes();
-    }
-
-    /*** Define routes */
-    protected routes(): void {
-    }
-
+/*** App errors interface. */
+export interface Errors {
+  api: string;
+  public: string;
+  routes: string;
+  dash: string;
+  admin: string;
+  scss: string;
 }

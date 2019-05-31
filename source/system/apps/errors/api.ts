@@ -22,14 +22,14 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../abstract/controllers/routes";
+import { Controllers } from "@unicoderns/stardust";
 
 /**
  * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
-export class Urls extends Routes {
+export class Urls extends Controllers.Routes {
 
     /*** Configure endpoints */
     protected init(): void {

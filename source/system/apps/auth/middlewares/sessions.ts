@@ -24,25 +24,25 @@
 
 /// <reference path="../types/express.d.ts"/>
 
-import JSloth from "../../../lib/core";
-import { Router, Request, Response, NextFunction, RequestHandler } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { Lib } from "@unicoderns/stardust";
 
 import * as jwt from "jsonwebtoken";
 import * as sessions from "@unicoderns/cerberus/db/sessionsModel";
 
 /**
- * JSloth Session Middlewares
+ * Stardust Session Middlewares
  */
 export default class Sessions {
     protected config: any;
-    protected jsloth: JSloth;
+    protected lib: Lib;
 
     /**
      * Load library, app configuration and install routes 
      */
-    constructor(jsloth: JSloth) {
-        this.jsloth = jsloth;
-        this.config = jsloth.config;
+    constructor(lib: Lib) {
+        this.lib = lib;
+        this.config = lib.config;
     }
 
 
@@ -56,7 +56,7 @@ export default class Sessions {
     public updateContext = (req: Request, res: Response, next: NextFunction) => {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
 
-        this.jsloth.cerberus.sessions.getUpdated(token).then((reply) => {
+        this.lib.cerberus.sessions.getUpdated(token).then((reply) => {
             req.user = reply.user;
             return next();
         }).catch(err => {
@@ -76,7 +76,7 @@ export default class Sessions {
     public context = (req: Request, res: Response, next: NextFunction) => {
         let token = req.body.token || req.query.token || req.headers["x-access-token"] || req.signedCookies.token;
 
-        this.jsloth.cerberus.sessions.get(token).then((reply) => {
+        this.lib.cerberus.sessions.get(token).then((reply) => {
             req.user = reply.user;
             return next();
         }).catch(err => {
@@ -95,7 +95,7 @@ export default class Sessions {
      */
     private reply = (res: Response, format: string = "html", json: any) => {
         if (format == "html") {
-            return res.redirect("/errors/404/");
+            res.send("404 error");
         } else if (format == "redirect") {
             return res.redirect("/auth/");
         } else {
@@ -142,7 +142,7 @@ export default class Sessions {
                 return next();
             } else {
                 if (format == "html") {
-                    return res.redirect("/errors/404/");
+                    res.send("404 error");
                 } else if (format == "redirect") {
                     if (req.user) {
                         return res.redirect("/dashboard/");
