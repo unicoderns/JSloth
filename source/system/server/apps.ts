@@ -24,16 +24,16 @@
 
 import * as fse from "fs-extra"
 
-import { App, Config } from "../interfaces/app";
-import { Application, NextFunction } from "express";
-
 import Batch from "./batch";
-import JSloth from "../lib/core";
 import Log from "./log";
 import SysConfig from "../interfaces/config";
 
+import { App, Config } from "../interfaces/app";
+import { Application, NextFunction } from "express";
+import { Lib } from "@unicoderns/stardust";
+
 /**
- * JSloth apps related tools.
+ * Stardust apps related tools.
  */
 export default class Apps {
 
@@ -46,24 +46,24 @@ export default class Apps {
     /*** Express app */
     private express: Application;
 
-    /*** JSloth library */
-    private jsloth: JSloth;
+    /*** library */
+    private lib: Lib;
 
     /*** Batch server library */
     private batch: Batch;
 
     /**
-     * Load configuration, JSloth library and Express application.
+     * Load configuration, library and Express application.
      * 
      * @param config System configuration
-     * @param jsloth JSloth Library
+     * @param lib Library
      * @param express Express app
      */
-    constructor(config: SysConfig, jsloth: JSloth, express: Application) {
+    constructor(config: SysConfig, lib: Lib, express: Application) {
         this.config = config;
-        this.jsloth = jsloth;
+        this.lib = lib;
         this.express = express;
-        this.batch = new Batch(jsloth);
+        this.batch = new Batch(lib);
     }
 
     /**
@@ -144,12 +144,12 @@ export default class Apps {
      * @param next
      */
     private installApp(app: App, type: string, next: NextFunction): void {
-        let appUrl = this.jsloth.context.sourceURL + "apps/";
+        let appUrl = this.lib.context.sourceURL + "apps/";
         if (type == "system") {
-            appUrl = this.jsloth.context.sourceURL + "system/apps/"
+            appUrl = this.lib.context.sourceURL + "system/apps/"
         }
         let compileSCSS = () => {
-            this.batch.compileSCSS(appUrl + app.config.name, this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
+            this.batch.compileSCSS(appUrl + app.config.name, this.lib.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
                 app.complete.scss = true;
                 app.success.scss = success;
                 this.installed(app, next);
@@ -169,7 +169,7 @@ export default class Apps {
             app.complete.scss = true;
             app.success.scss = false;
         } else {
-            this.batch.copyPublic(appUrl + app.config.name + "/public/", this.jsloth.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
+            this.batch.copyPublic(appUrl + app.config.name + "/public/", this.lib.context.baseURL + "dist/static/" + app.config.name).then((success: boolean) => {
                 app.complete.public = true;
                 app.success.public = success;
                 compileSCSS(); // Wait the structure to compile
@@ -212,16 +212,16 @@ export default class Apps {
      * @param next
      */
     private loadRoutes(app: App, appType: string, routeType: string, basepath: string, next: NextFunction): void {
-        let appUrl = this.jsloth.context.sourceURL + "apps/";
+        let appUrl = this.lib.context.sourceURL + "apps/";
         if (appType == "system") {
-            appUrl = this.jsloth.context.sourceURL + "system/apps/"
+            appUrl = this.lib.context.sourceURL + "system/apps/"
         }
         let appFileUrl = appUrl + app.config.name + "/" + routeType;
         fse.pathExists(appFileUrl + ".ts").then((exists: boolean) => {
             if (exists) {
                 let url: string = basepath + (app.config.basepath || "/");
                 let appRoute = require(appFileUrl);
-                let route = new appRoute.Urls(this.jsloth, app.config, url, [app.config.name]);
+                let route = new appRoute.Urls(this.lib, app.config, url, [app.config.name]);
                 this.express.use(url, route.router);
 
                 if (routeType == "routes") {

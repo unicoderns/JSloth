@@ -22,15 +22,15 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import HtmlController from "../../../abstract/controllers/html";
 import { Request, Response } from "express";
+import { Controllers } from "@unicoderns/stardust";
 
 /**
  * Index Controller
  *
  * @basepath /health/
  */
-export default class IndexController extends HtmlController {
+export default class IndexController extends Controllers.Html {
     /*** Define routes */
     protected routes(): void {
         this.app.get("/", this.index);

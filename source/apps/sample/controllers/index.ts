@@ -22,8 +22,7 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import HtmlController from "../../../system/abstract/controllers/html";
-import JSloth from "../../../system/lib/core";
+import { Controllers, Lib } from "@unicoderns/stardust";
 import Sessions from "../../../system/apps/auth/middlewares/sessions";
 
 import { Request, Response } from "express";
@@ -33,12 +32,12 @@ import { Request, Response } from "express";
  * 
  * @basepath /health/
  */
-export default class IndexController extends HtmlController {
+export default class IndexController extends Controllers.Html {
     private sessionsMiddleware: Sessions;
 
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-        this.sessionsMiddleware = new Sessions(jsloth)
+    constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
+        super(lib, config, url, namespaces);
+        this.sessionsMiddleware = new Sessions(lib)
     }
 
     /*** Define routes */

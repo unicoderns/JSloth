@@ -22,23 +22,22 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import HtmlController from "../../../abstract/controllers/html";
-import JSloth from "../../../lib/core";
 import Sessions from "../../auth/middlewares/sessions";
 
 import { Request, Response } from "express";
+import { Controllers, Lib } from "@unicoderns/stardust";
 
 /**
  * Index Controller
  * 
  * @basepath /admin/
  */
-export default class IndexController extends HtmlController {
+export default class IndexController extends Controllers.Html {
     private sessionsMiddleware: Sessions;
 
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-        this.sessionsMiddleware = new Sessions(jsloth)
+    constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
+        super(lib, config, url, namespaces);
+        this.sessionsMiddleware = new Sessions(lib)
     }
 
     /*** Define routes */

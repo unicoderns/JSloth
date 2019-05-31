@@ -22,7 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../../abstract/controllers/routes";
+import { Controllers } from "@unicoderns/stardust";
+
 import IndexEndpoint from "./v1/index";
 
 /**
@@ -30,7 +31,7 @@ import IndexEndpoint from "./v1/index";
  * 
  * @return express.Router
  */
-export class Urls extends Routes {
+export class Urls extends Controllers.Routes {
 
     /*** Configure endpoints */
     protected init(): void {

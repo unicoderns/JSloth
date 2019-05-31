@@ -22,15 +22,16 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Routes from "../../../system/abstract/controllers/routes";
 import IndexEndpoint from "./v1/index";
+
+import { Controllers } from "@unicoderns/stardust";
 
 /**
  * Centralized Controller Endpoint Loader
  * 
  * @return express.Router
  */
-export class Urls extends Routes {
+export class Urls extends Controllers.Routes {
 
     /*** Configure endpoints */
     protected init(): void {

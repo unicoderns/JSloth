@@ -22,11 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import HtmlController from "../../../abstract/controllers/html";
-import JSloth from "../../../lib/core";
-import Sessions from "../../auth/middlewares/sessions";
-
 import { Request, Response } from "express";
+import { Controllers, Lib } from "@unicoderns/stardust";
 
 interface Error {
     status?: number;
@@ -37,12 +34,9 @@ interface Error {
  * 
  * @basepath /admin/
  */
-export default class IndexController extends HtmlController {
-    private sessionsMiddleware: Sessions;
-
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
-        this.sessionsMiddleware = new Sessions(jsloth)
+export default class IndexController extends Controllers.Html {
+    constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
+        super(lib, config, url, namespaces);
     }
 
     /*** Define routes */

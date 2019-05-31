@@ -28,9 +28,8 @@ import * as users from "@unicoderns/cerberus/db/usersModel";
 import * as verifications from "@unicoderns/cerberus/db/verificationsModel";
 
 import { Request, Response } from "express";
+import { Controllers, Lib } from "@unicoderns/stardust";
 
-import ApiController from "../../../../abstract/controllers/api";
-import JSloth from "../../../../lib/core";
 import Sessions from "../../middlewares/sessions";
 
 let ip = require("ip");
@@ -41,19 +40,19 @@ let ip = require("ip");
  * @basepath /
  * @return express.Router
  */
-export default class IndexEndPoint extends ApiController {
+export default class IndexEndPoint extends Controllers.Api {
     private usersTable: users.Users;
     private verificationsTable: verifications.Verifications;
     private sessionsMiddleware: Sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-    constructor(jsloth: JSloth, config: any, url: string, namespaces: string[]) {
-        super(jsloth, config, url, namespaces);
+    constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
+        super(lib, config, url, namespaces);
 
-        this.usersTable = new users.Users(jsloth.db);
-        this.verificationsTable = new verifications.Verifications(jsloth.db);
+        this.usersTable = new users.Users(lib.db);
+        this.verificationsTable = new verifications.Verifications(lib.db);
 
-        this.sessionsMiddleware = new Sessions(jsloth)
+        this.sessionsMiddleware = new Sessions(lib)
     }
 
     /*** Define routes */
@@ -89,10 +88,10 @@ export default class IndexEndPoint extends ApiController {
      * @return bool
      */
     private signup = (req: Request, res: Response): void => {
-        this.jsloth.cerberus.users.signup(req.params).then((data) => {
+        this.lib.cerberus.users.signup(req.params).then((data) => {
             this.verificationsTable.getToken(data.user.id).then((token: string) => {
                 // send some mail
-                this.jsloth.mail.sendMail({
+                this.lib.mail.sendMail({
                     from: this.config.aws.ses.noreply,
                     to: req.user.email,
                     subject: 'Your verification token',
@@ -137,7 +136,7 @@ export default class IndexEndPoint extends ApiController {
         } else {
             this.verificationsTable.getToken(req.user.id).then((token: string) => {
                 // send some mail
-                this.jsloth.mail.sendMail({
+                this.lib.mail.sendMail({
                     from: this.config.aws.ses.noreply,
                     to: req.user.email,
                     subject: 'Your verification token',
@@ -257,7 +256,7 @@ export default class IndexEndPoint extends ApiController {
     private getToken = (req: Request, res: Response): void => {
         let config: any = this.config;
 
-        this.jsloth.cerberus.sessions.create({
+        this.lib.cerberus.sessions.create({
             email: req.body.email,
             password: req.body.password
         }).then((reply) => {
@@ -289,7 +288,7 @@ export default class IndexEndPoint extends ApiController {
      * @return json
      */
     private renewToken = (req: Request, res: Response): void => {
-        this.jsloth.cerberus.sessions.renew(req.user.id);
+        res.json(this.lib.cerberus.sessions.renew(req.user.id));
     };
 
     /**
@@ -302,7 +301,7 @@ export default class IndexEndPoint extends ApiController {
     private revokeToken = (req: Request, res: Response): void => {
         let config: any = this.config;
 
-        this.jsloth.cerberus.sessions.revoke(req.user.id).then((reply) => {
+        this.lib.cerberus.sessions.revoke(req.user.id).then((reply) => {
             // Expire cookie
             if (config.cookie) {
                 res.cookie('token', { signed: true, httpOnly: true, maxAge: Date.now() });
@@ -375,7 +374,7 @@ export default class IndexEndPoint extends ApiController {
      */
     /*
     private getFieds = (req: Request, res: Response): void => {
-        let unsafeUsersTable = new users.Users(this.jsloth, "unsafe");
+        let unsafeUsersTable = new users.Users(this.lib, "unsafe");
         let fields = this.usersTable.getFields();
         let unsafeFields = unsafeUsersTable.getFields();
         res.json({
@@ -395,7 +394,7 @@ export default class IndexEndPoint extends ApiController {
      */
     /*
     private getSysContext = (req: Request, res: Response): void => {
-        res.json(this.jsloth.context.export());
+        res.json(this.lib.context.export());
     };
     */
 

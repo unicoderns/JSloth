@@ -24,20 +24,20 @@
 
 import * as fse from "fs-extra"
 
-import JSloth from "../lib/core";
+import { Lib } from "@unicoderns/stardust";
 
 /**
  * Batch commands.
  */
 export default class Batch {
 
-    /*** JSloth library */
-    protected jsloth: JSloth;
+    /*** library */
+    protected lib: Lib;
     /*** Batch process */
     private exec = require("child_process").exec;
 
-    constructor(jsloth: JSloth) {
-        this.jsloth = jsloth;
+    constructor(lib: Lib) {
+        this.lib = lib;
     }
 
     /**
@@ -51,8 +51,8 @@ export default class Batch {
         // Create promise
         const p: Promise<boolean> = new Promise(
             (resolve: (exists: boolean) => void, reject: (err: NodeJS.ErrnoException) => void) => {
-                // "node-sass --include-path " + this.jsloth.context.baseURL + "node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from
-                this.exec("node-sass --include-path " + this.jsloth.context.baseURL + "node_modules/bootstrap/scss --output-style compressed -o " + to + " " + from, function (err: any, stdout: any, stderr: any) {
+                // "node-sass --include-path " + this.lib.context.baseURL + "node_modules/foundation-sites/scss --output-style compressed -o " + to + " " + from
+                this.exec("node-sass --include-path " + this.lib.context.baseURL + "node_modules/bootstrap/scss --output-style compressed -o " + to + " " + from, function (err: any, stdout: any, stderr: any) {
                     if ((stdout.substr(0, 39)) == "Rendering Complete, saving .css file...") {
                         resolve(true);
                     } else {
