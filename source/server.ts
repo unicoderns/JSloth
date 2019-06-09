@@ -22,18 +22,20 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import * as express from "express";
-
-import Core from "./system/server/core";
+import { Server } from "@unicoderns/stardust";
 
 /**
- * Custom JSloth server that extends from JSloth abstract server.
+ * Custom Stardust server.
  * Place for your custom server code.
  * 
  * @return express.Application
  */
-class Server extends Core {
+class CustomServer extends Server {
+
+    constructor() {
+        super(__dirname);
+    }
 
 }
 
-export default new Server().express;
+export default new CustomServer().express;

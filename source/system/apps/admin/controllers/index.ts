@@ -22,10 +22,8 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import Sessions from "../../auth/middlewares/sessions";
-
 import { Request, Response } from "express";
-import { Controllers, Lib } from "@unicoderns/stardust";
+import { Controllers, Lib, Middlewares } from "@unicoderns/stardust";
 
 /**
  * Index Controller
@@ -33,11 +31,11 @@ import { Controllers, Lib } from "@unicoderns/stardust";
  * @basepath /admin/
  */
 export default class IndexController extends Controllers.Html {
-    private sessionsMiddleware: Sessions;
+    private sessionsMiddleware: Middlewares.sessions;
 
     constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
         super(lib, config, url, namespaces);
-        this.sessionsMiddleware = new Sessions(lib)
+        this.sessionsMiddleware = new Middlewares.sessions(lib)
     }
 
     /*** Define routes */
