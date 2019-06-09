@@ -25,10 +25,8 @@
 import * as bcrypt from "bcrypt";
 import * as users from "@unicoderns/cerberus/db/usersModel";
 
-import Sessions from "../../../auth/middlewares/sessions";
-
 import { Request, Response } from "express";
-import { Controllers, Lib } from "@unicoderns/stardust";
+import { Controllers, Lib, Middlewares } from "@unicoderns/stardust";
 
 /**
  * Index Endpoint 
@@ -38,13 +36,13 @@ import { Controllers, Lib } from "@unicoderns/stardust";
  */
 export default class IndexEndPoint extends Controllers.Api {
     private usersTable: users.Users;
-    private sessionsMiddleware: Sessions;
+    private sessionsMiddleware: Middlewares.sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
         super(lib, config, url, namespaces);
         this.usersTable = new users.Users(lib.db);
-        this.sessionsMiddleware = new Sessions(lib)
+        this.sessionsMiddleware = new Middlewares.sessions(lib)
     }
 
     /*** Define routes */

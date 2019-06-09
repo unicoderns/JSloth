@@ -22,22 +22,21 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-import { Controllers, Lib } from "@unicoderns/stardust";
-import Sessions from "../../../system/apps/auth/middlewares/sessions";
+import { Controllers, Lib, Middlewares } from "@unicoderns/stardust";
 
 import { Request, Response } from "express";
 
 /**
  * Index Controller
  * 
- * @basepath /health/
+ * @basepath /
  */
 export default class IndexController extends Controllers.Html {
-    private sessionsMiddleware: Sessions;
+    private sessionsMiddleware: Middlewares.sessions;
 
     constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
         super(lib, config, url, namespaces);
-        this.sessionsMiddleware = new Sessions(lib)
+        this.sessionsMiddleware = new Middlewares.sessions(lib)
     }
 
     /*** Define routes */

@@ -22,15 +22,11 @@
 // SOFTWARE.                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/// <reference path="../../types/express.d.ts"/>
-
 import * as users from "@unicoderns/cerberus/db/usersModel";
 import * as verifications from "@unicoderns/cerberus/db/verificationsModel";
 
 import { Request, Response } from "express";
-import { Controllers, Lib } from "@unicoderns/stardust";
-
-import Sessions from "../../middlewares/sessions";
+import { Controllers, Lib, Middlewares } from "@unicoderns/stardust";
 
 let ip = require("ip");
 
@@ -43,7 +39,7 @@ let ip = require("ip");
 export default class IndexEndPoint extends Controllers.Api {
     private usersTable: users.Users;
     private verificationsTable: verifications.Verifications;
-    private sessionsMiddleware: Sessions;
+    private sessionsMiddleware: Middlewares.sessions;
     private emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
     constructor(lib: Lib, config: any, url: string, namespaces: string[]) {
@@ -52,7 +48,7 @@ export default class IndexEndPoint extends Controllers.Api {
         this.usersTable = new users.Users(lib.db);
         this.verificationsTable = new verifications.Verifications(lib.db);
 
-        this.sessionsMiddleware = new Sessions(lib)
+        this.sessionsMiddleware = new Middlewares.sessions(lib);
     }
 
     /*** Define routes */
