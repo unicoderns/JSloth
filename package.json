@@ -21,7 +21,7 @@
         "@unicoderns/cerberus": "^0.1.0",
         "@unicoderns/orm": "^0.2.1",
         "@unicoderns/stardust": "^0.1.0",
-        "aws-sdk": "^2.344.0",
+        "aws-sdk": "^2.814.0",
         "bcrypt": "^3.0.2",
         "body-parser": "^1.18.2",
         "bootstrap": "^4.1.3",
